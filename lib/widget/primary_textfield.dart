@@ -1,3 +1,4 @@
+import 'package:doctor_on_call/utils/app_color.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -21,7 +22,7 @@ class PrimaryTextField extends StatelessWidget {
   final String? counterText;
   final Color? textColor;
   final int? maxLength;
-  final String? label;
+
   final Color? color;
   final TextStyle? hintStyle;
   final String? instructionsText;
@@ -44,7 +45,7 @@ class PrimaryTextField extends StatelessWidget {
     this.onTap,
     this.suffix,
     this.textColor,
-    this.label,
+
     this.color,
     this.instructionsText,
     this.instructions = false,
@@ -89,7 +90,7 @@ class PrimaryTextField extends StatelessWidget {
               //     ? AppColor.darkThemeHintColor
               //     : AppColor.hintTextColor
             ),
-            fillColor: color ?? Theme.of(context).cardColor,
+            fillColor: color ?? AppColor.textFieldColor,
             filled: true,
             hintText: hintText,
             counterText: counterText,

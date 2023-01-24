@@ -18,10 +18,14 @@ class AppTextStyle {
     color: AppColor.white,
   );
 
-  static const TextStyle headline2 =
-      TextStyle(fontSize: Sizes.s16, fontWeight: FontWeight.w700);
+  static const TextStyle title =
+      TextStyle(fontSize: Sizes.s26, fontWeight: FontWeight.w700,color: AppColor.black);
+  static const TextStyle lable =
+  TextStyle(fontSize: Sizes.s16, fontWeight: FontWeight.w500,color: AppColor.black);
+  static const TextStyle appName =
+  TextStyle(fontSize: Sizes.s34, fontWeight: FontWeight.w700,color: AppColor.black);
   static const TextStyle subTitle =
-      TextStyle(fontSize: Sizes.s14, fontWeight: FontWeight.w900);
+      TextStyle(fontSize: Sizes.s14, fontWeight: FontWeight.w900,color: AppColor.grey);
 
   static const TextStyle subTitle2 =
       TextStyle(fontSize: Sizes.s14, fontWeight: FontWeight.w400);

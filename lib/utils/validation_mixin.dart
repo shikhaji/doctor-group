@@ -51,10 +51,9 @@ mixin ValidationMixin {
   }
 
   String? mobileNumberValidator(String? mobileNumber) {
-    String patttern = r'(^(?:[+0]7)?[0-9]{7,16}$)';
-    RegExp regExp = new RegExp(patttern);
+
     if (mobileNumber!.isNotEmpty) {
-      if (!regExp.hasMatch(mobileNumber)) {
+      if (mobileNumber.length != 10) {
         return "Please enter valid mobile number";
       }
       return null;
@@ -66,7 +65,7 @@ mixin ValidationMixin {
   String? passwordValidator(String? password, {bool isLogin = false}) {
     if (password!.isNotEmpty) {
       if (isLogin == false) {
-        if (password.length < 6) {
+        if (password.length <= 6) {
           return "Password Is Too Short";
         }
       }
