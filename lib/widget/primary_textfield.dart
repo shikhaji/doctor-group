@@ -19,6 +19,7 @@ class PrimaryTextField extends StatelessWidget {
   final VoidCallback? onTap;
   final List<TextInputFormatter>? inputFormatters;
   final Widget? suffix;
+  final Widget? prefix;
   final String? counterText;
   final Color? textColor;
   final int? maxLength;
@@ -44,6 +45,7 @@ class PrimaryTextField extends StatelessWidget {
     this.validator,
     this.onTap,
     this.suffix,
+    this.prefix,
     this.textColor,
 
     this.color,
@@ -100,6 +102,7 @@ class PrimaryTextField extends StatelessWidget {
                   minWidth: Sizes.s30.w,
                 ),
             suffixIcon: suffix,
+            prefixIcon: prefix,
             contentPadding: contentPadding ?? EdgeInsets.all(Sizes.s16.h),
             border: _outlineInputBorder(Theme.of(context).cardColor),
             enabledBorder: _outlineInputBorder(Theme.of(context).cardColor),

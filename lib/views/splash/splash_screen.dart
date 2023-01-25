@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 
 import '../../utils/app_asset.dart';
 import '../../utils/app_text_style.dart';
+import '../Auth/mobile_verification_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -22,7 +23,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Timer(
         Duration(seconds: 5),
         () => Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => LoginScreen())));
+            context, MaterialPageRoute(builder: (context) => MobileVerificationScreen())));
   }
 
   @override
