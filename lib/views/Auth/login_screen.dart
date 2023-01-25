@@ -11,6 +11,7 @@ import '../../utils/app_text.dart';
 import '../../utils/app_text_style.dart';
 import '../../widget/custom_sized_box.dart';
 import '../../widget/scrollview.dart';
+import '../home/home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -54,6 +55,7 @@ class _LoginScreenState extends State<LoginScreen> with ValidationMixin {
             SizedBoxH8(),
             PrimaryTextField(
               controller: _phone,
+              hintText: "Enter phone number",
               validator: mobileNumberValidator,
               prefix: Icon(Icons.phone),
             ),
@@ -62,8 +64,9 @@ class _LoginScreenState extends State<LoginScreen> with ValidationMixin {
             SizedBoxH8(),
             PrimaryTextField(
               controller: _password,
+              hintText: "Enter password",
               validator: passwordValidator,
-              prefix: Icon(Icons.password),
+              prefix: const Icon(Icons.password),
               suffix: GestureDetector(
                   onTap: () {
                     setState(() {
@@ -71,8 +74,8 @@ class _LoginScreenState extends State<LoginScreen> with ValidationMixin {
                     });
                   },
                   child: obscurePassword
-                      ? Icon(Icons.visibility_off)
-                      : Icon(Icons.visibility)),
+                      ? const Icon(Icons.visibility_off)
+                      : const Icon(Icons.visibility)),
               obscureText: obscurePassword,
             ),
             Row(
@@ -80,7 +83,10 @@ class _LoginScreenState extends State<LoginScreen> with ValidationMixin {
               children: [
                 TextButton(
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>ForgotPassword()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ForgotPassword()));
                     },
                     child:
                         appText("Forgot password?", style: AppTextStyle.lable))
@@ -90,7 +96,9 @@ class _LoginScreenState extends State<LoginScreen> with ValidationMixin {
             PrimaryButton(
                 lable: "Login",
                 onPressed: () {
-                  if (_formKey.currentState!.validate()) {}
+                  // if (_formKey.currentState!.validate()) {}
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => HomeScreen()));
                 }),
             SizedBoxH8(),
             GestureDetector(

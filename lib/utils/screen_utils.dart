@@ -68,6 +68,12 @@ class ScreenUtil {
 
   double get scaleText => min(scaleWidth, scaleHeight);
 
+  Widget setVerticalSpacing(num height) => SizedBox(height: setHeight(height));
+
+  Widget setVerticalSpacingFromWidth(num height) {
+    return SizedBox(height: setWidth(height));
+  }
+
   double setWidth(num width) => width * scaleWidth;
 
   double setHeight(num height) => height * scaleHeight;

@@ -47,7 +47,6 @@ class PrimaryTextField extends StatelessWidget {
     this.suffix,
     this.prefix,
     this.textColor,
-
     this.color,
     this.instructionsText,
     this.instructions = false,
@@ -85,13 +84,8 @@ class PrimaryTextField extends StatelessWidget {
           maxLength: maxLength,
           decoration: InputDecoration(
             isDense: true,
-            hintStyle: TextStyle(
-              fontWeight: FontWeight.w700,
-              // color: Theme.of(context).brightness ==
-              //     ThemeUtils.darkTheme.brightness
-              //     ? AppColor.darkThemeHintColor
-              //     : AppColor.hintTextColor
-            ),
+            hintStyle: AppTextStyle.alertSubtitle.copyWith(
+                color: Color(0x4d1d2125), fontWeight: FontWeight.w400),
             fillColor: color ?? AppColor.textFieldColor,
             filled: true,
             hintText: hintText,

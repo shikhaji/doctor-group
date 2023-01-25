@@ -8,4 +8,11 @@ class AppAsset {
   //splash screen(png)
   static const String splash = "${imagePath}splash_img.jpg";
   static const String backGround = "${imagePath}background_img.png";
+
+  //BOTTOM IMAGE
+  static const String home = "${iconPath}home.png";
+  static const String homeFill = "${iconPath}home_fill.png";
+
+  //DRAWER IMAGE
+  static const String drawerBackground = "${imagePath}drawer_background.svg";
 }

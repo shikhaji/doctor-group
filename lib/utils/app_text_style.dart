@@ -8,8 +8,8 @@ class AppTextStyle {
   AppTextStyle._();
 
   static ThemeData lightTheme = ThemeData(
-      primaryColor: const Color(0xff93C35B),
-      primarySwatch: createMaterialColor(const Color(0xff93C35B)),
+      primaryColor: AppColor.primaryColor,
+      primarySwatch: createMaterialColor(const Color(0xff33cc99)),
       fontFamily: "Nunito_Sans");
 
   static const TextStyle headline1 = TextStyle(
@@ -18,14 +18,14 @@ class AppTextStyle {
     color: AppColor.white,
   );
 
-  static const TextStyle title =
-      TextStyle(fontSize: Sizes.s26, fontWeight: FontWeight.w700,color: AppColor.black);
-  static const TextStyle lable =
-  TextStyle(fontSize: Sizes.s16, fontWeight: FontWeight.w500,color: AppColor.black);
-  static const TextStyle appName =
-  TextStyle(fontSize: Sizes.s34, fontWeight: FontWeight.w700,color: AppColor.black);
-  static const TextStyle subTitle =
-      TextStyle(fontSize: Sizes.s14, fontWeight: FontWeight.w900,color: AppColor.grey);
+  static const TextStyle title = TextStyle(
+      fontSize: Sizes.s26, fontWeight: FontWeight.w700, color: AppColor.black);
+  static const TextStyle lable = TextStyle(
+      fontSize: Sizes.s16, fontWeight: FontWeight.w500, color: AppColor.black);
+  static const TextStyle appName = TextStyle(
+      fontSize: Sizes.s34, fontWeight: FontWeight.w700, color: AppColor.black);
+  static const TextStyle subTitle = TextStyle(
+      fontSize: Sizes.s14, fontWeight: FontWeight.w900, color: AppColor.grey);
 
   static const TextStyle subTitle2 =
       TextStyle(fontSize: Sizes.s14, fontWeight: FontWeight.w400);
@@ -40,6 +40,8 @@ class AppTextStyle {
 
   static const TextStyle buttonTextStyle = TextStyle(
       fontSize: Sizes.s16, fontWeight: FontWeight.bold, color: AppColor.white);
+  static const TextStyle appBarTitle = TextStyle(
+      fontSize: Sizes.s24, fontWeight: FontWeight.bold, color: AppColor.white);
   static const TextStyle redTextStyle = TextStyle(
     fontSize: Sizes.s16,
     fontWeight: FontWeight.bold,

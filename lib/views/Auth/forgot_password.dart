@@ -16,9 +16,9 @@ class ForgotPassword extends StatefulWidget {
   State<ForgotPassword> createState() => _ForgotPasswordState();
 }
 
-class _ForgotPasswordState extends State<ForgotPassword> with ValidationMixin{
+class _ForgotPasswordState extends State<ForgotPassword> with ValidationMixin {
   final TextEditingController _password = TextEditingController();
-  final TextEditingController _confirmpassword = TextEditingController();
+  final TextEditingController _confirmPassword = TextEditingController();
   bool obscurePassword = true;
   final _formKey = GlobalKey<FormState>();
   @override
@@ -27,71 +27,70 @@ class _ForgotPasswordState extends State<ForgotPassword> with ValidationMixin{
       backgroundColor: AppColor.white,
       body: SafeArea(
           child: Form(
-            key: _formKey,
-            child: CustomScroll(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBoxH34(),
-                SizedBoxH34(),
-                SizedBoxH34(),
-                Center(
-                  child: appText("Doctor on call",
-                      style: AppTextStyle.appName
-                          .copyWith(color: AppColor.primaryColor)),
-                ),
-                SizedBoxH28(),
-                SizedBoxH28(),
-                appText("Reset Password", style: AppTextStyle.title),
-                SizedBoxH6(),
-                appText("Enter new password here",
-                    style: AppTextStyle.subTitle),
-                SizedBoxH28(),
-                appText("New Password", style: AppTextStyle.lable),
-                SizedBoxH8(),
-                PrimaryTextField(
-                  controller: _password,
-                  validator: mobileNumberValidator,
-                  prefix: Icon(Icons.password),
-                  suffix: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          obscurePassword = !obscurePassword;
-                        });
-                      },
-                      child: obscurePassword
-                          ? Icon(Icons.visibility_off)
-                          : Icon(Icons.visibility)),
-                  obscureText: obscurePassword,
-                ),
-                SizedBoxH10(),
-                appText("Confirm Password", style: AppTextStyle.lable),
-                SizedBoxH8(),
-                PrimaryTextField(
-                  controller: _confirmpassword,
-                  validator: passwordValidator,
-                  prefix: Icon(Icons.password),
-                  suffix: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          obscurePassword = !obscurePassword;
-                        });
-                      },
-                      child: obscurePassword
-                          ? Icon(Icons.visibility_off)
-                          : Icon(Icons.visibility)),
-                  obscureText: obscurePassword,
-                ),
-
-                SizedBoxH8(),
-                PrimaryButton(
-                    lable: "Reset",
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {}
-                    }),
-
-              ],
+        key: _formKey,
+        child: CustomScroll(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBoxH34(),
+            SizedBoxH34(),
+            SizedBoxH34(),
+            Center(
+              child: appText("Doctor on call",
+                  style: AppTextStyle.appName
+                      .copyWith(color: AppColor.primaryColor)),
             ),
-          )),
+            SizedBoxH28(),
+            SizedBoxH28(),
+            appText("Reset Password", style: AppTextStyle.title),
+            SizedBoxH6(),
+            appText("Enter new password here", style: AppTextStyle.subTitle),
+            SizedBoxH28(),
+            appText("New Password", style: AppTextStyle.lable),
+            SizedBoxH8(),
+            PrimaryTextField(
+              controller: _password,
+              hintText: "Enter password",
+              validator: mobileNumberValidator,
+              prefix: const Icon(Icons.password),
+              suffix: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      obscurePassword = !obscurePassword;
+                    });
+                  },
+                  child: obscurePassword
+                      ? const Icon(Icons.visibility_off)
+                      : const Icon(Icons.visibility)),
+              obscureText: obscurePassword,
+            ),
+            SizedBoxH10(),
+            appText("Confirm Password", style: AppTextStyle.lable),
+            SizedBoxH8(),
+            PrimaryTextField(
+              controller: _confirmPassword,
+              hintText: "Enter confirm password",
+              validator: passwordValidator,
+              prefix: Icon(Icons.password),
+              suffix: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      obscurePassword = !obscurePassword;
+                    });
+                  },
+                  child: obscurePassword
+                      ? Icon(Icons.visibility_off)
+                      : Icon(Icons.visibility)),
+              obscureText: obscurePassword,
+            ),
+            SizedBoxH8(),
+            PrimaryButton(
+                lable: "Reset",
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {}
+                }),
+          ],
+        ),
+      )),
     );
   }
 }
