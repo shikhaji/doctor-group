@@ -136,7 +136,10 @@ class _TabAppBarState extends State<TabAppBar> {
       centerTitle: true,
       elevation: widget.elevation,
       shadowColor: Theme.of(context).shadowColor.withOpacity(1),
-      title: appText(widget.title ?? "", style: AppTextStyle.appBarTextTitle),
+      title: appText(
+        widget.title ?? "",
+        style: AppTextStyle.appBarTitle,
+      ),
       actions: [
         Padding(
           padding: const EdgeInsets.all(10),

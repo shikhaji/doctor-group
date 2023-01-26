@@ -9,14 +9,15 @@ import '../../widget/primary_botton.dart';
 import '../../widget/primary_textfield.dart';
 import '../../widget/scrollview.dart';
 
-class ForgotPassword extends StatefulWidget {
-  const ForgotPassword({Key? key}) : super(key: key);
+class ResetPasswordScreen extends StatefulWidget {
+  const ResetPasswordScreen({Key? key}) : super(key: key);
 
   @override
-  State<ForgotPassword> createState() => _ForgotPasswordState();
+  State<ResetPasswordScreen> createState() => _ResetPasswordScreenState();
 }
 
-class _ForgotPasswordState extends State<ForgotPassword> with ValidationMixin {
+class _ResetPasswordScreenState extends State<ResetPasswordScreen>
+    with ValidationMixin {
   final TextEditingController _password = TextEditingController();
   final TextEditingController _confirmPassword = TextEditingController();
   bool obscurePassword = true;

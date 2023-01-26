@@ -1,6 +1,3 @@
-import 'package:doctor_on_call/views/Auth/login_screen.dart';
-import 'package:doctor_on_call/views/Auth/otp_verification_screen.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../utils/app_color.dart';
@@ -11,17 +8,16 @@ import '../../widget/custom_sized_box.dart';
 import '../../widget/primary_botton.dart';
 import '../../widget/primary_textfield.dart';
 import '../../widget/scrollview.dart';
+import 'otp_verification_screen.dart';
 
-class MobileVerificationScreen extends StatefulWidget {
-  const MobileVerificationScreen({Key? key}) : super(key: key);
+class ForgotPassword extends StatefulWidget {
+  const ForgotPassword({Key? key}) : super(key: key);
 
   @override
-  State<MobileVerificationScreen> createState() =>
-      _MobileVerificationScreenState();
+  State<ForgotPassword> createState() => _ForgotPasswordState();
 }
 
-class _MobileVerificationScreenState extends State<MobileVerificationScreen>
-    with ValidationMixin {
+class _ForgotPasswordState extends State<ForgotPassword> with ValidationMixin {
   final TextEditingController _phone = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
@@ -45,9 +41,10 @@ class _MobileVerificationScreenState extends State<MobileVerificationScreen>
             ),
             SizedBoxH28(),
             SizedBoxH28(),
-            appText("Mobile Verification", style: AppTextStyle.title),
+            appText("Forgot Password", style: AppTextStyle.title),
             SizedBoxH6(),
-            appText("Please verify your mobile number first",
+            appText(
+                "Enter registered phone number and we will send you an otp to your phone number.",
                 style: AppTextStyle.subTitle),
             SizedBoxH28(),
             appText("Phone number", style: AppTextStyle.lable),
@@ -69,26 +66,6 @@ class _MobileVerificationScreenState extends State<MobileVerificationScreen>
                   if (_formKey.currentState!.validate()) {}
                 }),
             SizedBoxH8(),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => LoginScreen()));
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  appText(
-                    "Already have an account? ",
-                    style: AppTextStyle.subTitle,
-                  ),
-                  appText(
-                    "Login",
-                    style: AppTextStyle.redTextStyle
-                        .copyWith(color: AppColor.primaryLightColor),
-                  ),
-                ],
-              ),
-            ),
           ],
         ),
       )),

@@ -17,7 +17,7 @@ class SignUpScreen extends StatefulWidget {
   State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> with ValidationMixin{
+class _SignUpScreenState extends State<SignUpScreen> with ValidationMixin {
   final TextEditingController _phone = TextEditingController();
   final TextEditingController _password = TextEditingController();
   final TextEditingController _refercode = TextEditingController();
@@ -30,85 +30,90 @@ class _SignUpScreenState extends State<SignUpScreen> with ValidationMixin{
       backgroundColor: AppColor.white,
       body: SafeArea(
           child: Form(
-            key: _formKey,
-            child: CustomScroll(
-
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBoxH34(),
-                SizedBoxH34(),
-                Center(
-                  child: appText("Doctor on call", style: AppTextStyle.appName.copyWith(color: AppColor.primaryColor)),
-                ),
-                SizedBoxH28(), SizedBoxH28(),
-                appText("Sign Up", style: AppTextStyle.title),
-                SizedBoxH6(),
-                appText("Fill your details to continue",
-                    style: AppTextStyle.subTitle),
-                SizedBoxH28(),
-                appText("Phone number", style: AppTextStyle.lable),
-                SizedBoxH8(),
-                PrimaryTextField(
-                  controller: _phone,
-                  validator: mobileNumberValidator,
-                  prefix: Icon(Icons.phone),
-                ),
-                SizedBoxH10(),
-                appText("Password", style: AppTextStyle.lable),
-                SizedBoxH8(),
-                PrimaryTextField(
-
-                  controller: _password,
-                  validator: passwordValidator,
-                  prefix: Icon(Icons.password),
-                  suffix: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          obscurePassword = !obscurePassword;
-                        });
-                      },
-                      child: obscurePassword
-                          ? Icon(Icons.visibility_off)
-                          : Icon(Icons.visibility)),
-                  obscureText: obscurePassword,
-                ),
-                SizedBoxH10(),
-                appText("Confirm Password", style: AppTextStyle.lable),
-                SizedBoxH8(),
-                PrimaryTextField(
-                  controller: _confirmPassword,
-                  prefix: Icon(Icons.password),
-                  suffix: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          obscurePassword = !obscurePassword;
-                        });
-                      },
-                      child: obscurePassword
-                          ? Icon(Icons.visibility_off)
-                          : Icon(Icons.visibility)),
-                  obscureText: obscurePassword,
-
-
-                ),
-                SizedBoxH10(),
-                appText("Refer Code", style: AppTextStyle.lable),
-                SizedBoxH8(),
-                PrimaryTextField(
-                  controller: _refercode,
-
-                ),
-
-                SizedBoxH8(),
-                PrimaryButton(lable: "Sign Up", onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=> LoginScreen()));
-                  if(_formKey.currentState!.validate()){
-
-                  }
-                }),
-              ],
+        key: _formKey,
+        child: CustomScroll(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBoxH34(),
+            SizedBoxH34(),
+            Center(
+              child: appText("Doctor on call",
+                  style: AppTextStyle.appName
+                      .copyWith(color: AppColor.primaryColor)),
             ),
-          )),
+            SizedBoxH28(),
+            SizedBoxH28(),
+            appText("Sign Up", style: AppTextStyle.title),
+            SizedBoxH6(),
+            appText("Fill your details to continue",
+                style: AppTextStyle.subTitle),
+            SizedBoxH28(),
+            appText("Phone number", style: AppTextStyle.lable),
+            SizedBoxH8(),
+            PrimaryTextField(
+              controller: _phone,
+              validator: mobileNumberValidator,
+              prefix: Icon(Icons.phone),
+              hintText: "Enter phone number",
+            ),
+            SizedBoxH10(),
+            appText("Password", style: AppTextStyle.lable),
+            SizedBoxH8(),
+            PrimaryTextField(
+              hintText: "Enter password",
+              controller: _password,
+              validator: passwordValidator,
+              prefix: Icon(Icons.password),
+              suffix: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      obscurePassword = !obscurePassword;
+                    });
+                  },
+                  child: obscurePassword
+                      ? Icon(Icons.visibility_off)
+                      : Icon(Icons.visibility)),
+              obscureText: obscurePassword,
+            ),
+            SizedBoxH10(),
+            appText("Confirm Password", style: AppTextStyle.lable),
+            SizedBoxH8(),
+            PrimaryTextField(
+              controller: _confirmPassword,
+              prefix: const Icon(Icons.password),
+              validator: (value) {
+                return confirmPasswordValidator(value!, _password.text.trim());
+              },
+              suffix: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      obscurePassword = !obscurePassword;
+                    });
+                  },
+                  child: obscurePassword
+                      ? Icon(Icons.visibility_off)
+                      : Icon(Icons.visibility)),
+              obscureText: obscurePassword,
+              hintText: "Enter confirm password",
+            ),
+            SizedBoxH10(),
+            appText("Refer Code", style: AppTextStyle.lable),
+            SizedBoxH8(),
+            PrimaryTextField(
+              controller: _refercode,
+              hintText: "Enter refer code",
+            ),
+            SizedBoxH8(),
+            PrimaryButton(
+                lable: "Sign Up",
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => LoginScreen()));
+                  if (_formKey.currentState!.validate()) {}
+                }),
+          ],
+        ),
+      )),
     );
   }
 }

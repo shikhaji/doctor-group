@@ -35,19 +35,19 @@ class PrimaryBottomNavigationBar extends StatelessWidget {
           activeIcon: _buildImageIcon(AppAsset.home),
         ),
         BottomNavigationBarItem(
-          label: 'Agreement',
-          icon: _buildImageIcon(AppAsset.home),
-          activeIcon: _buildImageIcon(AppAsset.homeFill),
+          label: 'My Appointment',
+          icon: _buildImageIcon(AppAsset.myAppointment),
+          activeIcon: _buildImageIcon(AppAsset.myAppointmentFill),
         ),
         BottomNavigationBarItem(
-          label: 'Messages',
-          icon: _buildImageIcon(AppAsset.home),
-          activeIcon: _buildImageIcon(AppAsset.homeFill),
+          label: 'My Order',
+          icon: _buildImageIcon(AppAsset.order),
+          activeIcon: _buildImageIcon(AppAsset.orderFill),
         ),
         BottomNavigationBarItem(
-          label: 'Profile',
-          icon: _buildImageIcon(AppAsset.home),
-          activeIcon: _buildImageIcon(AppAsset.homeFill),
+          label: 'Services',
+          icon: _buildImageIcon(AppAsset.service),
+          activeIcon: _buildImageIcon(AppAsset.serviceFill),
         ),
       ],
     );

@@ -13,7 +13,7 @@ class CustomContainerBox extends StatelessWidget {
   final VoidCallback? onPressed;
   final TextStyle? titleStyle;
   final EdgeInsetsGeometry? padding;
-  final IconData? icon;
+  final String? icon;
   const CustomContainerBox(
       {Key? key,
       this.title,
@@ -31,12 +31,14 @@ class CustomContainerBox extends StatelessWidget {
         alignment: Alignment.center,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(textFieldBorderRadius),
-            border: Border.all(color: AppColor.primaryColor)),
+            border: Border.all(color: AppColor.grey)),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              icon,
+            Image.asset(
+              "${icon}",
+              height: Sizes.s50.h,
+              width: Sizes.s50.w,
             ),
             SizedBoxH10(),
             appText(

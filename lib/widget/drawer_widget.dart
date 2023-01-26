@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../utils/app_sizes.dart';
 import '../utils/screen_utils.dart';
 
@@ -29,42 +30,42 @@ class DrawerWidget extends StatelessWidget {
                     _DrawerMenuListTile.asset(
                       title: 'Profile',
                       onTap: () {},
-                      child: Icon(Icons.home),
+                      child: Icon(FontAwesomeIcons.user),
                     ),
                     _DrawerMenuListTile.asset(
                       title: 'Order List',
                       onTap: () {},
-                      child: Icon(Icons.home),
+                      child: Icon(Icons.format_list_bulleted_sharp),
                     ),
                     _DrawerMenuListTile.asset(
                       title: 'Share',
                       onTap: () {},
-                      child: Icon(Icons.home),
+                      child: Icon(Icons.share),
                     ),
                     _DrawerMenuListTile.asset(
                       title: 'Rate Us',
                       onTap: () {},
-                      child: Icon(Icons.home),
+                      child: Icon(Icons.rate_review),
                     ),
                     _DrawerMenuListTile.asset(
                       title: 'Feedback',
                       onTap: () {},
-                      child: Icon(Icons.home),
+                      child: Icon(Icons.favorite_outline),
                     ),
                     _DrawerMenuListTile.asset(
                       title: 'Terms & Conditions',
                       onTap: () {},
-                      child: Icon(Icons.home),
+                      child: Icon(Icons.local_police_outlined),
                     ),
                     _DrawerMenuListTile.asset(
                       title: 'Privacy Policy',
                       onTap: () {},
-                      child: Icon(Icons.home),
+                      child: Icon(Icons.policy),
                     ),
                     _DrawerMenuListTile.asset(
                       title: 'About Us',
                       onTap: () {},
-                      child: Icon(Icons.home),
+                      child: const Icon(Icons.account_box),
                     ),
                     ScreenUtil().setVerticalSpacing(30),
                     SizedBox(

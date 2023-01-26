@@ -1,6 +1,9 @@
 import 'package:doctor_on_call/utils/app_sizes.dart';
 import 'package:doctor_on_call/utils/validation_mixin.dart';
-import 'package:doctor_on_call/views/Auth/forgot_password.dart';
+import 'package:doctor_on_call/views/Auth/forgot_password_screen.dart';
+import 'package:doctor_on_call/views/Auth/mobile_verification_screen.dart';
+import 'package:doctor_on_call/views/Auth/signup_screen.dart';
+import 'package:doctor_on_call/views/Dashbord/main_home_screen.dart';
 import 'package:doctor_on_call/widget/primary_botton.dart';
 import 'package:doctor_on_call/widget/primary_textfield.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +14,7 @@ import '../../utils/app_text.dart';
 import '../../utils/app_text_style.dart';
 import '../../widget/custom_sized_box.dart';
 import '../../widget/scrollview.dart';
-import '../home/home_screen.dart';
+import '../Dashbord/home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -97,17 +100,22 @@ class _LoginScreenState extends State<LoginScreen> with ValidationMixin {
                 lable: "Login",
                 onPressed: () {
                   // if (_formKey.currentState!.validate()) {}
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => HomeScreen()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MainHomeScreen()));
                 }),
             SizedBoxH8(),
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => SignUpScreen()));
+              },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   appText(
-                    "You don’t have an account?",
+                    "You don’t have an account? ",
                     style: AppTextStyle.subTitle,
                   ),
                   appText(
