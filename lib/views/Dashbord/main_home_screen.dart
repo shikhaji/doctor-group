@@ -68,7 +68,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
       case 1:
         return const MyAppointmentScreen();
       case 2:
-        return const DoctorList();
+        return const MyOrderScreen();
       case 3:
         return const ServicesScreen();
       default:

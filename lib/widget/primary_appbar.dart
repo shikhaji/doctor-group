@@ -51,6 +51,7 @@ class SecondaryAppBar extends StatefulWidget implements PreferredSizeWidget {
   final double? elevation;
   final bool? isLeading;
   final VoidCallback? onBackPressed;
+  final IconData? leadingIcon;
 
   const SecondaryAppBar({
     Key? key,
@@ -59,6 +60,7 @@ class SecondaryAppBar extends StatefulWidget implements PreferredSizeWidget {
     this.isLeading = true,
     this.elevation,
     this.leading,
+    this.leadingIcon,
     this.onBackPressed,
   })  : preferredSize = const Size.fromHeight(kToolbarHeight),
         super(key: key);
@@ -74,7 +76,7 @@ class _SecondaryAppBarState extends State<SecondaryAppBar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-        // backgroundColor: widget.color ?? Colors.white,
+        backgroundColor: Colors.white,
         elevation: widget.elevation,
         centerTitle: true,
         title: appText(
@@ -89,9 +91,9 @@ class _SecondaryAppBarState extends State<SecondaryAppBar> {
         ],
         leading: widget.isLeading == true
             ? IconButton(
-                icon: const Icon(
-                  Icons.arrow_back_ios_outlined,
-                  color: AppColor.red,
+                icon: Icon(
+                  widget.leadingIcon ?? Icons.arrow_back_ios_outlined,
+                  color: AppColor.black,
                 ),
                 onPressed: widget.onBackPressed ??
                     () {

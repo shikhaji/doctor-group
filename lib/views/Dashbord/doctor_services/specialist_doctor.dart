@@ -9,6 +9,7 @@ import '../../../utils/app_text_style.dart';
 import '../../../utils/screen_utils.dart';
 import '../../../widget/custom_container_box.dart';
 import '../../../widget/drawer_widget.dart';
+import '../../../widget/primary_appbar.dart';
 import '../../../widget/primary_textfield.dart';
 import '../../../widget/scrollview.dart';
 import '../home_screen.dart';
@@ -24,11 +25,14 @@ class _SpecialistDoctorState extends State<SpecialistDoctor> {
   final TextEditingController _search = TextEditingController();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
+      appBar: const SecondaryAppBar(
+        title: "Specialist Doctor",
+        isLeading: true,
+      ),
       body: CustomScroll(
         children: [
           // todo slider
@@ -38,11 +42,9 @@ class _SpecialistDoctorState extends State<SpecialistDoctor> {
           PrimaryTextField(
             controller: _search,
             hintText: "Search Here",
-
-            suffix: Icon(CupertinoIcons.search),
-
+            suffix: const Icon(CupertinoIcons.search),
           ),
-          SizedBox(
+          const SizedBox(
             height: 15,
           ),
           GridView.builder(
@@ -74,49 +76,29 @@ class _SpecialistDoctorState extends State<SpecialistDoctor> {
           ),
         ],
       ),
-
-      appBar: AppBar(
-          centerTitle: true,
-          title: const Text(
-            "Specialist Doctor",
-            style: AppTextStyle.appBarTitle,
-          ),
-          leading: IconButton(
-              onPressed: () {
-               Navigator.pop(context);
-              },
-              icon: const Icon(
-                Icons.arrow_back_ios,
-                color: AppColor.white,
-              ))),
     );
   }
+
   final List<HomeData> _specialistDoctor = [
     HomeData(
         name: 'Cardio Specialist',
         icon: AppAsset.doctorIcon,
-        onPressed: Routs.doctorList
-    ),
+        onPressed: Routs.doctorList),
     HomeData(
         name: 'Dental Specialist',
         icon: AppAsset.doctorIcon,
-        onPressed: Routs.doctorList
-    ),
+        onPressed: Routs.doctorList),
     HomeData(
         name: 'Brain Specialist',
         icon: AppAsset.doctorIcon,
-        onPressed: Routs.doctorList
-    ),
+        onPressed: Routs.doctorList),
     HomeData(
         name: 'Eye Specialist',
         icon: AppAsset.doctorIcon,
-        onPressed: Routs.doctorList
-    ),
+        onPressed: Routs.doctorList),
     HomeData(
         name: 'Child Specialist',
         icon: AppAsset.doctorIcon,
-        onPressed: Routs.doctorList
-    ),
-
+        onPressed: Routs.doctorList),
   ];
 }

@@ -2,6 +2,7 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:doctor_on_call/routs/app_routs.dart';
 import 'package:doctor_on_call/utils/app_text_style.dart';
 import 'package:doctor_on_call/utils/screen_utils.dart';
+import 'package:doctor_on_call/utils/theme_utils.dart';
 import 'package:doctor_on_call/views/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -18,10 +19,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.system,
-      theme: AppTextStyle.lightTheme,
+      theme: ThemeUtils.lightTheme,
+
       initialRoute: Routs.splash,
       onGenerateRoute: RoutGenerator.generateRoute,
-    //  home: const SplashScreen(),
+      //  home: const SplashScreen(),
       builder: (context, child) {
         return ScrollConfiguration(
           behavior: const _ScrollBehaviorModified(),

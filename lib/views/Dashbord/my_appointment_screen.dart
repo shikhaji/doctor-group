@@ -61,24 +61,20 @@ class _MyAppointmentScreenState extends State<MyAppointmentScreen>
         onTap: () {},
         title: "My Appointment",
         action: const SizedBox.shrink(),
-        leading: Container(
-
-          child: IconButton(
-              onPressed: () {
-                openDrawer();
-              },
-              icon: const Icon(
-                Icons.menu_sharp,
-                color: AppColor.orange,
-              )),
-        ),
+        leading: IconButton(
+            onPressed: () {
+              openDrawer();
+            },
+            icon: const Icon(
+              Icons.menu_sharp,
+              color: AppColor.black,
+            )),
         bottom: PreferredSize(
             preferredSize: const Size.fromHeight(0),
             child: Padding(
               padding: EdgeInsets.only(
                   bottom: Sizes.s20.w, left: Sizes.s10.w, right: Sizes.s10.w),
               child: Container(
-                //alignment: Alignment.center,
                 padding: EdgeInsets.symmetric(
                   horizontal: Sizes.s5.w,
                   vertical: Sizes.s5.h,
@@ -94,10 +90,7 @@ class _MyAppointmentScreenState extends State<MyAppointmentScreen>
                   onTap: (index) {},
                   indicatorPadding: EdgeInsets.zero,
                   labelPadding: EdgeInsets.zero,
-
-
                   padding: EdgeInsets.zero,
-
                   tabs: const [
                     Tab(text: "Pending"),
                     Tab(text: "Upcoming"),

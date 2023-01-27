@@ -7,26 +7,6 @@ import 'create_material_color.dart';
 class AppTextStyle {
   AppTextStyle._();
 
-  static ThemeData lightTheme = ThemeData(
-      primaryColor: AppColor.primaryColor,
-      tabBarTheme: lightTabBarTheme,
-      primarySwatch: createMaterialColor(const Color(0xff33cc99)),
-      fontFamily: "Nunito_Sans");
-
-
-
-
-  static TabBarTheme get lightTabBarTheme {
-    return TabBarTheme(
-      labelColor: AppColor.orange,
-      labelStyle: AppTextStyle.redTextStyle,
-      unselectedLabelColor: AppColor.unSelectedTabBarColor,
-      unselectedLabelStyle: AppTextStyle.greySubTitle,
-      indicator: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(50)),
-    );
-  }
-
   static const TextStyle headline1 = TextStyle(
     fontSize: Sizes.s28,
     fontWeight: FontWeight.w900,
