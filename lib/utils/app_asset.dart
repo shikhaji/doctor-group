@@ -26,4 +26,11 @@ class AppAsset {
 
   //DRAWER IMAGE
   static const String drawerBackground = "${imagePath}drawer_background.svg";
+
+  //services Page
+  static const String ambulanceIcon= "${iconPath}ambulance_icon.png";
+  static const String chemistIcon= "${iconPath}chemist_icon.png";
+  static const String doctorIcon= "${iconPath}doctor_icon.png";
+  static const String pathologyIcon= "${iconPath}pathology_icon.png";
+
 }

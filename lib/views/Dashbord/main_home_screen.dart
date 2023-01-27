@@ -12,6 +12,7 @@ import '../../utils/app_text_style.dart';
 import '../../utils/screen_utils.dart';
 import '../../widget/drawer_widget.dart';
 import '../../widget/primary_bottom_navigation_bar.dart';
+import 'doctor_services/doctor_list_screen.dart';
 
 class MainHomeScreen extends StatefulWidget {
   const MainHomeScreen({Key? key}) : super(key: key);
@@ -66,7 +67,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
       case 1:
         return const MyAppointmentScreen();
       case 2:
-        return const MyOrderScreen();
+        return const DoctorList();
       case 3:
         return const ServicesScreen();
       default:
