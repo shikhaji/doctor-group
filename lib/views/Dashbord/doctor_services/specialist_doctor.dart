@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../../routs/app_routs.dart';
 import '../../../utils/app_asset.dart';
 import '../../../utils/app_color.dart';
 import '../../../utils/app_sizes.dart';
@@ -23,9 +24,7 @@ class _SpecialistDoctorState extends State<SpecialistDoctor> {
   final TextEditingController _search = TextEditingController();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  void openDrawer() {
-    _scaffoldKey.currentState?.openDrawer();
-  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,30 +74,19 @@ class _SpecialistDoctorState extends State<SpecialistDoctor> {
           ),
         ],
       ),
-      drawer: Drawer(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        width: ScreenUtil().screenWidth * 0.8,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            topRight: Radius.circular(Sizes.s20.r),
-            bottomRight: Radius.circular(Sizes.s20.r),
-          ),
-        ),
-        child: const DrawerWidget(),
-      ),
+
       appBar: AppBar(
           centerTitle: true,
           title: const Text(
-            "Services",
+            "Specialist Doctor",
             style: AppTextStyle.appBarTitle,
           ),
           leading: IconButton(
               onPressed: () {
-                openDrawer();
+               Navigator.pop(context);
               },
               icon: const Icon(
-                Icons.menu_sharp,
+                Icons.arrow_back_ios,
                 color: AppColor.white,
               ))),
     );
@@ -107,27 +95,27 @@ class _SpecialistDoctorState extends State<SpecialistDoctor> {
     HomeData(
         name: 'Cardio Specialist',
         icon: AppAsset.doctorIcon,
-       // onPressed: ""
+        onPressed: Routs.doctorList
     ),
     HomeData(
         name: 'Dental Specialist',
         icon: AppAsset.doctorIcon,
-        //onPressed: ""
+        onPressed: Routs.doctorList
     ),
     HomeData(
         name: 'Brain Specialist',
         icon: AppAsset.doctorIcon,
-        //onPressed: ""
+        onPressed: Routs.doctorList
     ),
     HomeData(
         name: 'Eye Specialist',
         icon: AppAsset.doctorIcon,
-        //onPressed: ""
+        onPressed: Routs.doctorList
     ),
     HomeData(
         name: 'Child Specialist',
         icon: AppAsset.doctorIcon,
-        //onPressed: ""
+        onPressed: Routs.doctorList
     ),
 
   ];

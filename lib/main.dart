@@ -1,4 +1,5 @@
 import 'package:bot_toast/bot_toast.dart';
+import 'package:doctor_on_call/routs/app_routs.dart';
 import 'package:doctor_on_call/utils/app_text_style.dart';
 import 'package:doctor_on_call/utils/screen_utils.dart';
 import 'package:doctor_on_call/views/splash/splash_screen.dart';
@@ -18,7 +19,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.system,
       theme: AppTextStyle.lightTheme,
-      home: const SplashScreen(),
+      initialRoute: Routs.splash,
+      onGenerateRoute: RoutGenerator.generateRoute,
+    //  home: const SplashScreen(),
       builder: (context, child) {
         return ScrollConfiguration(
           behavior: const _ScrollBehaviorModified(),

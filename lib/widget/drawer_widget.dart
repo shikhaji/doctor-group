@@ -37,21 +37,21 @@ class DrawerWidget extends StatelessWidget {
                       onTap: () {},
                       child: Icon(Icons.format_list_bulleted_sharp),
                     ),
-                    _DrawerMenuListTile.asset(
-                      title: 'Share',
-                      onTap: () {},
-                      child: Icon(Icons.share),
-                    ),
-                    _DrawerMenuListTile.asset(
-                      title: 'Rate Us',
-                      onTap: () {},
-                      child: Icon(Icons.rate_review),
-                    ),
-                    _DrawerMenuListTile.asset(
-                      title: 'Feedback',
-                      onTap: () {},
-                      child: Icon(Icons.favorite_outline),
-                    ),
+                    // _DrawerMenuListTile.asset(
+                    //   title: 'Share',
+                    //   onTap: () {},
+                    //   child: Icon(Icons.share),
+                    // ),
+                    // _DrawerMenuListTile.asset(
+                    //   title: 'Rate Us',
+                    //   onTap: () {},
+                    //   child: Icon(Icons.rate_review),
+                    // ),
+                    // _DrawerMenuListTile.asset(
+                    //   title: 'Feedback',
+                    //   onTap: () {},
+                    //   child: Icon(Icons.favorite_outline),
+                    // ),
                     _DrawerMenuListTile.asset(
                       title: 'Terms & Conditions',
                       onTap: () {},

@@ -23,9 +23,7 @@ class DoctorList extends StatefulWidget {
 class _DoctorListState extends State<DoctorList> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  void openDrawer() {
-    _scaffoldKey.currentState?.openDrawer();
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +33,7 @@ class _DoctorListState extends State<DoctorList> {
         children: [
           // todo slider
           SizedBox(
-            height: 100,
+            height: 20,
           ),
           ListView.builder(
             padding: EdgeInsets.symmetric(vertical: Sizes.s20.h),
@@ -48,30 +46,19 @@ class _DoctorListState extends State<DoctorList> {
           )
         ],
       ),
-      drawer: Drawer(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        width: ScreenUtil().screenWidth * 0.8,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            topRight: Radius.circular(Sizes.s20.r),
-            bottomRight: Radius.circular(Sizes.s20.r),
-          ),
-        ),
-        child: const DrawerWidget(),
-      ),
+
       appBar: AppBar(
           centerTitle: true,
           title: const Text(
-            "My Order",
+            "Doctors",
             style: AppTextStyle.appBarTitle,
           ),
           leading: IconButton(
               onPressed: () {
-                openDrawer();
+                Navigator.pop(context);
               },
               icon: const Icon(
-                Icons.menu_sharp,
+                Icons.arrow_back_ios,
                 color: AppColor.white,
               ))),
     );

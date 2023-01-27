@@ -59,16 +59,19 @@ class _MyAppointmentScreenState extends State<MyAppointmentScreen>
       ),
       appBar: TabAppBar(
         onTap: () {},
-        title: "My Jobs",
+        title: "My Appointment",
         action: const SizedBox.shrink(),
-        leading: IconButton(
-            onPressed: () {
-              openDrawer();
-            },
-            icon: const Icon(
-              Icons.menu_sharp,
-              color: AppColor.white,
-            )),
+        leading: Container(
+
+          child: IconButton(
+              onPressed: () {
+                openDrawer();
+              },
+              icon: const Icon(
+                Icons.menu_sharp,
+                color: AppColor.orange,
+              )),
+        ),
         bottom: PreferredSize(
             preferredSize: const Size.fromHeight(0),
             child: Padding(
@@ -83,7 +86,7 @@ class _MyAppointmentScreenState extends State<MyAppointmentScreen>
                 width: ScreenUtil().screenWidth,
                 height: 60,
                 decoration: BoxDecoration(
-                  color: AppColor.lightGrey,
+                  color: Theme.of(context).cardColor,
                   borderRadius: BorderRadius.circular(50),
                 ),
                 child: TabBar(
@@ -91,10 +94,10 @@ class _MyAppointmentScreenState extends State<MyAppointmentScreen>
                   onTap: (index) {},
                   indicatorPadding: EdgeInsets.zero,
                   labelPadding: EdgeInsets.zero,
-                  unselectedLabelColor: AppColor.black,
-                  labelColor: AppColor.primaryColor,
+
+
                   padding: EdgeInsets.zero,
-                  indicatorColor: AppColor.primaryColor,
+
                   tabs: const [
                     Tab(text: "Pending"),
                     Tab(text: "Upcoming"),

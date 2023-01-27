@@ -9,8 +9,23 @@ class AppTextStyle {
 
   static ThemeData lightTheme = ThemeData(
       primaryColor: AppColor.primaryColor,
+      tabBarTheme: lightTabBarTheme,
       primarySwatch: createMaterialColor(const Color(0xff33cc99)),
       fontFamily: "Nunito_Sans");
+
+
+
+
+  static TabBarTheme get lightTabBarTheme {
+    return TabBarTheme(
+      labelColor: AppColor.orange,
+      labelStyle: AppTextStyle.redTextStyle,
+      unselectedLabelColor: AppColor.unSelectedTabBarColor,
+      unselectedLabelStyle: AppTextStyle.greySubTitle,
+      indicator: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(50)),
+    );
+  }
 
   static const TextStyle headline1 = TextStyle(
     fontSize: Sizes.s28,
@@ -45,7 +60,7 @@ class AppTextStyle {
   static const TextStyle redTextStyle = TextStyle(
     fontSize: Sizes.s16,
     fontWeight: FontWeight.bold,
-    color: AppColor.red,
+    color: AppColor.orange,
   );
   static const TextStyle blackSubTitle =
       TextStyle(fontSize: Sizes.s16, fontWeight: FontWeight.w400);

@@ -134,11 +134,12 @@ class _TabAppBarState extends State<TabAppBar> {
   Widget build(BuildContext context) {
     return AppBar(
       centerTitle: true,
+      backgroundColor: AppColor.white,
       elevation: widget.elevation,
       shadowColor: Theme.of(context).shadowColor.withOpacity(1),
       title: appText(
         widget.title ?? "",
-        style: AppTextStyle.appBarTitle,
+        style: AppTextStyle.appBarTitle.copyWith(color: AppColor.black),
       ),
       actions: [
         Padding(

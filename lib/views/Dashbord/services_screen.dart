@@ -1,6 +1,8 @@
+import 'package:doctor_on_call/views/Dashbord/doctor_services/specialist_doctor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../routs/app_routs.dart';
 import '../../utils/app_asset.dart';
 import '../../utils/app_color.dart';
 import '../../utils/app_sizes.dart';
@@ -109,11 +111,11 @@ class _ServicesScreenState extends State<ServicesScreen> {
     HomeData(
         name: 'Doctor',
         icon: AppAsset.doctorIcon,
-        onPressed: ""),
+        onPressed: Routs.specialistDoctor),
     HomeData(
         name: 'Pathology',
         icon: AppAsset.pathologyIcon,
-        //onPressed: ""
+        //onPressed: "
     ),
     HomeData(
         name: 'Ambulance',

@@ -28,6 +28,18 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
+      drawer: Drawer(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        width: ScreenUtil().screenWidth * 0.8,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topRight: Radius.circular(Sizes.s20.r),
+            bottomRight: Radius.circular(Sizes.s20.r),
+          ),
+        ),
+        child: const DrawerWidget(),
+      ),
       body: CustomScroll(
         children: [
           // todo slider
@@ -85,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
     HomeData(
         name: 'Meeting Schedule',
         icon: AppAsset.meetingSchedule,
-        //onPressed: ""
+        onPressed:""
     ),
     HomeData(name: 'Wallets', icon: AppAsset.wallets,
         //onPressed: ""
