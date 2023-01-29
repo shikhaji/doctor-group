@@ -4,6 +4,7 @@ import 'package:doctor_on_call/utils/app_text_style.dart';
 import 'package:doctor_on_call/widget/scrollview.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import '../../routs/app_routs.dart';
 import '../../utils/app_sizes.dart';
 import '../../utils/screen_utils.dart';
 import '../../widget/custom_container_box.dart';
@@ -91,13 +92,13 @@ class _HomeScreenState extends State<HomeScreen> {
     HomeData(
         name: 'Meeting Schedule',
         icon: AppAsset.meetingSchedule,
-        onPressed: ""),
+        onPressed: Routs.meetingSchedule),
     HomeData(
       name: 'Wallets', icon: AppAsset.wallets,
       //onPressed: ""
     ),
     HomeData(
-      name: 'My Appoinments',
+      name: 'Clients',
       icon: AppAsset.myAppointmentIcon,
     ),
   ];

@@ -4,10 +4,12 @@ import 'package:doctor_on_call/views/Auth/mobile_verification_screen.dart';
 import 'package:doctor_on_call/views/Auth/otp_verification_screen.dart';
 import 'package:doctor_on_call/views/Auth/reset_password_screen.dart';
 import 'package:doctor_on_call/views/Auth/signup_screen.dart';
+import 'package:doctor_on_call/views/Dashbord/clients_screen.dart';
 import 'package:doctor_on_call/views/Dashbord/doctor_services/doctor_list_screen.dart';
 import 'package:doctor_on_call/views/Dashbord/doctor_services/specialist_doctor.dart';
 import 'package:doctor_on_call/views/Dashbord/home_screen.dart';
 import 'package:doctor_on_call/views/Dashbord/main_home_screen.dart';
+import 'package:doctor_on_call/views/Dashbord/meeting_schedule_screen.dart';
 import 'package:doctor_on_call/views/Dashbord/my_appointment_screen.dart';
 import 'package:doctor_on_call/views/Dashbord/my_order_screen.dart';
 import 'package:doctor_on_call/views/Dashbord/services_screen.dart';
@@ -31,6 +33,8 @@ class Routs {
   static const String services = "/services_screen";
   static const String doctorList = "/doctor_list_screen";
   static const String specialistDoctor = "/specialist_doctor";
+  static const String clientsScreen = "/client_screen";
+  static const String meetingSchedule = "/meeting_schedule";
 
 
 }
@@ -47,21 +51,21 @@ class RoutGenerator {
         return MaterialPageRoute(builder: (_) => const LoginScreen());
 
       case Routs.forgotPassword:
-        return MaterialPageRoute(builder: (_) => ForgotPassword());
+        return MaterialPageRoute(builder: (_) => const ForgotPassword());
 
       case Routs.resetPassword:
         return MaterialPageRoute(
-            builder: (_) => ResetPasswordScreen());
+            builder: (_) => const ResetPasswordScreen());
 
       case Routs.signUp:
         return MaterialPageRoute(builder: (_) => const SignUpScreen());
 
       case Routs.otp:
         return MaterialPageRoute(
-            builder: (_) => OtpVerificationScreen());
+            builder: (_) => const OtpVerificationScreen());
 
       case Routs.mainHome:
-        return MaterialPageRoute(builder: (_) => MainHomeScreen());
+        return MaterialPageRoute(builder: (_) => const MainHomeScreen());
 
       case Routs.home:
         return MaterialPageRoute(builder: (_) => const HomeScreen());
@@ -82,7 +86,13 @@ class RoutGenerator {
         return MaterialPageRoute(builder: (_) => const SpecialistDoctor());
 
       case Routs.mobileVerification:
-        return MaterialPageRoute(builder: (_) => MobileVerificationScreen());
+        return MaterialPageRoute(builder: (_) => const MobileVerificationScreen());
+
+      case Routs.clientsScreen:
+        return MaterialPageRoute(builder: (_) => const ClientsScreen());
+
+      case Routs.meetingSchedule:
+        return MaterialPageRoute(builder: (_) => const MeetingSchedule());
 
 
       default:

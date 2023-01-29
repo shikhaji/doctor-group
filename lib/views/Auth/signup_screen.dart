@@ -35,14 +35,14 @@ class _SignUpScreenState extends State<SignUpScreen> with ValidationMixin {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBoxH34(),
-            SizedBoxH34(),
+
             Center(
               child: appText("Doctor on call",
                   style: AppTextStyle.appName
                       .copyWith(color: AppColor.primaryColor)),
             ),
             SizedBoxH28(),
-            SizedBoxH28(),
+
             appText("Sign Up", style: AppTextStyle.title),
             SizedBoxH6(),
             appText("Fill your details to continue",
@@ -97,6 +97,13 @@ class _SignUpScreenState extends State<SignUpScreen> with ValidationMixin {
               hintText: "Enter confirm password",
             ),
             SizedBoxH10(),
+
+            appText("Select Categories", style: AppTextStyle.lable),
+            SizedBoxH8(),
+            PrimaryTextField(
+              controller: _refercode,
+              hintText: "Select Categories",
+            ),
             appText("Refer Code", style: AppTextStyle.lable),
             SizedBoxH8(),
             PrimaryTextField(

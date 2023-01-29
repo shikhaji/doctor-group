@@ -37,7 +37,7 @@ class SizedBoxW10 extends SizedBox {
 }
 
 class SizedBoxW8 extends SizedBox {
-  SizedBoxW8({Key? key}) : super(key: key, width: Sizes.s8.w);
+  SizedBoxW8({Key? key}) : super(key: key, width: Sizes.s8.h);
 }
 
 class SizedBoxH6 extends SizedBox {

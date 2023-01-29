@@ -1,3 +1,4 @@
+import 'package:doctor_on_call/views/Auth/reset_password_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../utils/app_color.dart';
@@ -62,7 +63,7 @@ class _ForgotPasswordState extends State<ForgotPassword> with ValidationMixin {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => OtpVerificationScreen()));
+                          builder: (context) => ResetPasswordScreen()));
                   if (_formKey.currentState!.validate()) {}
                 }),
             SizedBoxH8(),
