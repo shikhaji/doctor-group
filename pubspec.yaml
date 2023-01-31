@@ -16,6 +16,7 @@ dependencies:
 
   cupertino_icons: ^1.0.2
   pin_code_text_field: ^1.8.0
+  date_picker_timeline: ^1.2.3
   flutter_svg: ^1.1.5
   fluttertoast: ^8.1.1
   dio: ^4.0.6

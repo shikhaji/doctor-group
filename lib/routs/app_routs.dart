@@ -4,7 +4,7 @@ import 'package:doctor_on_call/views/Auth/mobile_verification_screen.dart';
 import 'package:doctor_on_call/views/Auth/otp_verification_screen.dart';
 import 'package:doctor_on_call/views/Auth/reset_password_screen.dart';
 import 'package:doctor_on_call/views/Auth/signup_screen.dart';
-import 'package:doctor_on_call/views/Dashbord/clients_screen.dart';
+
 import 'package:doctor_on_call/views/Dashbord/doctor_services/doctor_list_screen.dart';
 import 'package:doctor_on_call/views/Dashbord/doctor_services/specialist_doctor.dart';
 import 'package:doctor_on_call/views/Dashbord/home_screen.dart';
@@ -33,7 +33,7 @@ class Routs {
   static const String services = "/services_screen";
   static const String doctorList = "/doctor_list_screen";
   static const String specialistDoctor = "/specialist_doctor";
-  static const String clientsScreen = "/client_screen";
+
   static const String meetingSchedule = "/meeting_schedule";
 
 
@@ -88,8 +88,6 @@ class RoutGenerator {
       case Routs.mobileVerification:
         return MaterialPageRoute(builder: (_) => const MobileVerificationScreen());
 
-      case Routs.clientsScreen:
-        return MaterialPageRoute(builder: (_) => const ClientsScreen());
 
       case Routs.meetingSchedule:
         return MaterialPageRoute(builder: (_) => const MeetingSchedule());
