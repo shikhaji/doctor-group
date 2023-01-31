@@ -1,3 +1,4 @@
+import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:doctor_on_call/utils/app_text_style.dart';
 import 'package:doctor_on_call/widget/custom_sized_box.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,12 +17,13 @@ class MeetingSchedule extends StatefulWidget {
 }
 
 class _MeetingScheduleState extends State<MeetingSchedule> {
+  DateTime _selectedDate = DateTime.now();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScroll(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 100,
           ),
           Container(
@@ -29,21 +31,41 @@ class _MeetingScheduleState extends State<MeetingSchedule> {
               child: Text("Select Date: ", style: AppTextStyle.headingTextTile,)),
           SizedBoxH8(),
           Container(
-            height: 90,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: [
-                dates("Mon","21",true),
-                dates("Tue","22",false),
-                dates("Wed","23",false),
-                dates("Thu","24",false),
-                dates("Fri","25",false),
-                dates("Sat","26",false),
-                dates("Sun","27",false),
-              ],
+
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: AppColor.textFieldColor,
             ),
 
+            child: DatePicker(
+              DateTime.now(),
+              height: 100,
+              width: 50,
+              initialSelectedDate: DateTime.now(),
+              selectionColor: AppColor.primaryColor,
+              selectedTextColor: AppColor.white,
+              dateTextStyle: AppTextStyle.greySubTitle,
+              onDateChange: (date){
+                _selectedDate=date;
+              },
+            ),
           ),
+          // Container(
+          //   height: 90,
+          //   child: ListView(
+          //     scrollDirection: Axis.horizontal,
+          //     children: [
+          //       dates("Mon","21",true),
+          //       dates("Tue","22",false),
+          //       dates("Wed","23",false),
+          //       dates("Thu","24",false),
+          //       dates("Fri","25",false),
+          //       dates("Sat","26",false),
+          //       dates("Sun","27",false),
+          //     ],
+          //   ),
+          //
+          // ),
           SizedBoxH34(),
           Container(
             child: Row(
@@ -51,7 +73,9 @@ class _MeetingScheduleState extends State<MeetingSchedule> {
               children: [
                 Column(
                   children: [
+
                     Text("From Start",style: AppTextStyle.headingTextTile,),
+
                     SizedBoxH8(),
                     CustomButton(
                       lable: "Start Time",
@@ -93,47 +117,47 @@ class _MeetingScheduleState extends State<MeetingSchedule> {
       ),
     );
   }
-  dates(String day, String date, bool isSelected){
-    return isSelected? Container(
-      width: 70,
-      margin: EdgeInsets.only(right: 15),
-      decoration: BoxDecoration(
-        color: AppColor.primaryColor,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Container(
-            child: Text(day,style: AppTextStyle.buttonTextStyle,),
-          ),
-          Container(
-            margin: EdgeInsets.only(top: 15),
-            padding: EdgeInsets.all(7),
-            child: Text(date,style: AppTextStyle.buttonTextStyle,),
-          )
-        ],
-      ),
-    ) :Container(
-    width: 70,
-    margin: EdgeInsets.only(right: 15),
-    decoration: BoxDecoration(
-    color: AppColor.textFieldColor,
-    borderRadius: BorderRadius.circular(10),
-    ),
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-    children: [
-    Container(
-    child: Text(day,style: AppTextStyle.buttonTextStyle.copyWith(color: AppColor.black),),
-    ),
-    Container(
-    margin: EdgeInsets.only(top: 15),
-    padding: EdgeInsets.all(7),
-    child: Text(date,style: AppTextStyle.buttonTextStyle.copyWith(color: AppColor.black),),
-    )
-    ],
-    ),
-    );
-  }
+  // dates(String day, String date, bool isSelected){
+  //   return isSelected? Container(
+  //     width: 70,
+  //     margin: EdgeInsets.only(right: 15),
+  //     decoration: BoxDecoration(
+  //       color: AppColor.primaryColor,
+  //       borderRadius: BorderRadius.circular(10),
+  //     ),
+  //     child: Column(
+  //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //       children: [
+  //         Container(
+  //           child: Text(day,style: AppTextStyle.buttonTextStyle,),
+  //         ),
+  //         Container(
+  //           margin: EdgeInsets.only(top: 15),
+  //           padding: EdgeInsets.all(7),
+  //           child: Text(date,style: AppTextStyle.buttonTextStyle,),
+  //         )
+  //       ],
+  //     ),
+  //   ) :Container(
+  //   width: 70,
+  //   margin: EdgeInsets.only(right: 15),
+  //   decoration: BoxDecoration(
+  //   color: AppColor.textFieldColor,
+  //   borderRadius: BorderRadius.circular(10),
+  //   ),
+  //   child: Column(
+  //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //   children: [
+  //   Container(
+  //   child: Text(day,style: AppTextStyle.buttonTextStyle.copyWith(color: AppColor.black),),
+  //   ),
+  //   Container(
+  //   margin: EdgeInsets.only(top: 15),
+  //   padding: EdgeInsets.all(7),
+  //   child: Text(date,style: AppTextStyle.buttonTextStyle.copyWith(color: AppColor.black),),
+  //   )
+  //   ],
+  //   ),
+  //   );
+  // }
 }
