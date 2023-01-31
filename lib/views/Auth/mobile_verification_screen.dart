@@ -1,8 +1,13 @@
+import 'package:dio/dio.dart';
+import 'package:doctor_on_call/routs/arguments.dart';
+import 'package:doctor_on_call/services/api_services.dart';
 import 'package:doctor_on_call/views/Auth/login_screen.dart';
 import 'package:doctor_on_call/views/Auth/otp_verification_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
+import '../../routs/app_routs.dart';
 import '../../utils/app_color.dart';
 import '../../utils/app_text.dart';
 import '../../utils/app_text_style.dart';
@@ -55,24 +60,43 @@ class _MobileVerificationScreenState extends State<MobileVerificationScreen>
             PrimaryTextField(
               controller: _phone,
               validator: mobileNumberValidator,
-              prefix: Icon(Icons.phone),
+              keyboardInputType: TextInputType.phone,
+              prefix: const Icon(Icons.phone),
               hintText: "Enter phone number",
             ),
             SizedBoxH8(),
             PrimaryButton(
                 lable: "Send OTP",
                 onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => OtpVerificationScreen()));
-                  if (_formKey.currentState!.validate()) {}
+                  if (_formKey.currentState!.validate()) {
+                    FormData data() {
+                      return FormData.fromMap({
+                        "mobile": _phone.text.trim(),
+                      });
+                    }
+
+                    ApiService()
+                        .mobileVerifyApi(context, data: data())
+                        .then((value) {
+                      if (value!.status == 200) {
+                        if (value.count == 0) {
+                          Navigator.pushNamed(context, Routs.otp,
+                              arguments: OtpArguments(
+                                  phoneNumber: _phone.text.trim()));
+                        } else if (value.count == 1) {
+                          Fluttertoast.showToast(
+                            msg: 'Your number is already register please login',
+                            backgroundColor: Colors.grey,
+                          );
+                        }
+                      }
+                    });
+                  }
                 }),
             SizedBoxH8(),
             GestureDetector(
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => LoginScreen()));
+                Navigator.pushNamed(context, Routs.login);
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,

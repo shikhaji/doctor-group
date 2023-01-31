@@ -95,7 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
         onPressed: Routs.meetingSchedule),
     HomeData(
       name: 'Wallets', icon: AppAsset.wallets,
-      //onPressed: ""
+      // onPressed: ""
     ),
     HomeData(
       name: 'Clients',
