@@ -1,5 +1,6 @@
 class OtpArguments {
   String? phoneNumber;
+  int? otpStatus;
 
-  OtpArguments({this.phoneNumber});
+  OtpArguments({this.phoneNumber,this.otpStatus});
 }

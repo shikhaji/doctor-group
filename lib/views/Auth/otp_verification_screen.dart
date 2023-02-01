@@ -165,7 +165,14 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen>
 
       UserCredential credential =
           await FirebaseAuth.instance.signInWithCredential(authCredential);
+      if(widget.arguments?.otpStatus=="1"){
+        CommonFunctions.toast("otp verify successfully !!");
+        Navigator.pushNamed(context, Routs.resetPassword);
 
+      }else{
+        CommonFunctions.toast("otp verify successfully !!");
+        Navigator.pushNamed(context, Routs.signUp);
+      }
       Loader.hideLoader();
       return AuthResult(status: true, user: credential.user);
     } on FirebaseAuthException catch (e) {
@@ -183,14 +190,8 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen>
         default:
       }
       if (result.message != null) {
-        // if(widget.status==1){
-        //   Navigator.pushNamed(context, Routs.signUp);
-        // }else{
-        //   Navigator.pushNamed(context, Routs.resetPassword);
-        // }
-
-        Navigator.pushNamed(context, Routs.signUp);
-        CommonFunctions.toast("Otp verify !!");
+        // Navigator.pushNamed(context, Routs.signUp);
+        // CommonFunctions.toast("Otp verify !!");
         CommonFunctions.toast(result.message!);
       }
       return AuthResult(status: false);
