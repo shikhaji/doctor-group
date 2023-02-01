@@ -1,7 +1,11 @@
+import 'package:doctor_on_call/models/get_categories_list_model.dart';
 import 'package:doctor_on_call/views/Auth/login_screen.dart';
+import 'package:doctor_on_call/widget/dailogs/categories_picker.dart';
 import 'package:flutter/material.dart';
 
+import '../../models/categories_model.dart';
 import '../../utils/app_color.dart';
+import '../../utils/app_sizes.dart';
 import '../../utils/app_text.dart';
 import '../../utils/app_text_style.dart';
 import '../../utils/validation_mixin.dart';
@@ -20,10 +24,12 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> with ValidationMixin {
   final TextEditingController _phone = TextEditingController();
   final TextEditingController _password = TextEditingController();
-  final TextEditingController _refercode = TextEditingController();
+  final TextEditingController _referCode = TextEditingController();
+  final TextEditingController _categories = TextEditingController();
   final TextEditingController _confirmPassword = TextEditingController();
   bool obscurePassword = true;
   final _formKey = GlobalKey<FormState>();
+  CategoriesModel categoriesModel = CategoriesModel();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,14 +41,12 @@ class _SignUpScreenState extends State<SignUpScreen> with ValidationMixin {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBoxH34(),
-
             Center(
               child: appText("Doctor on call",
                   style: AppTextStyle.appName
                       .copyWith(color: AppColor.primaryColor)),
             ),
             SizedBoxH28(),
-
             appText("Sign Up", style: AppTextStyle.title),
             SizedBoxH6(),
             appText("Fill your details to continue",
@@ -97,25 +101,43 @@ class _SignUpScreenState extends State<SignUpScreen> with ValidationMixin {
               hintText: "Enter confirm password",
             ),
             SizedBoxH10(),
-
             appText("Select Categories", style: AppTextStyle.lable),
             SizedBoxH8(),
             PrimaryTextField(
-              controller: _refercode,
+              controller: _categories,
               hintText: "Select Categories",
+              suffix: Icon(
+                Icons.arrow_drop_down,
+                size: Sizes.s30.h,
+              ),
+              keyboardInputType: TextInputType.text,
+              readOnly: true,
+              onTap: () async {
+                categoriesModel = await CategoriesPickerDailog.show(context);
+                _categories.text = categoriesModel.ptName ?? '';
+                setState(() {});
+              },
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Please select categories';
+                } else {
+                  return null;
+                }
+              },
             ),
             appText("Refer Code", style: AppTextStyle.lable),
             SizedBoxH8(),
             PrimaryTextField(
-              controller: _refercode,
+              controller: _referCode,
               hintText: "Enter refer code",
             ),
             SizedBoxH8(),
             PrimaryButton(
                 lable: "Sign Up",
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => LoginScreen()));
+                  // Navigator.push(context,
+                  //     MaterialPageRoute(builder: (context) => LoginScreen()));
+                  print("_categories:=${categoriesModel.ptId}");
                   if (_formKey.currentState!.validate()) {}
                 }),
           ],

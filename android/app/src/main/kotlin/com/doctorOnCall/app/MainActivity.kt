@@ -1,4 +1,4 @@
-package com.example.doctor_on_call
+package com.doctorOnCall.app
 
 import io.flutter.embedding.android.FlutterActivity
 
