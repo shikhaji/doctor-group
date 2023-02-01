@@ -1,9 +1,14 @@
+
+
+import 'package:dio/dio.dart';
 import 'package:doctor_on_call/models/get_categories_list_model.dart';
 import 'package:doctor_on_call/views/Auth/login_screen.dart';
 import 'package:doctor_on_call/widget/dailogs/categories_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../models/categories_model.dart';
+import '../../services/api_services.dart';
 import '../../utils/app_color.dart';
 import '../../utils/app_sizes.dart';
 import '../../utils/app_text.dart';
@@ -22,11 +27,12 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> with ValidationMixin {
+  final TextEditingController _name = TextEditingController();
   final TextEditingController _phone = TextEditingController();
   final TextEditingController _password = TextEditingController();
   final TextEditingController _referCode = TextEditingController();
   final TextEditingController _categories = TextEditingController();
-  final TextEditingController _confirmPassword = TextEditingController();
+  //final TextEditingController _confirmPassword = TextEditingController();
   bool obscurePassword = true;
   final _formKey = GlobalKey<FormState>();
   CategoriesModel categoriesModel = CategoriesModel();
@@ -51,7 +57,14 @@ class _SignUpScreenState extends State<SignUpScreen> with ValidationMixin {
             SizedBoxH6(),
             appText("Fill your details to continue",
                 style: AppTextStyle.subTitle),
-            SizedBoxH28(),
+            SizedBoxH28(),appText("Name", style: AppTextStyle.lable),
+            SizedBoxH8(),
+            PrimaryTextField(
+              controller: _name,
+              prefix: Icon(Icons.perm_identity),
+              hintText: "Enter your name",
+            ),
+            SizedBoxH10(),
             appText("Phone number", style: AppTextStyle.lable),
             SizedBoxH8(),
             PrimaryTextField(
@@ -80,26 +93,26 @@ class _SignUpScreenState extends State<SignUpScreen> with ValidationMixin {
               obscureText: obscurePassword,
             ),
             SizedBoxH10(),
-            appText("Confirm Password", style: AppTextStyle.lable),
-            SizedBoxH8(),
-            PrimaryTextField(
-              controller: _confirmPassword,
-              prefix: const Icon(Icons.password),
-              validator: (value) {
-                return confirmPasswordValidator(value!, _password.text.trim());
-              },
-              suffix: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      obscurePassword = !obscurePassword;
-                    });
-                  },
-                  child: obscurePassword
-                      ? Icon(Icons.visibility_off)
-                      : Icon(Icons.visibility)),
-              obscureText: obscurePassword,
-              hintText: "Enter confirm password",
-            ),
+            // appText("Confirm Password", style: AppTextStyle.lable),
+            // SizedBoxH8(),
+            // PrimaryTextField(
+            //   controller: _confirmPassword,
+            //   prefix: const Icon(Icons.password),
+            //   validator: (value) {
+            //     return confirmPasswordValidator(value!, _password.text.trim());
+            //   },
+            //   suffix: GestureDetector(
+            //       onTap: () {
+            //         setState(() {
+            //           obscurePassword = !obscurePassword;
+            //         });
+            //       },
+            //       child: obscurePassword
+            //           ? Icon(Icons.visibility_off)
+            //           : Icon(Icons.visibility)),
+            //   obscureText: obscurePassword,
+            //   hintText: "Enter confirm password",
+            // ),
             SizedBoxH10(),
             appText("Select Categories", style: AppTextStyle.lable),
             SizedBoxH8(),
@@ -135,11 +148,20 @@ class _SignUpScreenState extends State<SignUpScreen> with ValidationMixin {
             PrimaryButton(
                 lable: "Sign Up",
                 onPressed: () {
-                  // Navigator.push(context,
-                  //     MaterialPageRoute(builder: (context) => LoginScreen()));
-                  print("_categories:=${categoriesModel.ptId}");
-                  if (_formKey.currentState!.validate()) {}
-                }),
+                  if (_formKey.currentState!.validate()) {
+                    FormData data() {
+                      return FormData.fromMap({
+                        "name": _name.text.trim(),
+                        "phone": _phone.text.trim(),
+                        "password": _password.text.trim(),
+                        "referal_code": _referCode.text.trim(),
+                        "categoryid": "${categoriesModel.ptId}",
+                      });
+                    }
+                    ApiService().signUp(context, data: data());
+                    //print("_categories:=${categoriesModel.ptId}");
+
+                  } }),
           ],
         ),
       )),

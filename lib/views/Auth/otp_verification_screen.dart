@@ -20,6 +20,8 @@ import '../../widget/scrollview.dart';
 
 class OtpVerificationScreen extends StatefulWidget {
   final OtpArguments? arguments;
+
+
   const OtpVerificationScreen({Key? key, this.arguments}) : super(key: key);
 
   @override
@@ -33,6 +35,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen>
   int _seconds = -1;
   Timer? _timer;
   String _verificationId = '', otp = '';
+
 
   void _startTimer() {
     _seconds = 60;
@@ -180,6 +183,12 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen>
         default:
       }
       if (result.message != null) {
+        // if(widget.status==1){
+        //   Navigator.pushNamed(context, Routs.signUp);
+        // }else{
+        //   Navigator.pushNamed(context, Routs.resetPassword);
+        // }
+
         Navigator.pushNamed(context, Routs.signUp);
         CommonFunctions.toast("Otp verify !!");
         CommonFunctions.toast(result.message!);

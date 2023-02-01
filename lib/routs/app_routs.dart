@@ -61,6 +61,7 @@ class RoutGenerator {
         return MaterialPageRoute(
             builder: (_) => OtpVerificationScreen(
                   arguments: arguments as OtpArguments,
+
                 ));
 
       case Routs.mainHome:
