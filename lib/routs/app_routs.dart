@@ -1,4 +1,4 @@
-
+import 'package:doctor_on_call/routs/arguments.dart';
 import 'package:doctor_on_call/views/Auth/login_screen.dart';
 import 'package:doctor_on_call/views/Auth/mobile_verification_screen.dart';
 import 'package:doctor_on_call/views/Auth/otp_verification_screen.dart';
@@ -35,8 +35,6 @@ class Routs {
   static const String specialistDoctor = "/specialist_doctor";
 
   static const String meetingSchedule = "/meeting_schedule";
-
-
 }
 
 class RoutGenerator {
@@ -54,15 +52,17 @@ class RoutGenerator {
         return MaterialPageRoute(builder: (_) => const ForgotPassword());
 
       case Routs.resetPassword:
-        return MaterialPageRoute(
-            builder: (_) => const ResetPasswordScreen());
+        return MaterialPageRoute(builder: (_) => const ResetPasswordScreen());
 
       case Routs.signUp:
         return MaterialPageRoute(builder: (_) => const SignUpScreen());
 
       case Routs.otp:
         return MaterialPageRoute(
-            builder: (_) => const OtpVerificationScreen());
+            builder: (_) => OtpVerificationScreen(
+                  arguments: arguments as OtpArguments,
+
+                ));
 
       case Routs.mainHome:
         return MaterialPageRoute(builder: (_) => const MainHomeScreen());
@@ -86,12 +86,11 @@ class RoutGenerator {
         return MaterialPageRoute(builder: (_) => const SpecialistDoctor());
 
       case Routs.mobileVerification:
-        return MaterialPageRoute(builder: (_) => const MobileVerificationScreen());
-
+        return MaterialPageRoute(
+            builder: (_) => const MobileVerificationScreen());
 
       case Routs.meetingSchedule:
         return MaterialPageRoute(builder: (_) => const MeetingSchedule());
-
 
       default:
         return null;

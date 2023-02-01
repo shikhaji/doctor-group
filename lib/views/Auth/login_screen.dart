@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:doctor_on_call/utils/app_sizes.dart';
 import 'package:doctor_on_call/utils/validation_mixin.dart';
 import 'package:doctor_on_call/views/Auth/forgot_password_screen.dart';
@@ -7,7 +8,9 @@ import 'package:doctor_on_call/views/Dashbord/main_home_screen.dart';
 import 'package:doctor_on_call/widget/primary_botton.dart';
 import 'package:doctor_on_call/widget/primary_textfield.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
+import '../../services/api_services.dart';
 import '../../utils/app_asset.dart';
 import '../../utils/app_color.dart';
 import '../../utils/app_text.dart';
@@ -99,11 +102,22 @@ class _LoginScreenState extends State<LoginScreen> with ValidationMixin {
             PrimaryButton(
                 lable: "Login",
                 onPressed: () {
-                  // if (_formKey.currentState!.validate()) {}
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => MainHomeScreen()));
+
+                  if (_formKey.currentState!.validate()) {
+                    FormData data() {
+                      return FormData.fromMap({
+                        "user_id": _phone.text.trim(),
+                        "password": _password.text.trim(),
+                      });
+                    }
+
+                    ApiService().login(
+                        context, data: data());
+                  }
+                  // Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //         builder: (context) => MainHomeScreen()));
                 }),
             SizedBoxH8(),
             GestureDetector(

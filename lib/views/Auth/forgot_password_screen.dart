@@ -1,6 +1,11 @@
+import 'package:dio/dio.dart';
 import 'package:doctor_on_call/views/Auth/reset_password_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
+import '../../routs/app_routs.dart';
+import '../../routs/arguments.dart';
+import '../../services/api_services.dart';
 import '../../utils/app_color.dart';
 import '../../utils/app_text.dart';
 import '../../utils/app_text_style.dart';
@@ -60,11 +65,32 @@ class _ForgotPasswordState extends State<ForgotPassword> with ValidationMixin {
             PrimaryButton(
                 lable: "Send OTP",
                 onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ResetPasswordScreen()));
-                  if (_formKey.currentState!.validate()) {}
+                  if (_formKey.currentState!.validate()) {
+                    FormData data() {
+                      return FormData.fromMap({
+                        "mobile": _phone.text.trim(),
+                      });
+                    }
+
+                    ApiService()
+                        .mobileVerifyApi(context, data: data())
+                        .then((value) {
+                      if (value!.status == 200) {
+                        if (value.count == 1) {
+                          Navigator.pushNamed(context, Routs.otp,
+                              arguments: OtpArguments(
+                                  phoneNumber: _phone.text.trim(),otpStatus: 1),
+
+                          );
+                        } else if (value.count == 0) {
+                          Fluttertoast.showToast(
+                            msg: 'Your number is not registered',
+                            backgroundColor: Colors.grey,
+                          );
+                        }
+                      }
+                    });
+                  }
                 }),
             SizedBoxH8(),
           ],
