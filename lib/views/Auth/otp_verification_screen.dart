@@ -21,7 +21,6 @@ import '../../widget/scrollview.dart';
 class OtpVerificationScreen extends StatefulWidget {
   final OtpArguments? arguments;
 
-
   const OtpVerificationScreen({Key? key, this.arguments}) : super(key: key);
 
   @override
@@ -34,8 +33,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen>
   int pinLength = 6;
   int _seconds = -1;
   Timer? _timer;
-  String _verificationId = '', otp = '';
-
+  String _verificationId = '';
 
   void _startTimer() {
     _seconds = 60;
@@ -117,13 +115,20 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen>
             PrimaryButton(
                 lable: "Verify OTP",
                 onPressed: () async {
+                  // if (_controller.text == "") {
+                  //   CommonFunctions.toast("please enter otp code !!");
+                  // } else {
+                  //   AuthResult result = await _verify(_controller.text);
+                  //   if (result.status) {
+                  //     Navigator.of(context).pop();
+                  //   }
+                  // }
                   if (_controller.text == "") {
                     CommonFunctions.toast("please enter otp code !!");
                   } else {
-                    AuthResult result = await _verify(otp);
-                    if (result.status) {
-                      Navigator.of(context).pop();
-                    }
+                    print("co_controller.text:=${_controller.text}");
+                    AuthResult result = await _verify(_controller.text);
+                    if (result.status) {}
                   }
                 }),
           ],
@@ -150,6 +155,9 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen>
       },
       codeAutoRetrievalTimeout: (String verificationId) {
         _verificationId = verificationId;
+        print("verificationId:=$verificationId");
+        print("_verificationId_verificationId:=$_verificationId");
+
         setState(() {});
       },
     );
@@ -165,14 +173,16 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen>
 
       UserCredential credential =
           await FirebaseAuth.instance.signInWithCredential(authCredential);
-      if(widget.arguments?.otpStatus=="1"){
+      if (widget.arguments?.otpStatus == "1") {
         CommonFunctions.toast("otp verify successfully !!");
         Navigator.pushNamed(context, Routs.resetPassword);
-
-      }else{
+      } else {
         CommonFunctions.toast("otp verify successfully !!");
-        Navigator.pushNamed(context, Routs.signUp);
+        Navigator.pushNamed(context, Routs.signUp,
+            arguments:
+                OtpArguments(phoneNumber: widget.arguments?.phoneNumber));
       }
+
       Loader.hideLoader();
       return AuthResult(status: true, user: credential.user);
     } on FirebaseAuthException catch (e) {
@@ -190,8 +200,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen>
         default:
       }
       if (result.message != null) {
-        // Navigator.pushNamed(context, Routs.signUp);
-        // CommonFunctions.toast("Otp verify !!");
+        _controller.clear();
         CommonFunctions.toast(result.message!);
       }
       return AuthResult(status: false);

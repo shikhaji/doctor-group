@@ -63,7 +63,8 @@ class _LoginScreenState extends State<LoginScreen> with ValidationMixin {
               controller: _phone,
               hintText: "Enter phone number",
               validator: mobileNumberValidator,
-              prefix: Icon(Icons.phone),
+              prefix: const Icon(Icons.phone),
+              keyboardInputType: TextInputType.phone,
             ),
             SizedBoxH10(),
             appText("Password", style: AppTextStyle.lable),
@@ -102,7 +103,6 @@ class _LoginScreenState extends State<LoginScreen> with ValidationMixin {
             PrimaryButton(
                 lable: "Login",
                 onPressed: () {
-
                   if (_formKey.currentState!.validate()) {
                     FormData data() {
                       return FormData.fromMap({
@@ -111,13 +111,8 @@ class _LoginScreenState extends State<LoginScreen> with ValidationMixin {
                       });
                     }
 
-                    ApiService().login(
-                        context, data: data());
+                    ApiService().login(context, data: data());
                   }
-                  // Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //         builder: (context) => MainHomeScreen()));
                 }),
             SizedBoxH8(),
             GestureDetector(

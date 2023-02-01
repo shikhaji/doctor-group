@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:doctor_on_call/utils/app_asset.dart';
 import 'package:doctor_on_call/utils/app_color.dart';
 import 'package:doctor_on_call/utils/app_text_style.dart';
@@ -21,7 +22,9 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
+  CarouselController buttonCarouselController = CarouselController();
+  int _selectedSliderIndex = 0;
+  List? images = [];
   void openDrawer() {
     _scaffoldKey.currentState?.openDrawer();
   }
@@ -48,7 +51,57 @@ class _HomeScreenState extends State<HomeScreen> {
             SizedBox(
               height: 100,
             ),
-
+            Container(
+              width: double.infinity,
+              child: CarouselSlider.builder(
+                  carouselController: buttonCarouselController,
+                  itemCount: images!.length != null ? images!.length : 0,
+                  itemBuilder: (BuildContext context, int itemIndex,
+                          int pageViewIndex) =>
+                      Padding(
+                          padding: EdgeInsets.only(right: 3, left: 3),
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Colors.black,
+                                borderRadius: BorderRadius.circular(12),
+                                image: DecorationImage(
+                                    image: NetworkImage(
+                                      'https://celebrationstation.in/uploads/' +
+                                          images![itemIndex]['IMAGE_URL'],
+                                    ),
+                                    fit: BoxFit.cover)),
+                          )),
+                  options: CarouselOptions(
+                    onPageChanged: (index, _) {
+                      setState(() {
+                        _selectedSliderIndex = index;
+                      });
+                    },
+                    aspectRatio: 12 / 8,
+                    viewportFraction: 1,
+                    initialPage: 0,
+                    autoPlay: false,
+                    enableInfiniteScroll: false,
+                    autoPlayInterval: Duration(seconds: 3),
+                    autoPlayAnimationDuration: Duration(milliseconds: 800),
+                    autoPlayCurve: Curves.fastOutSlowIn,
+                    enlargeCenterPage: true,
+                    scrollDirection: Axis.horizontal,
+                  )),
+            ),
+            SizedBox(
+              height: 8,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ...List.generate(
+                  images!.length,
+                  (index) => Indicator(
+                      isActive: _selectedSliderIndex == index ? true : false),
+                )
+              ],
+            ),
             GridView.builder(
               shrinkWrap: true,
               padding: EdgeInsets.zero,
@@ -102,6 +155,28 @@ class _HomeScreenState extends State<HomeScreen> {
       icon: AppAsset.myAppointmentIcon,
     ),
   ];
+}
+
+class Indicator extends StatelessWidget {
+  final bool isActive;
+  const Indicator({
+    Key? key,
+    required this.isActive,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 350),
+      height: 10.0,
+      margin: const EdgeInsets.symmetric(horizontal: 3.0),
+      width: isActive ? 10.0 : 10.0,
+      decoration: BoxDecoration(
+          color: isActive ? Colors.black : Colors.black,
+          borderRadius: BorderRadius.circular(8.0),
+          border: Border.all(color: Colors.black, width: 2.0)),
+    );
+  }
 }
 
 class HomeData {

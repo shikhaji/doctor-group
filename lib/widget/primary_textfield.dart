@@ -76,16 +76,12 @@ class PrimaryTextField extends StatelessWidget {
           onTap: onTap,
           obscureText: obscureText,
           autovalidateMode: AutovalidateMode.onUserInteraction,
-          style: TextStyle(
-            fontSize: Sizes.s16.sp,
-            fontWeight: FontWeight.w900,
-            // color: textColor ?? AppColor.black,
-          ),
+          style: AppTextStyle.textFieldFont,
           maxLength: maxLength,
           decoration: InputDecoration(
             isDense: true,
             hintStyle: AppTextStyle.alertSubtitle.copyWith(
-                color: Color(0x4d1d2125), fontWeight: FontWeight.w400),
+                color: const Color(0x4d1d2125), fontWeight: FontWeight.w400),
             fillColor: color ?? AppColor.textFieldColor,
             filled: true,
             hintText: hintText,

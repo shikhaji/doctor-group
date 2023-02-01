@@ -59,6 +59,7 @@ class _ForgotPasswordState extends State<ForgotPassword> with ValidationMixin {
               controller: _phone,
               validator: mobileNumberValidator,
               prefix: Icon(Icons.phone),
+              keyboardInputType: TextInputType.phone,
               hintText: "Enter phone number",
             ),
             SizedBoxH8(),
@@ -77,10 +78,11 @@ class _ForgotPasswordState extends State<ForgotPassword> with ValidationMixin {
                         .then((value) {
                       if (value!.status == 200) {
                         if (value.count == 1) {
-                          Navigator.pushNamed(context, Routs.otp,
-                              arguments: OtpArguments(
-                                  phoneNumber: _phone.text.trim(),otpStatus: 1),
-
+                          Navigator.pushNamed(
+                            context,
+                            Routs.otp,
+                            arguments: OtpArguments(
+                                phoneNumber: _phone.text.trim(), otpStatus: 1),
                           );
                         } else if (value.count == 0) {
                           Fluttertoast.showToast(

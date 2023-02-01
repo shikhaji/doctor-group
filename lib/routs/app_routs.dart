@@ -16,6 +16,7 @@ import 'package:doctor_on_call/views/Dashbord/services_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../views/Auth/forgot_password_screen.dart';
+import '../views/Auth/update_profile_screen.dart';
 import '../views/splash/splash_screen.dart';
 
 class Routs {
@@ -33,6 +34,7 @@ class Routs {
   static const String services = "/services_screen";
   static const String doctorList = "/doctor_list_screen";
   static const String specialistDoctor = "/specialist_doctor";
+  static const String updateProfile = "/update_profile_screen";
 
   static const String meetingSchedule = "/meeting_schedule";
 }
@@ -56,12 +58,13 @@ class RoutGenerator {
 
       case Routs.signUp:
         return MaterialPageRoute(builder: (_) => const SignUpScreen());
+      case Routs.updateProfile:
+        return MaterialPageRoute(builder: (_) => const UpdateProfileScreen());
 
       case Routs.otp:
         return MaterialPageRoute(
             builder: (_) => OtpVerificationScreen(
                   arguments: arguments as OtpArguments,
-
                 ));
 
       case Routs.mainHome:

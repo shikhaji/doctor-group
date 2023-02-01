@@ -1,5 +1,3 @@
-
-
 import 'package:dio/dio.dart';
 import 'package:doctor_on_call/models/get_categories_list_model.dart';
 import 'package:doctor_on_call/views/Auth/login_screen.dart';
@@ -8,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../models/categories_model.dart';
+import '../../routs/arguments.dart';
 import '../../services/api_services.dart';
 import '../../utils/app_color.dart';
 import '../../utils/app_sizes.dart';
@@ -20,7 +19,8 @@ import '../../widget/primary_textfield.dart';
 import '../../widget/scrollview.dart';
 
 class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({Key? key}) : super(key: key);
+  final OtpArguments? arguments;
+  const SignUpScreen({Key? key, this.arguments}) : super(key: key);
 
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
@@ -32,7 +32,6 @@ class _SignUpScreenState extends State<SignUpScreen> with ValidationMixin {
   final TextEditingController _password = TextEditingController();
   final TextEditingController _referCode = TextEditingController();
   final TextEditingController _categories = TextEditingController();
-  //final TextEditingController _confirmPassword = TextEditingController();
   bool obscurePassword = true;
   final _formKey = GlobalKey<FormState>();
   CategoriesModel categoriesModel = CategoriesModel();
@@ -57,11 +56,12 @@ class _SignUpScreenState extends State<SignUpScreen> with ValidationMixin {
             SizedBoxH6(),
             appText("Fill your details to continue",
                 style: AppTextStyle.subTitle),
-            SizedBoxH28(),appText("Name", style: AppTextStyle.lable),
+            SizedBoxH28(),
+            appText("Name", style: AppTextStyle.lable),
             SizedBoxH8(),
             PrimaryTextField(
               controller: _name,
-              prefix: Icon(Icons.perm_identity),
+              prefix: const Icon(Icons.perm_identity),
               hintText: "Enter your name",
             ),
             SizedBoxH10(),
@@ -69,9 +69,11 @@ class _SignUpScreenState extends State<SignUpScreen> with ValidationMixin {
             SizedBoxH8(),
             PrimaryTextField(
               controller: _phone,
+              keyboardInputType: TextInputType.phone,
               validator: mobileNumberValidator,
-              prefix: Icon(Icons.phone),
-              hintText: "Enter phone number",
+              readOnly: true,
+              prefix: const Icon(Icons.phone),
+              hintText: "${widget.arguments?.phoneNumber}",
             ),
             SizedBoxH10(),
             appText("Password", style: AppTextStyle.lable),
@@ -80,7 +82,7 @@ class _SignUpScreenState extends State<SignUpScreen> with ValidationMixin {
               hintText: "Enter password",
               controller: _password,
               validator: passwordValidator,
-              prefix: Icon(Icons.password),
+              prefix: const Icon(Icons.password),
               suffix: GestureDetector(
                   onTap: () {
                     setState(() {
@@ -88,31 +90,11 @@ class _SignUpScreenState extends State<SignUpScreen> with ValidationMixin {
                     });
                   },
                   child: obscurePassword
-                      ? Icon(Icons.visibility_off)
-                      : Icon(Icons.visibility)),
+                      ? const Icon(Icons.visibility_off)
+                      : const Icon(Icons.visibility)),
               obscureText: obscurePassword,
             ),
             SizedBoxH10(),
-            // appText("Confirm Password", style: AppTextStyle.lable),
-            // SizedBoxH8(),
-            // PrimaryTextField(
-            //   controller: _confirmPassword,
-            //   prefix: const Icon(Icons.password),
-            //   validator: (value) {
-            //     return confirmPasswordValidator(value!, _password.text.trim());
-            //   },
-            //   suffix: GestureDetector(
-            //       onTap: () {
-            //         setState(() {
-            //           obscurePassword = !obscurePassword;
-            //         });
-            //       },
-            //       child: obscurePassword
-            //           ? Icon(Icons.visibility_off)
-            //           : Icon(Icons.visibility)),
-            //   obscureText: obscurePassword,
-            //   hintText: "Enter confirm password",
-            // ),
             SizedBoxH10(),
             appText("Select Categories", style: AppTextStyle.lable),
             SizedBoxH8(),
@@ -158,10 +140,10 @@ class _SignUpScreenState extends State<SignUpScreen> with ValidationMixin {
                         "categoryid": "${categoriesModel.ptId}",
                       });
                     }
-                    ApiService().signUp(context, data: data());
-                    //print("_categories:=${categoriesModel.ptId}");
 
-                  } }),
+                    ApiService().signUp(context, data: data());
+                  }
+                }),
           ],
         ),
       )),
