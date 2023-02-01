@@ -17,7 +17,7 @@ class ThemeUtils {
         bottomNavigationBarTheme: lightBottomNavigationBarTheme,
         inputDecorationTheme: lightInputDecorationTheme,
         dividerColor: AppColor.darkGrey,
-        colorScheme: const ColorScheme.light(),
+        //colorScheme: const ColorScheme.light(),
         primarySwatch: createMaterialColor(const Color(0xff33cc99)),
         fontFamily: "Nunito_Sans");
   }
