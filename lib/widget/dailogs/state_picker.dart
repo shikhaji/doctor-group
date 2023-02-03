@@ -40,6 +40,7 @@ class _StatePickerDailogState extends State<StatePickerDailog> {
   Future<void> fetchState() async {
     GetStateListModel? response = await ApiService().getStateList();
     if (response != null) {
+      //
 
       _state = response.message.map((e) => StateModel.fromJson(e.toJson())).toList();
       _stateResponse =
