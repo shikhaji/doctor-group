@@ -10,9 +10,11 @@ import 'package:fluttertoast/fluttertoast.dart';
 import '../api/dio_client.dart';
 import '../api/url.dart';
 import '../models/get_categories_list_model.dart';
+import '../models/get_city_list_model.dart';
 import '../models/get_state_list_model.dart';
 import '../models/login_model.dart';
 import '../routs/app_routs.dart';
+import '../routs/arguments.dart';
 import '../views/Auth/login_screen.dart';
 
 class ApiService {
@@ -86,13 +88,40 @@ class ApiService {
     try {
       Loader.showLoader();
       Response response;
-      response = await dio.get(
+      response = await dio.post(
         EndPoints.state,
         options: Options(headers: {"Content-Type": 'application/json'}),
       );
       if (response.statusCode == 200) {
         GetStateListModel responseData =
             GetStateListModel.fromJson(response.data);
+        Loader.hideLoader();
+        return responseData;
+      } else {
+        Loader.hideLoader();
+        throw Exception(response.data);
+      }
+    } on DioError catch (e) {
+      Loader.hideLoader();
+      debugPrint('Dio E  $e');
+    } finally {
+      Loader.hideLoader();
+    }
+    return null;
+  }
+
+//-----------------------------CITY LIST API---------------------------//
+  Future<GetCityListModel?> getCityList(String stateId) async {
+    try {
+      Loader.showLoader();
+      Response response;
+      FormData formData = FormData.fromMap({"stateid": stateId});
+      response = await dio.post(EndPoints.city,
+          options: Options(headers: {"Content-Type": 'application/json'}),
+          data: formData);
+      if (response.statusCode == 200) {
+        GetCityListModel responseData =
+            GetCityListModel.fromJson(response.data);
         Loader.hideLoader();
         return responseData;
       } else {
@@ -169,7 +198,9 @@ class ApiService {
           msg: 'login Successfully...',
           backgroundColor: Colors.grey,
         );
-        Navigator.pushNamed(context, Routs.updateProfile);
+
+        Navigator.pushNamed(context, Routs.updateProfile,
+            arguments: OtpArguments(userId: responseData.id));
 
         return responseData;
       } else {
@@ -183,5 +214,47 @@ class ApiService {
       Loader.hideLoader();
     }
     return null;
+  }
+
+  //----------------------------UPDATE PROFILE API--------------//
+  Future updateProfile(
+    BuildContext context, {
+    FormData? data,
+  }) async {
+    try {
+      String? id = await Preferances.getString("userId");
+      String? token = await Preferances.getString("userToken");
+      String? type = await Preferances.getString("userType");
+      Loader.showLoader();
+      Response response;
+      response = await dio.post(EndPoints.updateProfile,
+          options: Options(headers: {
+            "Client-Service": "frontend-client",
+            "Auth-Key": 'simplerestapi',
+            "User-ID": id,
+            "Authorization": token,
+            "type": type,
+          }),
+          data: data);
+
+      if (response.statusCode == 200) {
+        Loader.hideLoader();
+        Fluttertoast.showToast(
+          msg: 'Your Profile Updated Successfully...',
+          backgroundColor: Colors.grey,
+        );
+        Navigator.pushNamed(context, Routs.mainHome);
+
+        debugPrint('responseData ----- > ${response.data}');
+        return response.data;
+      } else {
+        Loader.hideLoader();
+        throw Exception(response.data);
+      }
+    } on DioError catch (e) {
+      Loader.hideLoader();
+      debugPrint('Dio E  $e');
+      throw e.error;
+    }
   }
 }

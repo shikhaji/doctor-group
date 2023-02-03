@@ -114,7 +114,7 @@ class _LoginScreenState extends State<LoginScreen> with ValidationMixin {
                     ApiService().login(context, data: data());
                   }
                 }),
-            SizedBoxH8(),
+            SizedBoxH18(),
             GestureDetector(
               onTap: () {
                 Navigator.push(context,

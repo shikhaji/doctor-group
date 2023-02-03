@@ -1,9 +1,14 @@
+import 'package:doctor_on_call/models/gender_model.dart';
 import 'package:doctor_on_call/models/state_model.dart';
 import 'package:doctor_on_call/routs/app_routs.dart';
+import 'package:doctor_on_call/widget/dailogs/city_picker.dart';
+import 'package:doctor_on_call/widget/dailogs/gender_picker.dart';
 import 'package:doctor_on_call/widget/dailogs/state_picker.dart';
 import 'package:flutter/material.dart';
 
 import 'package:dio/dio.dart';
+import '../../models/city_model.dart';
+import '../../routs/arguments.dart';
 import '../../services/api_services.dart';
 import '../../utils/app_color.dart';
 import '../../utils/app_sizes.dart';
@@ -16,7 +21,8 @@ import '../../widget/primary_textfield.dart';
 import '../../widget/scrollview.dart';
 
 class UpdateProfileScreen extends StatefulWidget {
-  const UpdateProfileScreen({Key? key}) : super(key: key);
+  final OtpArguments? arguments;
+  const UpdateProfileScreen({Key? key, this.arguments}) : super(key: key);
 
   @override
   State<UpdateProfileScreen> createState() => _UpdateProfileScreenState();
@@ -29,11 +35,15 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen>
   final TextEditingController _email = TextEditingController();
   final TextEditingController _address = TextEditingController();
   final TextEditingController _city = TextEditingController();
+  final TextEditingController _phoneNumber = TextEditingController();
   final TextEditingController _state = TextEditingController();
+  final TextEditingController _gender = TextEditingController();
   var genderValue = "Male";
   String genderInitialValue = 'Male';
   var gender = ["Male", "Female"];
   StateModel stateModel = StateModel();
+  CityModel cityModel = CityModel();
+  GenderModel genderModel = GenderModel();
 
   @override
   Widget build(BuildContext context) {
@@ -68,11 +78,11 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen>
             appText("Phone number", style: AppTextStyle.lable),
             SizedBoxH8(),
             PrimaryTextField(
-              controller: _email,
-              keyboardInputType: TextInputType.emailAddress,
-              validator: emailValidator,
+              controller: _phoneNumber,
+              keyboardInputType: TextInputType.number,
+              validator: mobileNumberValidator,
               prefix: const Icon(Icons.phone),
-              hintText: "Enter email address",
+              hintText: "Enter phone number",
             ),
             SizedBoxH10(),
             appText("Enter address", style: AppTextStyle.lable),
@@ -80,11 +90,36 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen>
             PrimaryTextField(
               hintText: "Enter address",
               controller: _address,
+              prefix: const Icon(Icons.email),
               validator: addressValidation,
             ),
             appText("Select gender", style: AppTextStyle.lable),
             SizedBoxH8(),
-            genderList(),
+            PrimaryTextField(
+              controller: _gender,
+              readOnly: true,
+              hintText: "Select gender",
+              suffix: Icon(
+                Icons.arrow_drop_down,
+                size: Sizes.s30.h,
+              ),
+              onTap: () async {
+                GenderPickerDailog.show(context).then((value) {
+                  if (value != null) {
+                    _gender.text = value;
+                  }
+                });
+
+                setState(() {});
+              },
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Please select state';
+                } else {
+                  return null;
+                }
+              },
+            ),
             SizedBoxH10(),
             SizedBoxH10(),
             Row(
@@ -97,6 +132,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen>
                       SizedBoxH8(),
                       PrimaryTextField(
                         controller: _state,
+                        readOnly: true,
                         hintText: "Select State",
                         suffix: Icon(
                           Icons.arrow_drop_down,
@@ -105,7 +141,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen>
                         onTap: () async {
                           stateModel = await StatePickerDailog.show(context);
                           _state.text = stateModel.stateName ?? '';
-                          setState(() {});
+                          _city.clear();
                           setState(() {});
                         },
                         validator: (value) {
@@ -128,14 +164,16 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen>
                       SizedBoxH8(),
                       PrimaryTextField(
                         controller: _city,
-                        hintText: "Select Categories",
+                        hintText: "Select City",
+                        readOnly: true,
                         suffix: Icon(
                           Icons.arrow_drop_down,
                           size: Sizes.s30.h,
                         ),
                         onTap: () async {
-                          // categoriesModel = await CategoriesPickerDailog.show(context);
-                          // _categories.text = categoriesModel.ptName ?? '';
+                          cityModel = await CityPickerDailog.show(
+                              context, "${stateModel.stateId}");
+                          _city.text = cityModel.districtName ?? '';
                           setState(() {});
                         },
                         validator: (value) {
@@ -155,21 +193,28 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen>
             PrimaryButton(
                 lable: "Save",
                 onPressed: () {
-                  Navigator.pushNamed(context, Routs.mainHome);
+                  print("state:=${stateModel.stateId}");
+                  print("city:=${cityModel.districtId}");
+                  print("name:=${_name.text}");
+                  print("email:=${_email.text}");
+                  print("address:=${_address.text}");
+                  print("gender:=${_gender.text}");
+                  print("login id:=${widget.arguments?.userId}");
+                  // Navigator.pushNamed(context, Routs.mainHome);
                   if (_formKey.currentState!.validate()) {
-                    // FormData data() {
-                    //   return FormData.fromMap({
-                    //     "name": _name.text.trim(),
-                    //     "email": _email.text.trim(),
-                    //     "loginid": "",
-                    //     "gender": genderValue.trim(),
-                    //     "address": _address.text.trim(),
-                    //     "city": "",
-                    //     "state": "",
-                    //   });
-                    // }
+                    FormData data() {
+                      return FormData.fromMap({
+                        "name": _name.text.trim(),
+                        "email": _email.text.trim(),
+                        "loginid": "${widget.arguments?.userId}",
+                        "gender": genderValue.trim(),
+                        "address": _address.text.trim(),
+                        "city": cityModel.districtId,
+                        "state": stateModel.stateId,
+                      });
+                    }
 
-                    //ApiService().signUp(context, data: data());
+                    ApiService().updateProfile(context, data: data());
                   }
                 }),
           ],
@@ -191,7 +236,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen>
         iconEnabledColor: AppColor.grey,
         style: AppTextStyle.textFieldFont,
         dropdownColor: AppColor.textFieldColor,
-        focusColor: AppColor.grey,
+        //focusColor: AppColor.grey,
         elevation: 0,
         underline: const SizedBox(),
         value: genderInitialValue,

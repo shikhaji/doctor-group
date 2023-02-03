@@ -1,36 +1,40 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../models/get_state_list_model.dart';
-import '../../models/state_model.dart';
+import '../../models/city_model.dart';
+import '../../models/get_city_list_model.dart';
 import '../../services/api_services.dart';
 import '../../utils/app_color.dart';
 import '../../utils/app_sizes.dart';
-import '../../utils/theme_utils.dart';
 import '../custom_sized_box.dart';
 import '../primary_textfield.dart';
 
-class StatePickerDailog extends StatefulWidget {
-  const StatePickerDailog({super.key});
+class CityPickerDailog extends StatefulWidget {
+  final String stateId;
+  const CityPickerDailog({
+    super.key,
+    required this.stateId,
+  });
 
-  static Future<StateModel> show(BuildContext context) async {
+  static Future<CityModel> show(BuildContext context, String stateId) async {
     return await showCupertinoDialog(
       context: context,
       barrierDismissible: true,
-      builder: (context) => const StatePickerDailog(),
+      builder: (context) => CityPickerDailog(stateId: stateId),
     );
   }
 
   @override
-  State<StatePickerDailog> createState() => _StatePickerDailogState();
+  State<CityPickerDailog> createState() => _StatePickerDailogState();
 }
 
-class _StatePickerDailogState extends State<StatePickerDailog> {
+class _StatePickerDailogState extends State<CityPickerDailog> {
   final TextEditingController _searchController = TextEditingController();
 
   bool _isSearching = false;
-  List<StateModel> _stateResponse = [];
-  List<StateModel> _state = [];
+
+  List<CityModel> _city = [];
+  List<CityModel> _cityResponse = [];
 
   @override
   void initState() {
@@ -39,32 +43,38 @@ class _StatePickerDailogState extends State<StatePickerDailog> {
   }
 
   Future<void> fetchState() async {
-    GetStateListModel? response = await ApiService().getStateList();
+    GetCityListModel? response = await ApiService().getCityList(widget.stateId);
     if (response != null) {
-      print("state response:=${response.message}");
-      _state =
-          response.message.map((e) => StateModel.fromJson(e.toJson())).toList();
-      _stateResponse =
-          response.message.map((e) => StateModel.fromJson(e.toJson())).toList();
-      setState(() {});
+      if (response != null) {
+        _city = response.message
+            .map((e) => CityModel.fromJson(e.toJson()))
+            .toList();
+        _cityResponse = response.message
+            .map((e) => CityModel.fromJson(e.toJson()))
+            .toList();
+        setState(() {});
+      }
+    } else {
+      print("first select state");
     }
   }
 
   Future<void> _onSearchHandler(String qurey) async {
     if (qurey.isNotEmpty) {
       _isSearching = true;
-      _state = _isSearching ? serachCountry(qurey) : _state;
+      _city = _isSearching ? serachCountry(qurey) : _city;
     } else {
-      _state.clear();
-      _state = _stateResponse;
+      _city.clear();
+      _city = _cityResponse;
       _isSearching = false;
     }
     setState(() {});
   }
 
-  List<StateModel> serachCountry(String qurey) {
-    return _stateResponse
-        .where((e) => e.stateName!.toLowerCase().contains(qurey.toLowerCase()))
+  List<CityModel> serachCountry(String qurey) {
+    return _cityResponse
+        .where(
+            (e) => e.districtName!.toLowerCase().contains(qurey.toLowerCase()))
         .toList();
   }
 
@@ -87,15 +97,15 @@ class _StatePickerDailogState extends State<StatePickerDailog> {
               PrimaryTextField(
                 controller: _searchController,
                 onChanged: _onSearchHandler,
-                hintText: 'Search Country',
+                hintText: 'Search State',
                 color: AppColor.textFieldColor,
                 suffix: _isSearching
                     ? InkWell(
                         onTap: () {
                           _searchController.clear();
                           _isSearching = false;
-                          _state.clear();
-                          _state = _stateResponse;
+                          _city.clear();
+                          _city = _cityResponse;
                           setState(() {});
                         },
                         child: const Padding(
@@ -110,17 +120,17 @@ class _StatePickerDailogState extends State<StatePickerDailog> {
               ),
               Expanded(
                 child: ListView.builder(
-                  itemCount: _state.length,
+                  itemCount: _city.length,
                   padding: EdgeInsets.symmetric(
                     horizontal: Sizes.s16.w,
                     vertical: Sizes.s20.h,
                   ),
                   itemBuilder: (context, index) {
-                    StateModel state = _state[index];
-                    return _CountryListTile(
-                      stateModel: state,
+                    CityModel cityModel = _city[index];
+                    return _CountryStateListTile(
+                      cityModel: cityModel,
                       onTap: () {
-                        Navigator.pop(context, state);
+                        Navigator.pop(context, cityModel);
                       },
                     );
                   },
@@ -134,11 +144,11 @@ class _StatePickerDailogState extends State<StatePickerDailog> {
   }
 }
 
-class _CountryListTile extends StatelessWidget {
-  final StateModel stateModel;
+class _CountryStateListTile extends StatelessWidget {
+  final CityModel cityModel;
   final VoidCallback onTap;
-  const _CountryListTile({
-    required this.stateModel,
+  const _CountryStateListTile({
+    required this.cityModel,
     required this.onTap,
   });
 
@@ -158,7 +168,7 @@ class _CountryListTile extends StatelessWidget {
                   color: AppColor.textFieldColor,
                   borderRadius: BorderRadius.circular(10)),
               child: Text(
-                stateModel.stateName ?? '',
+                cityModel.districtName ?? '',
                 style: TextStyle(
                   fontSize: Sizes.s16.sp,
                   fontWeight: FontWeight.w500,

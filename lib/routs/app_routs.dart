@@ -59,7 +59,10 @@ class RoutGenerator {
       case Routs.signUp:
         return MaterialPageRoute(builder: (_) => const SignUpScreen());
       case Routs.updateProfile:
-        return MaterialPageRoute(builder: (_) => const UpdateProfileScreen());
+        return MaterialPageRoute(
+            builder: (_) => UpdateProfileScreen(
+                  arguments: arguments as OtpArguments,
+                ));
 
       case Routs.otp:
         return MaterialPageRoute(

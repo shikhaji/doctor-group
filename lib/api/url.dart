@@ -8,7 +8,9 @@ class EndPoints {
   static const String categoriesList = '$baseUrl/$get/get_all_profile_type';
   static const String signUp = '$baseUrl/$post/add_account';
   static const String login = '$baseUrl/$get/login';
-  static const String state = '$baseUrl/$get/get_states';
-  static const String city = '$baseUrl/$get/get_district';
+  static const String state = '$baseUrl/$get/get_states_for_android';
+  static const String city = '$baseUrl/$get/get_district_for_android';
+  static const String updateProfile = '$baseUrl/$post/update_kyc';
+
   static const String slider = '$baseUrl/$get/get_sliders';
 }

@@ -93,7 +93,7 @@ class _MobileVerificationScreenState extends State<MobileVerificationScreen>
                     });
                   }
                 }),
-            SizedBoxH8(),
+            SizedBoxH18(),
             GestureDetector(
               onTap: () {
                 Navigator.pushNamed(context, Routs.login);
