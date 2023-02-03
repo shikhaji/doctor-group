@@ -1,4 +1,6 @@
+import 'package:doctor_on_call/models/state_model.dart';
 import 'package:doctor_on_call/routs/app_routs.dart';
+import 'package:doctor_on_call/widget/dailogs/state_picker.dart';
 import 'package:flutter/material.dart';
 
 import 'package:dio/dio.dart';
@@ -31,6 +33,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen>
   var genderValue = "Male";
   String genderInitialValue = 'Male';
   var gender = ["Male", "Female"];
+  StateModel stateModel = StateModel();
 
   @override
   Widget build(BuildContext context) {
@@ -100,8 +103,9 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen>
                           size: Sizes.s30.h,
                         ),
                         onTap: () async {
-                          // categoriesModel = await CategoriesPickerDailog.show(context);
-                          // _categories.text = categoriesModel.ptName ?? '';
+                          stateModel = await StatePickerDailog.show(context);
+                          _state.text = stateModel.stateName ?? '';
+                          setState(() {});
                           setState(() {});
                         },
                         validator: (value) {
@@ -195,11 +199,11 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen>
         icon: const Icon(Icons.keyboard_arrow_down),
         items: gender.map((String items) {
           return DropdownMenuItem(
+            value: items != null ? items : "",
             child: Text(
               '${items}',
               style: AppTextStyle.textFieldFont,
             ),
-            value: items != null ? items : "",
           );
         }).toList(),
         onChanged: (String? value) {
