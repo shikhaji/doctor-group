@@ -9,6 +9,7 @@ import '../../routs/app_routs.dart';
 import '../../utils/app_sizes.dart';
 import '../../utils/screen_utils.dart';
 import '../../widget/custom_container_box.dart';
+import '../../widget/dailogs/location_dailog.dart';
 import '../../widget/drawer_widget.dart';
 import '../../widget/primary_appbar.dart';
 import '../../widget/primary_bottom_navigation_bar.dart';
@@ -138,6 +139,14 @@ class _HomeScreenState extends State<HomeScreen> {
           onBackPressed: () {
             openDrawer();
           },
+          action: IconButton(
+              onPressed: () {
+                LocationDailog.show(context);
+              },
+              icon: const Icon(
+                Icons.location_on_rounded,
+                color: AppColor.orange,
+              )),
         ));
   }
 
