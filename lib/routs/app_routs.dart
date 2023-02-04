@@ -37,6 +37,7 @@ class Routs {
   static const String updateProfile = "/update_profile_screen";
 
   static const String meetingSchedule = "/meeting_schedule";
+  static const String privacyPolicy = "/privacy_policy";
 }
 
 class RoutGenerator {
@@ -96,6 +97,9 @@ class RoutGenerator {
             builder: (_) => const MobileVerificationScreen());
 
       case Routs.meetingSchedule:
+        return MaterialPageRoute(builder: (_) => const MeetingSchedule());
+
+      case Routs.privacyPolicy:
         return MaterialPageRoute(builder: (_) => const MeetingSchedule());
 
       default:

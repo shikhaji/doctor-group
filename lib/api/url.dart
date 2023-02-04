@@ -14,4 +14,6 @@ class EndPoints {
   static const String updatePassword = '$baseUrl/$post/update_pasword';
   static const String slider = '$baseUrl/$get/get_sliders';
   static const String latestNews = '$baseUrl/$get/latest_news';
+  static const String privacyPolicy = '$baseUrl/$get/get_privacy_policy';
+  static const String termsAndConditions = '$baseUrl/$get/get_terms_conditions';
 }
