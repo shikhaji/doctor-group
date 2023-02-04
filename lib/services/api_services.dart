@@ -14,6 +14,7 @@ import '../models/get_categories_list_model.dart';
 import '../models/get_city_list_model.dart';
 import '../models/get_state_list_model.dart';
 import '../models/login_model.dart';
+import '../models/privacy_policy_model.dart';
 import '../routs/app_routs.dart';
 import '../routs/arguments.dart';
 import '../views/Auth/login_screen.dart';
@@ -299,6 +300,30 @@ class ApiService {
           msg: 'Something Went Wrong',
           backgroundColor: Colors.grey,
         );
+        Loader.hideLoader();
+        throw Exception(response.data);
+      }
+    } on DioError catch (e) {
+      Loader.hideLoader();
+      debugPrint('Dio E  $e');
+      throw e.error;
+    }
+  }
+
+  //----------------------------Privacy Policy-----------------------//
+  Future<PrivacyPolicyModel?> privacyPolicy(
+      BuildContext context) async {
+    try {
+      Loader.showLoader();
+      Response response;
+      response = await dio.post(EndPoints.privacyPolicy);
+      if (response.statusCode == 200) {
+        PrivacyPolicyModel responseData = PrivacyPolicyModel.fromJson(response.data);
+        Loader.hideLoader();
+
+        debugPrint('responseData ----- > $responseData');
+        return responseData;
+      } else {
         Loader.hideLoader();
         throw Exception(response.data);
       }
