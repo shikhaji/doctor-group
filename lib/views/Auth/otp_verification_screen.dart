@@ -175,7 +175,9 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen>
           await FirebaseAuth.instance.signInWithCredential(authCredential);
       if (widget.arguments?.otpStatus == 1) {
         CommonFunctions.toast("otp verify successfully !!");
-        Navigator.pushNamed(context, Routs.resetPassword);
+        Navigator.pushNamed(context, Routs.resetPassword,arguments:
+        OtpArguments(phoneNumber: widget.arguments?.phoneNumber));
+
       } else {
         CommonFunctions.toast("otp verify successfully !!");
         Navigator.pushNamed(context, Routs.signUp,

@@ -114,7 +114,9 @@ class _LocationDailogState extends State<LocationDailog> with ValidationMixin {
                 },
               ),
               SizedBoxH18(),
-              PrimaryButton(lable: "Done", onPressed: () {}),
+              PrimaryButton(lable: "Done", onPressed: () {
+                Navigator.pop(context);
+              }),
             ],
           ),
         ),

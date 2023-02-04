@@ -7,6 +7,7 @@ import 'package:doctor_on_call/views/Auth/signup_screen.dart';
 import 'package:doctor_on_call/views/Dashbord/main_home_screen.dart';
 import 'package:doctor_on_call/widget/primary_botton.dart';
 import 'package:doctor_on_call/widget/primary_textfield.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -102,12 +103,16 @@ class _LoginScreenState extends State<LoginScreen> with ValidationMixin {
             SizedBoxH8(),
             PrimaryButton(
                 lable: "Login",
-                onPressed: () {
+                onPressed: () async{
+                  // String? firebaseToken= await  FirebaseMessaging.instance.getToken();
+                  // debugPrint("${firebaseToken}");
                   if (_formKey.currentState!.validate()) {
+
                     FormData data() {
                       return FormData.fromMap({
                         "user_id": _phone.text.trim(),
                         "password": _password.text.trim(),
+                        "firebase_token":"eewd"
                       });
                     }
 

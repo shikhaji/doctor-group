@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
+import '../../routs/arguments.dart';
 import '../../services/api_services.dart';
 import '../../utils/app_color.dart';
 import '../../utils/app_text.dart';
@@ -12,7 +13,8 @@ import '../../widget/primary_textfield.dart';
 import '../../widget/scrollview.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
-  const ResetPasswordScreen({Key? key}) : super(key: key);
+  final OtpArguments? arguments;
+  const ResetPasswordScreen({Key? key, this.arguments}) : super(key: key);
 
   @override
   State<ResetPasswordScreen> createState() => _ResetPasswordScreenState();
@@ -20,6 +22,7 @@ class ResetPasswordScreen extends StatefulWidget {
 
 class _ResetPasswordScreenState extends State<ResetPasswordScreen>
     with ValidationMixin {
+
   final TextEditingController _password = TextEditingController();
   final TextEditingController _phoneNumber = TextEditingController();
   final TextEditingController _confirmPassword = TextEditingController();
@@ -49,15 +52,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen>
             SizedBoxH6(),
             appText("Enter new password here", style: AppTextStyle.subTitle),
             SizedBoxH28(),
-            appText("Phone number", style: AppTextStyle.lable),
-            SizedBoxH8(),
-            PrimaryTextField(
-              controller: _phoneNumber,
-              hintText: "Enter phone number",
-              validator: mobileNumberValidator,
-              prefix: const Icon(Icons.phone),
-              keyboardInputType: TextInputType.phone,
-            ),
+
             appText("New Password", style: AppTextStyle.lable),
             SizedBoxH8(),
             PrimaryTextField(
@@ -102,18 +97,17 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen>
                 lable: "Reset",
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    // FormData data() {
-                    //   return FormData.fromMap({
-                    //     "phone": _phoneNumber.text.trim(),
-                    //     "password": _password.text.trim(),
-                    //   });
-                    // }
-                    Map<String, dynamic> body = {
-                      "phone": _phoneNumber.text.trim(),
-                      "password": _password.text.trim(),
-                    };
+                    debugPrint("${widget.arguments?.phoneNumber}");
+                    debugPrint("password ${_password.text.trim()}");
+                    FormData data() {
+                      return FormData.fromMap({
+                        "phone": widget.arguments?.phoneNumber,
+                        "password": _password.text.trim(),
+                      });
+                    }
 
-                    // ApiService().updatePassword(context, data: body);
+
+                    ApiService().updatePassword(context, data: data());
                   }
                 }),
           ],

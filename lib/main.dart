@@ -5,14 +5,21 @@ import 'package:doctor_on_call/utils/screen_utils.dart';
 import 'package:doctor_on_call/utils/theme_utils.dart';
 import 'package:doctor_on_call/views/splash/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+
+import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  // await Firebase.initializeApp(
+  //   options: DefaultFirebaseOptions.currentPlatform,
+  // );
   runApp(const MyApp());
+  FirebaseMessaging.onBackgroundMessage(_onBackgroundMessageHandler);
 }
-
+Future<void> _onBackgroundMessageHandler(RemoteMessage message) async {}
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 

@@ -188,23 +188,32 @@ class ApiService {
             "Auth-Key": 'simplerestapi',
           }),
           data: data);
-      if (response.statusCode == 200) {
+      if (response.statusMessage == "OK") {
         LoginModel responseData = LoginModel.fromJson(response.data);
         Preferances.setString("userId", responseData.id);
-        Preferances.setString("userToken", responseData.token);
-        Preferances.setString("userType", responseData.type);
+        Preferances.setString("Token", responseData.loginToken);
+        Preferances.setString("userType", responseData.businessType);
         Loader.hideLoader();
 
         Fluttertoast.showToast(
           msg: 'login Successfully...',
           backgroundColor: Colors.grey,
         );
+        if(responseData.profileStatus==0){
+          Navigator.pushNamed(context, Routs.updateProfile,
+              arguments: OtpArguments(userId: responseData.id));
+        }else{
+          Navigator.pushNamed(context, Routs.mainHome);
+        }
 
-        Navigator.pushNamed(context, Routs.updateProfile,
-            arguments: OtpArguments(userId: responseData.id));
+
 
         return responseData;
       } else {
+        Fluttertoast.showToast(
+          msg: 'Invalid Login Credential',
+          backgroundColor: Colors.grey,
+        );
         Loader.hideLoader();
         throw Exception(response.data);
       }
@@ -260,43 +269,43 @@ class ApiService {
   }
 
   //----------------------------UPDATE PASSWORD API-----------------------//
-  // Future<dynamic> updatePassword(
-  //   BuildContext context, {
-  //   Map<String, dynamic>? data,
-  // }) async {
-  //   try {
-  //     Loader.showLoader();
-  //     //Response response;
-  //     final response = await dio.post(EndPoints.updatePassword,
-  //         options: Options(headers: {
-  //           "Client-Service": "frontend-client",
-  //           "Auth-Key": 'simplerestapi',
-  //         }),
-  //         data: data);
-  //     CommonModel responseData =
-  //         CommonModel.fromJson(response);
-  //     if (responseData.status == 200) {
-  //       Loader.hideLoader();
-  //       Fluttertoast.showToast(
-  //         msg: '${responseData.message}',
-  //         backgroundColor: Colors.grey,
-  //       );
-  //       Navigator.pushNamed(context, Routs.login);
-  //
-  //       debugPrint('responseData ----- > ${response.data}');
-  //       return response.data;
-  //     } else {
-  //       Fluttertoast.showToast(
-  //         msg: '${responseData.message}',
-  //         backgroundColor: Colors.grey,
-  //       );
-  //       Loader.hideLoader();
-  //       throw Exception(response.data);
-  //     }
-  //   } on DioError catch (e) {
-  //     Loader.hideLoader();
-  //     debugPrint('Dio E  $e');
-  //     throw e.error;
-  //   }
-  // }
+  Future updatePassword(
+    BuildContext context, {
+    FormData? data,
+  }) async {
+    try {
+      Loader.showLoader();
+      Response response;
+      response = await dio.post(EndPoints.updatePassword,
+          options: Options(headers: {
+            "Client-Service": "frontend-client",
+            "Auth-Key": 'simplerestapi',
+          }),
+          data: data);
+
+
+      if (response.statusCode == 200) {
+        Loader.hideLoader();
+        Fluttertoast.showToast(
+          msg: 'Password Updated...!',
+          backgroundColor: Colors.grey,
+        );
+        Navigator.pushNamed(context, Routs.login);
+
+        debugPrint('responseData ----- > ${response.data}');
+        return response.data;
+      } else {
+        Fluttertoast.showToast(
+          msg: 'Something Went Wrong',
+          backgroundColor: Colors.grey,
+        );
+        Loader.hideLoader();
+        throw Exception(response.data);
+      }
+    } on DioError catch (e) {
+      Loader.hideLoader();
+      debugPrint('Dio E  $e');
+      throw e.error;
+    }
+  }
 }
