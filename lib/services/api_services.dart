@@ -202,14 +202,12 @@ class ApiService {
           msg: 'login Successfully...',
           backgroundColor: Colors.grey,
         );
-        if(responseData.profileStatus==0){
+        if (responseData.profileStatus == 0) {
           Navigator.pushNamed(context, Routs.updateProfile,
               arguments: OtpArguments(userId: responseData.id));
-        }else{
+        } else {
           Navigator.pushNamed(context, Routs.mainHome);
         }
-
-
 
         return responseData;
       } else {
@@ -285,7 +283,6 @@ class ApiService {
             "Auth-Key": 'simplerestapi',
           }),
           data: data);
-
 
       if (response.statusCode == 200) {
         Loader.hideLoader();
@@ -370,14 +367,14 @@ class ApiService {
   }
 
   //----------------------------Privacy Policy-----------------------//
-  Future<PrivacyPolicyModel?> privacyPolicy(
-      BuildContext context) async {
+  Future<PrivacyPolicyModel?> privacyPolicy(BuildContext context) async {
     try {
       Loader.showLoader();
       Response response;
       response = await dio.post(EndPoints.privacyPolicy);
       if (response.statusCode == 200) {
-        PrivacyPolicyModel responseData = PrivacyPolicyModel.fromJson(response.data);
+        PrivacyPolicyModel responseData =
+            PrivacyPolicyModel.fromJson(response.data);
         Loader.hideLoader();
 
         debugPrint('responseData ----- > $responseData');
