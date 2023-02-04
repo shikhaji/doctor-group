@@ -9,6 +9,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import '../api/dio_client.dart';
 import '../api/url.dart';
+import '../models/common_model.dart';
 import '../models/get_categories_list_model.dart';
 import '../models/get_city_list_model.dart';
 import '../models/get_state_list_model.dart';
@@ -257,4 +258,45 @@ class ApiService {
       throw e.error;
     }
   }
+
+  //----------------------------UPDATE PASSWORD API-----------------------//
+  // Future<dynamic> updatePassword(
+  //   BuildContext context, {
+  //   Map<String, dynamic>? data,
+  // }) async {
+  //   try {
+  //     Loader.showLoader();
+  //     //Response response;
+  //     final response = await dio.post(EndPoints.updatePassword,
+  //         options: Options(headers: {
+  //           "Client-Service": "frontend-client",
+  //           "Auth-Key": 'simplerestapi',
+  //         }),
+  //         data: data);
+  //     CommonModel responseData =
+  //         CommonModel.fromJson(response);
+  //     if (responseData.status == 200) {
+  //       Loader.hideLoader();
+  //       Fluttertoast.showToast(
+  //         msg: '${responseData.message}',
+  //         backgroundColor: Colors.grey,
+  //       );
+  //       Navigator.pushNamed(context, Routs.login);
+  //
+  //       debugPrint('responseData ----- > ${response.data}');
+  //       return response.data;
+  //     } else {
+  //       Fluttertoast.showToast(
+  //         msg: '${responseData.message}',
+  //         backgroundColor: Colors.grey,
+  //       );
+  //       Loader.hideLoader();
+  //       throw Exception(response.data);
+  //     }
+  //   } on DioError catch (e) {
+  //     Loader.hideLoader();
+  //     debugPrint('Dio E  $e');
+  //     throw e.error;
+  //   }
+  // }
 }

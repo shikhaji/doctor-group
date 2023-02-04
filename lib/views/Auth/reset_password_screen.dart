@@ -1,5 +1,7 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
+import '../../services/api_services.dart';
 import '../../utils/app_color.dart';
 import '../../utils/app_text.dart';
 import '../../utils/app_text_style.dart';
@@ -19,6 +21,7 @@ class ResetPasswordScreen extends StatefulWidget {
 class _ResetPasswordScreenState extends State<ResetPasswordScreen>
     with ValidationMixin {
   final TextEditingController _password = TextEditingController();
+  final TextEditingController _phoneNumber = TextEditingController();
   final TextEditingController _confirmPassword = TextEditingController();
   bool obscurePassword = true;
   final _formKey = GlobalKey<FormState>();
@@ -46,12 +49,21 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen>
             SizedBoxH6(),
             appText("Enter new password here", style: AppTextStyle.subTitle),
             SizedBoxH28(),
+            appText("Phone number", style: AppTextStyle.lable),
+            SizedBoxH8(),
+            PrimaryTextField(
+              controller: _phoneNumber,
+              hintText: "Enter phone number",
+              validator: mobileNumberValidator,
+              prefix: const Icon(Icons.phone),
+              keyboardInputType: TextInputType.phone,
+            ),
             appText("New Password", style: AppTextStyle.lable),
             SizedBoxH8(),
             PrimaryTextField(
               controller: _password,
               hintText: "Enter password",
-              validator: mobileNumberValidator,
+              validator: passwordValidator,
               prefix: const Icon(Icons.password),
               suffix: GestureDetector(
                   onTap: () {
@@ -70,7 +82,9 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen>
             PrimaryTextField(
               controller: _confirmPassword,
               hintText: "Enter confirm password",
-              validator: passwordValidator,
+              validator: (value) {
+                return confirmPasswordValidator(value!, _password.text.trim());
+              },
               prefix: Icon(Icons.password),
               suffix: GestureDetector(
                   onTap: () {
@@ -87,7 +101,20 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen>
             PrimaryButton(
                 lable: "Reset",
                 onPressed: () {
-                  if (_formKey.currentState!.validate()) {}
+                  if (_formKey.currentState!.validate()) {
+                    // FormData data() {
+                    //   return FormData.fromMap({
+                    //     "phone": _phoneNumber.text.trim(),
+                    //     "password": _password.text.trim(),
+                    //   });
+                    // }
+                    Map<String, dynamic> body = {
+                      "phone": _phoneNumber.text.trim(),
+                      "password": _password.text.trim(),
+                    };
+
+                    // ApiService().updatePassword(context, data: body);
+                  }
                 }),
           ],
         ),

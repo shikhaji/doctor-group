@@ -11,6 +11,6 @@ class EndPoints {
   static const String state = '$baseUrl/$get/get_states_for_android';
   static const String city = '$baseUrl/$get/get_district_for_android';
   static const String updateProfile = '$baseUrl/$post/update_kyc';
-
+  static const String updatePassword = '$baseUrl/$post/update_pasword';
   static const String slider = '$baseUrl/$get/get_sliders';
 }
