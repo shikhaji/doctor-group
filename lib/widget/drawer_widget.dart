@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../routs/app_routs.dart';
 import '../utils/app_sizes.dart';
 import '../utils/screen_utils.dart';
 import '../views/Auth/login_screen.dart';
@@ -61,7 +62,9 @@ class DrawerWidget extends StatelessWidget {
                     ),
                     _DrawerMenuListTile.asset(
                       title: 'Privacy Policy',
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.pushNamed(context, Routs.privacyPolicy);
+                      },
                       child: Icon(Icons.policy),
                     ),
                     _DrawerMenuListTile.asset(
@@ -78,45 +81,55 @@ class DrawerWidget extends StatelessWidget {
                         onPressed: () {
                           showDialog(
                             context: context,
-                            builder: (ctx) =>
-                                AlertDialog(
-                                  title: const Text("Logout",style: AppTextStyle.alertSubtitle,),
-                                  content: const Text("Are You Sure ?",style: AppTextStyle.subTitle,),
-                                  actions: <Widget>[
-
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.of(ctx).pop();
-                                          },
-                                          child: Container(
-                                            color: Colors.white,
-                                            padding: const EdgeInsets.all(14),
-                                            child: const Text("Cancel"),
-                                          ),
-                                        ),
-                                        TextButton(
-                                          onPressed: ()async {
-                                            SharedPreferences sharedPreferences =
-                                            await SharedPreferences.getInstance();
-                                            sharedPreferences.clear();
-                                            Navigator.of(context).pushAndRemoveUntil(
-                                                MaterialPageRoute(builder: (context) =>
-                                                const LoginScreen()), (
-                                                Route<dynamic> route) => false);
-                                          },
-                                          child: Container(
-                                            color: Colors.white,
-                                            padding: const EdgeInsets.all(14),
-                                            child: const Text("okay"),
-                                          ),
-                                        ),
-                                      ],
+                            builder: (ctx) => AlertDialog(
+                              title: const Text(
+                                "Logout",
+                                style: AppTextStyle.alertSubtitle,
+                              ),
+                              content: const Text(
+                                "Are You Sure ?",
+                                style: AppTextStyle.subTitle,
+                              ),
+                              actions: <Widget>[
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(ctx).pop();
+                                      },
+                                      child: Container(
+                                        color: Colors.white,
+                                        padding: const EdgeInsets.all(14),
+                                        child: const Text("Cancel"),
+                                      ),
+                                    ),
+                                    TextButton(
+                                      onPressed: () async {
+                                        SharedPreferences sharedPreferences =
+                                            await SharedPreferences
+                                                .getInstance();
+                                        sharedPreferences.clear();
+                                        Navigator.of(
+                                                context)
+                                            .pushAndRemoveUntil(
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const LoginScreen()),
+                                                (Route<dynamic> route) =>
+                                                    false);
+                                      },
+                                      child: Container(
+                                        color: Colors.white,
+                                        padding: const EdgeInsets.all(14),
+                                        child: const Text("okay"),
+                                      ),
                                     ),
                                   ],
                                 ),
+                              ],
+                            ),
                           );
                         },
                       ),
