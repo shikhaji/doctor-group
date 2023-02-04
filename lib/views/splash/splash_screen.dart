@@ -5,6 +5,8 @@ import 'package:doctor_on_call/utils/app_text.dart';
 import 'package:doctor_on_call/views/Auth/login_screen.dart';
 import 'package:flutter/material.dart';
 
+import '../../routs/app_routs.dart';
+import '../../services/shared_referances.dart';
 import '../../utils/app_asset.dart';
 import '../../utils/app_text_style.dart';
 import '../Auth/mobile_verification_screen.dart';
@@ -20,10 +22,22 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(
-        Duration(seconds: 5),
-        () => Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => MobileVerificationScreen())));
+    verify();
+  }
+
+  Future<void> verify() async {
+    String userId = await Preferances.prefGetString("userId", '');
+    Future.delayed(const Duration(seconds: 3)).then(
+      (value) {
+        if (userId.isNotEmpty) {
+          Navigator.pushNamedAndRemoveUntil(
+              context, Routs.mainHome, (route) => false);
+        } else {
+          Navigator.pushNamedAndRemoveUntil(
+              context, Routs.mobileVerification, (route) => false);
+        }
+      },
+    );
   }
 
   @override

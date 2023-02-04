@@ -85,7 +85,7 @@ class _SecondaryAppBarState extends State<SecondaryAppBar> {
         ),
         actions: [
           Padding(
-            padding: const EdgeInsets.all(0),
+            padding: const EdgeInsets.only(right: 12),
             child: Center(child: widget.action),
           )
         ],

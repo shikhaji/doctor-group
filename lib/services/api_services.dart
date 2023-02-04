@@ -2,21 +2,19 @@ import 'package:dio/dio.dart';
 import 'package:doctor_on_call/models/mobile_verify_model.dart';
 import 'package:doctor_on_call/services/shared_referances.dart';
 import 'package:doctor_on_call/utils/loder.dart';
-import 'package:doctor_on_call/views/Dashbord/main_home_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
 import '../api/dio_client.dart';
 import '../api/url.dart';
-import '../models/common_model.dart';
 import '../models/get_categories_list_model.dart';
 import '../models/get_city_list_model.dart';
 import '../models/get_state_list_model.dart';
+import '../models/latest_news_model.dart';
 import '../models/login_model.dart';
+import '../models/slider_model.dart';
 import '../routs/app_routs.dart';
 import '../routs/arguments.dart';
-import '../views/Auth/login_screen.dart';
 
 class ApiService {
   ApiClient apiClient = ApiClient();
@@ -191,7 +189,7 @@ class ApiService {
       if (response.statusMessage == "OK") {
         LoginModel responseData = LoginModel.fromJson(response.data);
         Preferances.setString("userId", responseData.id);
-        Preferances.setString("Token", responseData.loginToken);
+        Preferances.setString("userToken", responseData.loginToken);
         Preferances.setString("userType", responseData.businessType);
         Loader.hideLoader();
 
@@ -199,14 +197,12 @@ class ApiService {
           msg: 'login Successfully...',
           backgroundColor: Colors.grey,
         );
-        if(responseData.profileStatus==0){
+        if (responseData.profileStatus == 0) {
           Navigator.pushNamed(context, Routs.updateProfile,
               arguments: OtpArguments(userId: responseData.id));
-        }else{
+        } else {
           Navigator.pushNamed(context, Routs.mainHome);
         }
-
-
 
         return responseData;
       } else {
@@ -283,7 +279,6 @@ class ApiService {
           }),
           data: data);
 
-
       if (response.statusCode == 200) {
         Loader.hideLoader();
         Fluttertoast.showToast(
@@ -299,6 +294,63 @@ class ApiService {
           msg: 'Something Went Wrong',
           backgroundColor: Colors.grey,
         );
+        Loader.hideLoader();
+        throw Exception(response.data);
+      }
+    } on DioError catch (e) {
+      Loader.hideLoader();
+      debugPrint('Dio E  $e');
+      throw e.error;
+    }
+  }
+
+  //-----------------------SLIDER API-----------------------//
+  Future<SliderModel> slider(BuildContext context, {FormData? data}) async {
+    try {
+      Loader.showLoader();
+      Response response;
+      response = await dio.post(EndPoints.slider,
+          options: Options(headers: {
+            "Client-Service": "frontend-client",
+            "Auth-Key": 'simplerestapi',
+          }),
+          data: data);
+
+      if (response.statusCode == 200) {
+        SliderModel responseData = SliderModel.fromJson(response.data);
+        Loader.hideLoader();
+        debugPrint('responseData ----- > ${response.data}');
+        return responseData;
+      } else {
+        Loader.hideLoader();
+        throw Exception(response.data);
+      }
+    } on DioError catch (e) {
+      Loader.hideLoader();
+      debugPrint('Dio E  $e');
+      throw e.error;
+    }
+  }
+
+  //-----------------------LATEST NEWS API-----------------------//
+  Future<LatestNewsModel> latestNews(BuildContext context) async {
+    try {
+      Loader.showLoader();
+      Response response;
+      response = await dio.post(
+        EndPoints.latestNews,
+        options: Options(headers: {
+          "Client-Service": "frontend-client",
+          "Auth-Key": 'simplerestapi',
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        LatestNewsModel responseData = LatestNewsModel.fromJson(response.data);
+        Loader.hideLoader();
+        debugPrint('responseData ----- > ${response.data}');
+        return responseData;
+      } else {
         Loader.hideLoader();
         throw Exception(response.data);
       }

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 import '../../models/city_model.dart';
 import '../../models/state_model.dart';
+import '../../services/shared_referances.dart';
 import '../../utils/app_sizes.dart';
 import '../../utils/app_text.dart';
 import '../../utils/app_text_style.dart';
@@ -36,6 +37,8 @@ class _LocationDailogState extends State<LocationDailog> with ValidationMixin {
   final TextEditingController _city = TextEditingController();
   StateModel stateModel = StateModel();
   CityModel cityModel = CityModel();
+
+  SetLocationModel setLocationModel = SetLocationModel();
 
   @override
   Widget build(BuildContext context) {
@@ -114,13 +117,29 @@ class _LocationDailogState extends State<LocationDailog> with ValidationMixin {
                 },
               ),
               SizedBoxH18(),
-              PrimaryButton(lable: "Done", onPressed: () {
-                Navigator.pop(context);
-              }),
+              PrimaryButton(
+                  lable: "Done",
+                  onPressed: () {
+                    setLocationModel.state = _state.text;
+                    setLocationModel.city = _city.text;
+                    setLocationModel.stateId = cityModel.districtId;
+                    Navigator.pop(context, setLocationModel);
+                  }),
             ],
           ),
         ),
       ),
     ));
   }
+}
+
+class SetLocationModel {
+  SetLocationModel({
+    this.state,
+    this.city,
+    this.stateId,
+  });
+  String? state;
+  String? city;
+  String? stateId;
 }

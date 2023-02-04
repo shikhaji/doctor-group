@@ -13,4 +13,5 @@ class EndPoints {
   static const String updateProfile = '$baseUrl/$post/update_kyc';
   static const String updatePassword = '$baseUrl/$post/update_pasword';
   static const String slider = '$baseUrl/$get/get_sliders';
+  static const String latestNews = '$baseUrl/$get/latest_news';
 }
