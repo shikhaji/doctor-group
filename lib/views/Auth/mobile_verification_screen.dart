@@ -80,6 +80,7 @@ class _MobileVerificationScreenState extends State<MobileVerificationScreen>
                         .then((value) {
                       if (value!.status == 200) {
                         if (value.count == 0) {
+                          print("number //  7990934053");
                           Navigator.pushNamed(context, Routs.otp,
                               arguments: OtpArguments(
                                   phoneNumber: _phone.text.trim()));

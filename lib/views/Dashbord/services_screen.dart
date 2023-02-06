@@ -2,7 +2,10 @@ import 'package:doctor_on_call/views/Dashbord/doctor_services/specialist_doctor.
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../models/categories_model.dart';
+import '../../models/get_categories_list_model.dart';
 import '../../routs/app_routs.dart';
+import '../../services/api_services.dart';
 import '../../utils/app_asset.dart';
 import '../../utils/app_color.dart';
 import '../../utils/app_sizes.dart';
@@ -31,6 +34,24 @@ class _ServicesScreenState extends State<ServicesScreen> {
     _scaffoldKey.currentState?.openDrawer();
   }
 
+  List<CategoriesData> _categoriesData = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchCategories();
+  }
+
+  Future<void> fetchCategories() async {
+    ApiService().getCategoriesList().then((value) {
+      if (value != null) {
+        setState(() {
+          _categoriesData = value.message;
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,7 +75,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
               padding: EdgeInsets.zero,
               cacheExtent: 30,
               physics: const ClampingScrollPhysics(),
-              itemCount: _servicesData.length,
+              itemCount: _categoriesData.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 childAspectRatio: 12 / 9,
@@ -66,12 +87,13 @@ class _ServicesScreenState extends State<ServicesScreen> {
                   onTap: () {
                     Navigator.pushNamed(
                       context,
-                      _servicesData[index].onPressed.toString(),
+                      Routs.specialistDoctor,
                     );
                   },
                   child: CustomContainerBox(
-                    title: _servicesData[index].name.toString(),
-                    icon: _servicesData[index].icon.toString(),
+                    title: _categoriesData[index].ptName,
+                    iconBool: true,
+                    icon: _categoriesData[index].ptImage.toString(),
                   ),
                 );
               },

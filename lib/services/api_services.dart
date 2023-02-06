@@ -181,6 +181,7 @@ class ApiService {
   Future<LoginModel?> login(
     BuildContext context, {
     FormData? data,
+    String? phoneNumber,
   }) async {
     try {
       Loader.showLoader();
@@ -197,14 +198,18 @@ class ApiService {
         Preferances.setString("Token", responseData.loginToken);
         Preferances.setString("userType", responseData.businessType);
         Loader.hideLoader();
-
         Fluttertoast.showToast(
           msg: 'login Successfully...',
           backgroundColor: Colors.grey,
         );
         if (responseData.profileStatus == 0) {
-          Navigator.pushNamed(context, Routs.updateProfile,
-              arguments: OtpArguments(userId: responseData.id));
+          print("phoneNumber is here:=${phoneNumber}");
+          Navigator.pushNamed(
+            context,
+            Routs.updateProfile,
+            arguments:
+                OtpArguments(userId: responseData.id, phoneNumber: phoneNumber),
+          );
         } else {
           Navigator.pushNamed(context, Routs.mainHome);
         }
