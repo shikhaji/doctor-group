@@ -42,6 +42,7 @@ dependencies:
   firebase_messaging: ^14.2.1
   url_launcher: ^6.1.8
   flutter_html: ^3.0.0-alpha.6
+  text_scroll: ^0.1.2
 
 dev_dependencies:
   flutter_test:

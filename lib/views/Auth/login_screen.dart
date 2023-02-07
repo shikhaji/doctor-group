@@ -112,7 +112,7 @@ class _LoginScreenState extends State<LoginScreen> with ValidationMixin {
                       return FormData.fromMap({
                         "user_id": _phone.text.trim(),
                         "password": _password.text.trim(),
-                        "firebase_token":"eewd"
+                        "firebase_token":"123"
                       });
                     }
 

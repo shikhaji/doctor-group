@@ -92,86 +92,86 @@ class _HomeScreenState extends State<HomeScreen> {
         body: CustomScroll(
           children: [
             SizedBoxH18(),
-            Container(
-              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: AppColor.textFieldColor,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Center(
-                  child: SingleChildScrollView(
-                controller: controller,
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    Text(
-                      "latestNewsList[itemIndex].newsDesclatestNewsList[itemIndex].newsDesc",
-                      style: AppTextStyle.blackSubTitle,
-                    ),
-                    SizedBoxW10(),
-                    Text(
-                      "latestNewsList[itemIndex].newsDesclatestNewsList[itemIndex].newsDesc",
-                      style: AppTextStyle.blackSubTitle
-                          .copyWith(color: AppColor.red),
-                    ),
-                  ],
-                ),
-              )),
-            ),
-            SizedBox(
-              width: double.infinity,
-              child: CarouselSlider.builder(
-                  carouselController: newsController,
-                  itemCount:
-                      latestNewsList.length != null ? latestNewsList.length : 0,
-                  itemBuilder: (BuildContext context, int itemIndex,
-                          int pageViewIndex) =>
-                      Container(
-                        padding: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: AppColor.textFieldColor,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Center(
-                            child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: [
-                              Text(
-                                "${latestNewsList[itemIndex].newsDesc}",
-                                style: AppTextStyle.blackSubTitle,
-                              ),
-                              SizedBoxW10(),
-                              Text(
-                                "${latestNewsList[itemIndex].newsLink}",
-                                style: AppTextStyle.blackSubTitle
-                                    .copyWith(color: AppColor.red),
-                              ),
-                            ],
-                          ),
-                        )),
-                      ),
-                  options: CarouselOptions(
-                    // onPageChanged: (index, _) {
-                    //   setState(() {
-                    //     latestNewsList.length = index;
-                    //   });
-                    // },
-                    aspectRatio: 70 / 8,
-                    viewportFraction: 1,
-                    initialPage: 0,
-                    autoPlay: true,
-                    reverse: true,
-                    enableInfiniteScroll: false,
-                    autoPlayInterval: const Duration(seconds: 3),
-                    autoPlayAnimationDuration:
-                        const Duration(milliseconds: 800),
-                    autoPlayCurve: Curves.fastOutSlowIn,
-                    enlargeCenterPage: true,
-
-                    scrollDirection: Axis.horizontal,
-                  )),
-            ),
+            // Container(
+            //   padding: EdgeInsets.all(10),
+            //   decoration: BoxDecoration(
+            //     color: AppColor.textFieldColor,
+            //     borderRadius: BorderRadius.circular(12),
+            //   ),
+            //   child: Center(
+            //       child: SingleChildScrollView(
+            //     controller: controller,
+            //     scrollDirection: Axis.horizontal,
+            //     child: Row(
+            //       children: [
+            //         Text(
+            //           "latestNewsList[itemIndex].newsDesclatestNewsList[itemIndex].newsDesc",
+            //           style: AppTextStyle.blackSubTitle,
+            //         ),
+            //         SizedBoxW10(),
+            //         Text(
+            //           "latestNewsList[itemIndex].newsDesclatestNewsList[itemIndex].newsDesc",
+            //           style: AppTextStyle.blackSubTitle
+            //               .copyWith(color: AppColor.red),
+            //         ),
+            //       ],
+            //     ),
+            //   )),
+            // ),
+            // SizedBox(
+            //   width: double.infinity,
+            //   child: CarouselSlider.builder(
+            //       carouselController: newsController,
+            //       itemCount:
+            //           latestNewsList.length != null ? latestNewsList.length : 0,
+            //       itemBuilder: (BuildContext context, int itemIndex,
+            //               int pageViewIndex) =>
+            //           Container(
+            //             padding: EdgeInsets.all(10),
+            //             decoration: BoxDecoration(
+            //               color: AppColor.textFieldColor,
+            //               borderRadius: BorderRadius.circular(12),
+            //             ),
+            //             child: Center(
+            //                 child: SingleChildScrollView(
+            //               scrollDirection: Axis.horizontal,
+            //               child: Row(
+            //                 children: [
+            //                   Text(
+            //                     "${latestNewsList[itemIndex].newsDesc}",
+            //                     style: AppTextStyle.blackSubTitle,
+            //                   ),
+            //                   SizedBoxW10(),
+            //                   Text(
+            //                     "${latestNewsList[itemIndex].newsLink}",
+            //                     style: AppTextStyle.blackSubTitle
+            //                         .copyWith(color: AppColor.red),
+            //                   ),
+            //                 ],
+            //               ),
+            //             )),
+            //           ),
+            //       options: CarouselOptions(
+            //         // onPageChanged: (index, _) {
+            //         //   setState(() {
+            //         //     latestNewsList.length = index;
+            //         //   });
+            //         // },
+            //         aspectRatio: 70 / 8,
+            //         viewportFraction: 1,
+            //         initialPage: 0,
+            //         autoPlay: true,
+            //         reverse: true,
+            //         enableInfiniteScroll: false,
+            //         autoPlayInterval: const Duration(seconds: 3),
+            //         autoPlayAnimationDuration:
+            //             const Duration(milliseconds: 800),
+            //         autoPlayCurve: Curves.fastOutSlowIn,
+            //         enlargeCenterPage: true,
+            //
+            //         scrollDirection: Axis.horizontal,
+            //       )),
+            // ),
             SizedBoxH18(),
             SizedBox(
               width: double.infinity,
@@ -299,7 +299,7 @@ class _HomeScreenState extends State<HomeScreen> {
         onPressed: Routs.meetingSchedule),
     HomeData(
       name: 'Wallets', icon: AppAsset.wallets,
-      // onPressed: ""
+        onPressed: Routs.walletMainScreen
     ),
     HomeData(
       name: 'Clients',

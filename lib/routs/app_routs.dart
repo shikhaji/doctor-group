@@ -14,6 +14,7 @@ import 'package:doctor_on_call/views/Dashbord/my_appointment_screen.dart';
 import 'package:doctor_on_call/views/Dashbord/my_order_screen.dart';
 import 'package:doctor_on_call/views/Dashbord/services_screen.dart';
 import 'package:doctor_on_call/views/Side%20menu/privacy_policy.dart';
+import 'package:doctor_on_call/views/wallet/wallet_main_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../views/Auth/forgot_password_screen.dart';
@@ -39,6 +40,7 @@ class Routs {
 
   static const String meetingSchedule = "/meeting_schedule";
   static const String privacyPolicy = "/privacy_policy";
+  static const String walletMainScreen = "/wallet_main_screen";
 }
 
 class RoutGenerator {
@@ -102,6 +104,8 @@ class RoutGenerator {
 
       case Routs.privacyPolicy:
         return MaterialPageRoute(builder: (_) => const PrivacyPolicyScreen());
+      case Routs.walletMainScreen:
+        return MaterialPageRoute(builder: (_) => const WalletMainScreen());
 
       default:
         return null;

@@ -52,6 +52,9 @@ class AppTextStyle {
   static const TextStyle headingTextTile =
       TextStyle(fontSize: Sizes.s18, fontWeight: FontWeight.w900);
 
+  static const TextStyle bigTextTile =
+  TextStyle(fontSize: Sizes.s34, fontWeight: FontWeight.w900);
+
   static const TextStyle headingTextTile2 =
       TextStyle(fontSize: Sizes.s20, fontWeight: FontWeight.w900);
 
