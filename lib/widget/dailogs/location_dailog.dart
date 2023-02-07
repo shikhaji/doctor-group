@@ -122,8 +122,11 @@ class _LocationDailogState extends State<LocationDailog> with ValidationMixin {
                   onPressed: () {
                     setLocationModel.state = _state.text;
                     setLocationModel.city = _city.text;
-                    setLocationModel.stateId = cityModel.districtId;
+                    setLocationModel.stateId = stateModel.stateId;
                     Navigator.pop(context, setLocationModel);
+                    Preferances.setString("stateName", setLocationModel.state);
+                    Preferances.setString("stateId", setLocationModel.stateId);
+                    Preferances.setString("cityName", setLocationModel.city);
                   }),
             ],
           ),

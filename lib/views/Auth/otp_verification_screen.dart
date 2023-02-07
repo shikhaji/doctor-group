@@ -115,14 +115,6 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen>
             PrimaryButton(
                 lable: "Verify OTP",
                 onPressed: () async {
-                  // if (_controller.text == "") {
-                  //   CommonFunctions.toast("please enter otp code !!");
-                  // } else {
-                  //   AuthResult result = await _verify(_controller.text);
-                  //   if (result.status) {
-                  //     Navigator.of(context).pop();
-                  //   }
-                  // }
                   if (_controller.text == "") {
                     CommonFunctions.toast("please enter otp code !!");
                   } else {
@@ -175,9 +167,9 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen>
           await FirebaseAuth.instance.signInWithCredential(authCredential);
       if (widget.arguments?.otpStatus == 1) {
         CommonFunctions.toast("otp verify successfully !!");
-        Navigator.pushNamed(context, Routs.resetPassword,arguments:
-        OtpArguments(phoneNumber: widget.arguments?.phoneNumber));
-
+        Navigator.pushNamed(context, Routs.resetPassword,
+            arguments:
+                OtpArguments(phoneNumber: widget.arguments?.phoneNumber));
       } else {
         CommonFunctions.toast("otp verify successfully !!");
         Navigator.pushNamed(context, Routs.signUp,

@@ -9,6 +9,7 @@ import 'package:doctor_on_call/widget/custom_sized_box.dart';
 import 'package:doctor_on_call/widget/scrollview.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:text_scroll/text_scroll.dart';
 import '../../models/slider_model.dart';
 import '../../routs/app_routs.dart';
 import '../../services/shared_referances.dart';
@@ -44,16 +45,21 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    controller.animateTo(100,
-        duration: Duration(milliseconds: 500), curve: Curves.linear);
 
     callApi();
   }
 
-  void callApi() {
+  Future<void> callApi() async {
+    state = await Preferances.getString("stateName");
+    city = await Preferances.getString("cityName");
+    stateId = await Preferances.getString("stateId");
+    print("ststeId:===${stateId}");
+    if (stateId == null) {
+      stateId = "0";
+    }
     FormData data() {
       return FormData.fromMap({
-        "districtid": 0,
+        "districtid": stateId?.replaceAll('"', '').toString(),
       });
     }
 
@@ -92,115 +98,39 @@ class _HomeScreenState extends State<HomeScreen> {
         body: CustomScroll(
           children: [
             SizedBoxH18(),
-            // Container(
-            //   padding: EdgeInsets.all(10),
-            //   decoration: BoxDecoration(
-            //     color: AppColor.textFieldColor,
-            //     borderRadius: BorderRadius.circular(12),
-            //   ),
-            //   child: Center(
-            //       child: SingleChildScrollView(
-            //     controller: controller,
-            //     scrollDirection: Axis.horizontal,
-            //     child: Row(
-            //       children: [
-            //         Text(
-            //           "latestNewsList[itemIndex].newsDesclatestNewsList[itemIndex].newsDesc",
-            //           style: AppTextStyle.blackSubTitle,
-            //         ),
-            //         SizedBoxW10(),
-            //         Text(
-            //           "latestNewsList[itemIndex].newsDesclatestNewsList[itemIndex].newsDesc",
-            //           style: AppTextStyle.blackSubTitle
-            //               .copyWith(color: AppColor.red),
-            //         ),
-            //       ],
-            //     ),
-            //   )),
-            // ),
-            // SizedBox(
-            //   width: double.infinity,
-            //   child: CarouselSlider.builder(
-            //       carouselController: newsController,
-            //       itemCount:
-            //           latestNewsList.length != null ? latestNewsList.length : 0,
-            //       itemBuilder: (BuildContext context, int itemIndex,
-            //               int pageViewIndex) =>
-            //           Container(
-            //             padding: EdgeInsets.all(10),
-            //             decoration: BoxDecoration(
-            //               color: AppColor.textFieldColor,
-            //               borderRadius: BorderRadius.circular(12),
-            //             ),
-            //             child: Center(
-            //                 child: SingleChildScrollView(
-            //               scrollDirection: Axis.horizontal,
-            //               child: Row(
-            //                 children: [
-            //                   Text(
-            //                     "${latestNewsList[itemIndex].newsDesc}",
-            //                     style: AppTextStyle.blackSubTitle,
-            //                   ),
-            //                   SizedBoxW10(),
-            //                   Text(
-            //                     "${latestNewsList[itemIndex].newsLink}",
-            //                     style: AppTextStyle.blackSubTitle
-            //                         .copyWith(color: AppColor.red),
-            //                   ),
-            //                 ],
-            //               ),
-            //             )),
-            //           ),
-            //       options: CarouselOptions(
-            //         // onPageChanged: (index, _) {
-            //         //   setState(() {
-            //         //     latestNewsList.length = index;
-            //         //   });
-            //         // },
-            //         aspectRatio: 70 / 8,
-            //         viewportFraction: 1,
-            //         initialPage: 0,
-            //         autoPlay: true,
-            //         reverse: true,
-            //         enableInfiniteScroll: false,
-            //         autoPlayInterval: const Duration(seconds: 3),
-            //         autoPlayAnimationDuration:
-            //             const Duration(milliseconds: 800),
-            //         autoPlayCurve: Curves.fastOutSlowIn,
-            //         enlargeCenterPage: true,
-            //
-            //         scrollDirection: Axis.horizontal,
-            //       )),
-            // ),
-            SizedBoxH18(),
+            ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 400),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: List.generate(
+                      1,
+                      (index) => SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              children: [
+                                TextScroll(
+                                  'Hey! I\'m a RTL text, check me out. Hey! ',
+                                  textDirection: TextDirection.rtl,
+                                )
+                              ],
+                            ),
+                          ))),
+            ),
             SizedBox(
               width: double.infinity,
               child: CarouselSlider.builder(
                   carouselController: buttonCarouselController,
-                  itemCount: sliderImageList.length != null
-                      ? sliderImageList.length
-                      : 0,
+                  itemCount: sliderImageList.length ?? 0,
                   itemBuilder: (BuildContext context, int itemIndex,
                           int pageViewIndex) =>
                       Padding(
-                          padding: EdgeInsets.only(right: 3, left: 3),
+                          padding: const EdgeInsets.only(right: 3, left: 3),
                           child: Container(
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(12),
-                                // boxShadow: [
-                                //   BoxShadow(
-                                //     color: Colors.grey
-                                //         .withOpacity(0.5), //color of shadow
-                                //     spreadRadius: 3, //spread radius
-                                //     blurRadius: 5, // blur radius
-                                //     offset: Offset(0, 3),
-                                //   )
-                                // ],
                                 image: DecorationImage(
                                     image: NetworkImage(
-                                      'https://appointment.doctoroncalls.in/uploads/' +
-                                          sliderImageList[itemIndex]
-                                              .sliderImage,
+                                      'https://appointment.doctoroncalls.in/uploads/${sliderImageList[itemIndex].sliderImage}',
                                     ),
                                     fit: BoxFit.cover)),
                           )),
@@ -213,10 +143,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     aspectRatio: 12 / 8,
                     viewportFraction: 1,
                     initialPage: 0,
-                    autoPlay: true,
+                    autoPlay: false,
                     enableInfiniteScroll: false,
-                    autoPlayInterval: Duration(seconds: 3),
-                    autoPlayAnimationDuration: Duration(milliseconds: 800),
+                    autoPlayInterval: const Duration(seconds: 3),
+                    autoPlayAnimationDuration:
+                        const Duration(milliseconds: 800),
                     autoPlayCurve: Curves.fastOutSlowIn,
                     enlargeCenterPage: true,
                     scrollDirection: Axis.horizontal,
@@ -275,9 +206,27 @@ class _HomeScreenState extends State<HomeScreen> {
                 IconButton(
                     onPressed: () {
                       LocationDailog.show(context).then((value) {
-                        setState(() {
+                        setState(() async {
                           state = value.state;
                           city = value.city;
+                          stateId = value.stateId;
+                          FormData data() {
+                            return FormData.fromMap({
+                              "districtid":
+                                  stateId?.replaceAll('"', '').toString(),
+                            });
+                          }
+
+                          ApiService()
+                              .slider(context, data: data())
+                              .then((value) {
+                            setState(() {
+                              sliderImageList = value.message!;
+                            });
+                            print(
+                                "slider images ;=${sliderImageList[0].sliderImage}");
+                          });
+                          await callApi();
                         });
                       });
                     },
@@ -286,7 +235,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: AppColor.orange,
                     )),
                 state != null && city != null
-                    ? Text("${state} ${city}")
+                    ? Text(
+                        "${state!.replaceAll('"', '').toString()} ${city!.replaceAll('"', '').toString()}")
                     : SizedBox.shrink()
               ],
             )));
@@ -299,7 +249,7 @@ class _HomeScreenState extends State<HomeScreen> {
         onPressed: Routs.meetingSchedule),
     HomeData(
       name: 'Wallets', icon: AppAsset.wallets,
-        onPressed: Routs.walletMainScreen
+      // onPressed: ""
     ),
     HomeData(
       name: 'Clients',

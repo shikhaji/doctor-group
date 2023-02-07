@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bot_toast/bot_toast.dart';
 import 'package:doctor_on_call/routs/app_routs.dart';
 import 'package:doctor_on_call/utils/app_text_style.dart';
@@ -7,19 +9,35 @@ import 'package:doctor_on_call/views/splash/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 
-import 'firebase_options.dart';
+import 'commonMethod/notification.dart';
+import 'commonMethod/storage_handler.dart';
+
+Future<void> backgroundHandler(RemoteMessage message) async {
+  debugPrint(message.data.toString());
+  debugPrint(message.notification!.title);
+}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  // await Firebase.initializeApp(
-  //   options: DefaultFirebaseOptions.currentPlatform,
-  // );
+  await GetStorage.init();
+  await AppNotificationHandler.firebaseNotificationSetup();
+  FirebaseMessaging.onBackgroundMessage(backgroundHandler);
+  FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
+  try {
+    String? token = await firebaseMessaging.getToken().catchError((e) {
+      log("=========1fcm- Error ....:$e");
+    });
+    await PreferenceManager.setFcmToken(token!);
+    log("=========2fcm-token===>>  $token");
+  } catch (e) {
+    log("=========3fcm- Error :$e");
+  }
   runApp(const MyApp());
-  FirebaseMessaging.onBackgroundMessage(_onBackgroundMessageHandler);
 }
-Future<void> _onBackgroundMessageHandler(RemoteMessage message) async {}
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 

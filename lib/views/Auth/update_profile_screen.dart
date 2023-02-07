@@ -44,6 +44,12 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen>
   StateModel stateModel = StateModel();
   CityModel cityModel = CityModel();
   GenderModel genderModel = GenderModel();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print("phone number otp screen${widget.arguments?.phoneNumber}");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,6 +86,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen>
             PrimaryTextField(
               controller: _phoneNumber,
               keyboardInputType: TextInputType.number,
+              readOnly: true,
               validator: mobileNumberValidator,
               prefix: const Icon(Icons.phone),
               hintText: "Enter phone number",

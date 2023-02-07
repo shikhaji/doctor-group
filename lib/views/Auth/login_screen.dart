@@ -10,7 +10,9 @@ import 'package:doctor_on_call/widget/primary_textfield.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/utils.dart';
 
+import '../../commonMethod/storage_handler.dart';
 import '../../services/api_services.dart';
 import '../../utils/app_asset.dart';
 import '../../utils/app_color.dart';
@@ -103,20 +105,20 @@ class _LoginScreenState extends State<LoginScreen> with ValidationMixin {
             SizedBoxH8(),
             PrimaryButton(
                 lable: "Login",
-                onPressed: () async{
+                onPressed: () async {
                   // String? firebaseToken= await  FirebaseMessaging.instance.getToken();
                   // debugPrint("${firebaseToken}");
                   if (_formKey.currentState!.validate()) {
-
                     FormData data() {
                       return FormData.fromMap({
                         "user_id": _phone.text.trim(),
                         "password": _password.text.trim(),
-                        "firebase_token":"123"
+                        "firebase_token": PreferenceManager.getFcmToken()
                       });
                     }
 
-                    ApiService().login(context, data: data());
+                    ApiService().login(context,
+                        data: data(), phoneNumber: _phone.text.trim());
                   }
                 }),
             SizedBoxH18(),

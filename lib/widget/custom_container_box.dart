@@ -14,12 +14,14 @@ class CustomContainerBox extends StatelessWidget {
   final TextStyle? titleStyle;
   final EdgeInsetsGeometry? padding;
   final String? icon;
+  final bool? iconBool;
   const CustomContainerBox(
       {Key? key,
       this.title,
       this.onPressed,
       this.titleStyle,
       this.padding,
+      this.iconBool = false,
       this.icon})
       : super(key: key);
 
@@ -35,11 +37,17 @@ class CustomContainerBox extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(
-              "${icon}",
-              height: Sizes.s50.h,
-              width: Sizes.s50.w,
-            ),
+            iconBool == true
+                ? Image.network(
+                    "${icon}",
+                    height: Sizes.s50.h,
+                    width: Sizes.s50.w,
+                  )
+                : Image.asset(
+                    "${icon}",
+                    height: Sizes.s50.h,
+                    width: Sizes.s50.w,
+                  ),
             SizedBoxH10(),
             appText(
               "${title}",

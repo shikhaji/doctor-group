@@ -15,6 +15,7 @@ class AppColor {
   static const Color white = Colors.white;
   static const Color unSelectedTabBarColor = Color(0xff85898D);
   static const Color orange = Color(0xffFF9966);
+  static const Color lightOrange = Color(0x66ff9966);
   static const Color green = Color(0xff00A355);
   static const Color textFieldColor = Color(0xffEEF2F6);
 }
