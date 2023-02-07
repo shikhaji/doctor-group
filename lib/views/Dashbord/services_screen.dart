@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/categories_model.dart';
+import '../../models/get_all_service_model.dart';
 import '../../models/get_categories_list_model.dart';
 import '../../routs/app_routs.dart';
 import '../../services/api_services.dart';
@@ -34,7 +35,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
     _scaffoldKey.currentState?.openDrawer();
   }
 
-  List<CategoriesData> _categoriesData = [];
+  List<GetAllServicesList> allServicesList = [];
 
   @override
   void initState() {
@@ -43,10 +44,10 @@ class _ServicesScreenState extends State<ServicesScreen> {
   }
 
   Future<void> fetchCategories() async {
-    ApiService().getCategoriesList().then((value) {
+    ApiService().getServicesList().then((value) {
       if (value != null) {
         setState(() {
-          _categoriesData = value.message;
+          allServicesList = value.message;
         });
       }
     });
@@ -75,7 +76,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
               padding: EdgeInsets.zero,
               cacheExtent: 30,
               physics: const ClampingScrollPhysics(),
-              itemCount: _categoriesData.length,
+              itemCount: allServicesList.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 childAspectRatio: 12 / 9,
@@ -85,16 +86,22 @@ class _ServicesScreenState extends State<ServicesScreen> {
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {
-                    Navigator.pushNamed(
-                      context,
-                      Routs.specialistDoctor,
-                    );
+                    print(
+                        "allServicesList[index].ptSubCatAvailable:=${allServicesList[index].ptSubCatAvailable}");
+                    if (allServicesList[index].ptSubCatAvailable == "1") {
+                      Navigator.pushNamed(
+                        context,
+                        Routs.specialistDoctor,
+                      );
+                    } else {
+                      Navigator.pushNamed(context, Routs.doctorList);
+                    }
                   },
                   child: CustomContainerBox(
-                    title: _categoriesData[index].ptName,
+                    title: allServicesList[index].ptName,
                     iconBool: true,
                     icon:
-                        "https://appointment.doctoroncalls.in/uploads/${_categoriesData[index].ptImage.toString()}",
+                        "https://appointment.doctoroncalls.in/uploads/${allServicesList[index].ptImage.toString()}",
                   ),
                 );
               },

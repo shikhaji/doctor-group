@@ -70,8 +70,8 @@ class _SignUpScreenState extends State<SignUpScreen> with ValidationMixin {
             PrimaryTextField(
               controller: _phone,
               keyboardInputType: TextInputType.phone,
-              validator: mobileNumberValidator,
-              //readOnly: true,
+              //validator: mobileNumberValidator,
+              readOnly: true,
               prefix: const Icon(Icons.phone),
               hintText: "${widget.arguments?.phoneNumber}",
             ),

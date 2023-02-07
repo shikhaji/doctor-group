@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 
 import 'package:dio/dio.dart';
 import '../../models/city_model.dart';
+import '../../models/sub_categories_model.dart';
 import '../../routs/arguments.dart';
 import '../../services/api_services.dart';
 import '../../utils/app_color.dart';
@@ -16,6 +17,7 @@ import '../../utils/app_text.dart';
 import '../../utils/app_text_style.dart';
 import '../../utils/validation_mixin.dart';
 import '../../widget/custom_sized_box.dart';
+import '../../widget/dailogs/sub_categories_picker.dart';
 import '../../widget/primary_botton.dart';
 import '../../widget/primary_textfield.dart';
 import '../../widget/scrollview.dart';
@@ -38,17 +40,20 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen>
   final TextEditingController _phoneNumber = TextEditingController();
   final TextEditingController _state = TextEditingController();
   final TextEditingController _gender = TextEditingController();
+  final TextEditingController _subCategoriesType = TextEditingController();
   var genderValue = "Male";
   String genderInitialValue = 'Male';
   var gender = ["Male", "Female"];
   StateModel stateModel = StateModel();
   CityModel cityModel = CityModel();
   GenderModel genderModel = GenderModel();
+  SubCategoriesModel subCategoriesModel = SubCategoriesModel();
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     print("phone number otp screen${widget.arguments?.phoneNumber}");
+    print("phone number otp screen${widget.arguments?.category_type}");
   }
 
   @override
@@ -197,6 +202,32 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen>
               ],
             ),
             SizedBoxH8(),
+            widget.arguments?.category_type == 1
+                ? PrimaryTextField(
+                    controller: _subCategoriesType,
+                    readOnly: true,
+                    hintText: "Select sub categories",
+                    suffix: Icon(
+                      Icons.arrow_drop_down,
+                      size: Sizes.s30.h,
+                    ),
+                    onTap: () async {
+                      subCategoriesModel =
+                          await SubCategoriesPickerDailog.show(context);
+                      _subCategoriesType.text =
+                          subCategoriesModel.categoryName ?? '';
+                      setState(() {});
+                      setState(() {});
+                    },
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please select state';
+                      } else {
+                        return null;
+                      }
+                    },
+                  )
+                : SizedBox.shrink(),
             PrimaryButton(
                 lable: "Save",
                 onPressed: () {
@@ -218,6 +249,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen>
                         "address": _address.text.trim(),
                         "city": cityModel.districtId,
                         "state": stateModel.stateId,
+                        "subcategoryid": _subCategoriesType.text,
                       });
                     }
 

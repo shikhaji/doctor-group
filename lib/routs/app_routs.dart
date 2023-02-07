@@ -13,7 +13,9 @@ import 'package:doctor_on_call/views/Dashbord/meeting_schedule_screen.dart';
 import 'package:doctor_on_call/views/Dashbord/my_appointment_screen.dart';
 import 'package:doctor_on_call/views/Dashbord/my_order_screen.dart';
 import 'package:doctor_on_call/views/Dashbord/services_screen.dart';
+import 'package:doctor_on_call/views/Side%20menu/about_us.dart';
 import 'package:doctor_on_call/views/Side%20menu/privacy_policy.dart';
+import 'package:doctor_on_call/views/Side%20menu/terms_and_condition_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../views/Auth/forgot_password_screen.dart';
@@ -36,9 +38,10 @@ class Routs {
   static const String doctorList = "/doctor_list_screen";
   static const String specialistDoctor = "/specialist_doctor";
   static const String updateProfile = "/update_profile_screen";
-
   static const String meetingSchedule = "/meeting_schedule";
   static const String privacyPolicy = "/privacy_policy";
+  static const String termsAndCondition = "/terms_and_condition_screen";
+  static const String aboutUs = "/about_us";
 }
 
 class RoutGenerator {
@@ -59,7 +62,11 @@ class RoutGenerator {
         return MaterialPageRoute(builder: (_) => const ResetPasswordScreen());
 
       case Routs.signUp:
-        return MaterialPageRoute(builder: (_) => const SignUpScreen());
+        return MaterialPageRoute(
+            builder: (_) => SignUpScreen(
+                  arguments: arguments as OtpArguments,
+                ));
+
       case Routs.updateProfile:
         return MaterialPageRoute(
             builder: (_) => UpdateProfileScreen(
@@ -102,6 +109,12 @@ class RoutGenerator {
 
       case Routs.privacyPolicy:
         return MaterialPageRoute(builder: (_) => const PrivacyPolicyScreen());
+
+      case Routs.termsAndCondition:
+        return MaterialPageRoute(
+            builder: (_) => const TermsAndConditionScreen());
+      case Routs.aboutUs:
+        return MaterialPageRoute(builder: (_) => const AboutUsScreen());
 
       default:
         return null;

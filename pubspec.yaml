@@ -32,6 +32,7 @@ dependencies:
   flutter_html: ^3.0.0-alpha.6
   get: ^4.6.5
   text_scroll: ^0.1.2
+  marquee: ^2.2.3
 
   #change app name
   change_app_package_name: ^1.1.0
