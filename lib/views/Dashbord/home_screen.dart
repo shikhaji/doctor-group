@@ -54,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
     city = await Preferances.getString("cityName");
     stateId = await Preferances.getString("stateId");
     print("ststeId:===${stateId}");
-    if (stateId!.isEmpty) {
+    if (stateId == null) {
       stateId = "0";
     }
     FormData data() {

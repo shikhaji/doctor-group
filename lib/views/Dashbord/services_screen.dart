@@ -93,7 +93,8 @@ class _ServicesScreenState extends State<ServicesScreen> {
                   child: CustomContainerBox(
                     title: _categoriesData[index].ptName,
                     iconBool: true,
-                    icon: _categoriesData[index].ptImage.toString(),
+                    icon:
+                        "https://appointment.doctoroncalls.in/uploads/${_categoriesData[index].ptImage.toString()}",
                   ),
                 );
               },
