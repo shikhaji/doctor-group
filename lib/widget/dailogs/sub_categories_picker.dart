@@ -10,13 +10,18 @@ import '../../utils/app_sizes.dart';
 import '../../utils/screen_utils.dart';
 
 class SubCategoriesPickerDailog extends StatefulWidget {
-  const SubCategoriesPickerDailog({super.key});
+  final String ptId;
+  const SubCategoriesPickerDailog({
+    super.key,
+    required this.ptId,
+  });
 
-  static Future<SubCategoriesModel> show(BuildContext context) async {
+  static Future<SubCategoriesModel> show(
+      BuildContext context, String ptId) async {
     return await showCupertinoDialog(
       context: context,
       barrierDismissible: true,
-      builder: (context) => const SubCategoriesPickerDailog(),
+      builder: (context) => SubCategoriesPickerDailog(ptId: ptId),
     );
   }
 
@@ -35,7 +40,8 @@ class _SubCategoriesPickerDailogState extends State<SubCategoriesPickerDailog> {
   }
 
   Future<void> fetchCategories() async {
-    GetSubCategoryModel? response = await ApiService().getSubCategoriesList();
+    GetSubCategoryModel? response =
+        await ApiService().getSubCategoriesList("${widget.ptId}");
     if (response != null) {
       if (response.status == 200) {
         _subCategoriesModel = response.message

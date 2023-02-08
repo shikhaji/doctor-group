@@ -1,7 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../../models/get_sub_categories_model.dart';
+import '../../../models/sub_categories_model.dart';
 import '../../../routs/app_routs.dart';
+import '../../../routs/arguments.dart';
+import '../../../services/api_services.dart';
 import '../../../utils/app_asset.dart';
 import '../../../utils/app_color.dart';
 import '../../../utils/app_sizes.dart';
@@ -15,7 +19,8 @@ import '../../../widget/scrollview.dart';
 import '../home_screen.dart';
 
 class SpecialistDoctor extends StatefulWidget {
-  const SpecialistDoctor({Key? key}) : super(key: key);
+  final OtpArguments? arguments;
+  const SpecialistDoctor({Key? key, this.arguments}) : super(key: key);
 
   @override
   State<SpecialistDoctor> createState() => _SpecialistDoctorState();
@@ -24,6 +29,27 @@ class SpecialistDoctor extends StatefulWidget {
 class _SpecialistDoctorState extends State<SpecialistDoctor> {
   final TextEditingController _search = TextEditingController();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  List<GetSubCategoryList> _getSubCategoryList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    print("sub category id here${widget.arguments?.ptId}");
+    fetchCategories();
+  }
+
+  Future<void> fetchCategories() async {
+    ApiService()
+        .getSubCategoriesList("${widget.arguments?.ptId}")
+        .then((value) {
+      if (value != null) {
+        setState(() {
+          _getSubCategoryList = value.message;
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +78,7 @@ class _SpecialistDoctorState extends State<SpecialistDoctor> {
             padding: EdgeInsets.zero,
             cacheExtent: 30,
             physics: const ClampingScrollPhysics(),
-            itemCount: _specialistDoctor.length,
+            itemCount: _getSubCategoryList.length,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               childAspectRatio: 12 / 9,
@@ -62,14 +88,16 @@ class _SpecialistDoctorState extends State<SpecialistDoctor> {
             itemBuilder: (context, index) {
               return GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    _specialistDoctor[index].onPressed.toString(),
-                  );
+                  // Navigator.pushNamed(
+                  //   context,
+                  //   _getSubCategoryList[index].onPressed.toString(),
+                  // );
                 },
                 child: CustomContainerBox(
-                  title: _specialistDoctor[index].name.toString(),
-                  icon: _specialistDoctor[index].icon.toString(),
+                  title: _getSubCategoryList[index].categoryName.toString(),
+                  icon:
+                      "https://appointment.doctoroncalls.in/uploads/${_getSubCategoryList[index].catImage.toString()}",
+                  iconBool: true,
                 ),
               );
             },
@@ -79,26 +107,26 @@ class _SpecialistDoctorState extends State<SpecialistDoctor> {
     );
   }
 
-  final List<HomeData> _specialistDoctor = [
-    HomeData(
-        name: 'Cardio Specialist',
-        icon: AppAsset.doctorIcon,
-        onPressed: Routs.doctorList),
-    HomeData(
-        name: 'Dental Specialist',
-        icon: AppAsset.doctorIcon,
-        onPressed: Routs.doctorList),
-    HomeData(
-        name: 'Brain Specialist',
-        icon: AppAsset.doctorIcon,
-        onPressed: Routs.doctorList),
-    HomeData(
-        name: 'Eye Specialist',
-        icon: AppAsset.doctorIcon,
-        onPressed: Routs.doctorList),
-    HomeData(
-        name: 'Child Specialist',
-        icon: AppAsset.doctorIcon,
-        onPressed: Routs.doctorList),
-  ];
+  // final List<HomeData> _specialistDoctor = [
+  //   HomeData(
+  //       name: 'Cardio Specialist',
+  //       icon: AppAsset.doctorIcon,
+  //       onPressed: Routs.doctorList),
+  //   HomeData(
+  //       name: 'Dental Specialist',
+  //       icon: AppAsset.doctorIcon,
+  //       onPressed: Routs.doctorList),
+  //   HomeData(
+  //       name: 'Brain Specialist',
+  //       icon: AppAsset.doctorIcon,
+  //       onPressed: Routs.doctorList),
+  //   HomeData(
+  //       name: 'Eye Specialist',
+  //       icon: AppAsset.doctorIcon,
+  //       onPressed: Routs.doctorList),
+  //   HomeData(
+  //       name: 'Child Specialist',
+  //       icon: AppAsset.doctorIcon,
+  //       onPressed: Routs.doctorList),
+  // ];
 }

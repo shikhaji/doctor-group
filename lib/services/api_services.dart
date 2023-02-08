@@ -160,19 +160,22 @@ class ApiService {
             "Auth-Key": 'simplerestapi',
           }),
           data: data);
-
-      if (response.statusCode == 200) {
+      CommonModel commonModel = CommonModel.fromJson(response.data);
+      if (commonModel.status == 200) {
         Loader.hideLoader();
         Fluttertoast.showToast(
-          msg: 'Sign Up Successfully...',
+          msg: '${commonModel.message}',
           backgroundColor: Colors.grey,
         );
         Navigator.pushNamed(context, Routs.login);
-
         debugPrint('responseData ----- > ${response.data}');
         return response.data;
       } else {
         Loader.hideLoader();
+        Fluttertoast.showToast(
+          msg: '${commonModel.message}',
+          backgroundColor: Colors.grey,
+        );
         throw Exception(response.data);
       }
     } on DioError catch (e) {
@@ -197,17 +200,19 @@ class ApiService {
             "Auth-Key": 'simplerestapi',
           }),
           data: data);
-      if (response.statusMessage == "OK") {
-        LoginModel responseData = LoginModel.fromJson(response.data);
+      LoginModel responseData = LoginModel.fromJson(response.data);
+      if (responseData.message == "ok") {
         Preferances.setString("userId", responseData.id);
         Preferances.setString("Token", responseData.loginToken);
         Preferances.setString("userType", responseData.businessType);
+        Preferances.setString("profileStatus", responseData.profileStatus);
         Loader.hideLoader();
         Fluttertoast.showToast(
           msg: 'login Successfully...',
           backgroundColor: Colors.grey,
         );
-        if (responseData.profileStatus == 0) {
+        if (responseData.profileStatus == "0") {
+          Preferances.setString("profileStatus", responseData.profileStatus);
           print("phoneNumber is here:=${phoneNumber}");
           Navigator.pushNamed(
             context,
@@ -215,9 +220,10 @@ class ApiService {
             arguments: OtpArguments(
                 userId: responseData.id,
                 phoneNumber: phoneNumber,
-                category_type: responseData.businessType),
+                ptId: responseData.businessType),
           );
         } else {
+          Preferances.setString("profileStatus", responseData.profileStatus);
           Navigator.pushNamed(context, Routs.mainHome);
         }
 
@@ -481,17 +487,17 @@ class ApiService {
   }
 
   //----------------------------SUB CATEGORIES LIST API-----------------------//
-  Future<GetSubCategoryModel?> getSubCategoriesList() async {
+  Future<GetSubCategoryModel?> getSubCategoriesList(String ptid) async {
     try {
       Loader.showLoader();
       Response response;
-      response = await dio.post(
-        EndPoints.allMainCategory,
-        options: Options(headers: {
-          "Client-Service": "frontend-client",
-          "Auth-Key": 'simplerestapi',
-        }),
-      );
+      FormData formData = FormData.fromMap({"ptid": ptid});
+      response = await dio.post(EndPoints.allMainCategory,
+          options: Options(headers: {
+            "Client-Service": "frontend-client",
+            "Auth-Key": 'simplerestapi',
+          }),
+          data: formData);
       if (response.statusCode == 200) {
         GetSubCategoryModel responseData =
             GetSubCategoryModel.fromJson(response.data);

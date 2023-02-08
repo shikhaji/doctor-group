@@ -260,10 +260,7 @@ class _HomeScreenState extends State<HomeScreen> {
         name: 'Meeting Schedule',
         icon: AppAsset.meetingSchedule,
         onPressed: Routs.meetingSchedule),
-    HomeData(
-      name: 'Wallets', icon: AppAsset.wallets,
-      // onPressed: ""
-    ),
+    HomeData(name: 'Wallets', icon: AppAsset.wallets, onPressed: Routs.wallet),
     HomeData(
       name: 'Clients',
       icon: AppAsset.myAppointmentIcon,

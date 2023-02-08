@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../../../routs/arguments.dart';
 import '../../../utils/app_color.dart';
 import '../../../utils/app_sizes.dart';
 import '../../../utils/app_text.dart';
@@ -15,7 +16,8 @@ import '../../../widget/primary_botton.dart';
 import '../../../widget/scrollview.dart';
 
 class DoctorList extends StatefulWidget {
-  const DoctorList({Key? key}) : super(key: key);
+  final OtpArguments? arguments;
+  const DoctorList({Key? key, this.arguments}) : super(key: key);
 
   @override
   State<DoctorList> createState() => _DoctorListState();

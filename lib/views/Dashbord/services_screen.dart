@@ -1,3 +1,4 @@
+import 'package:doctor_on_call/routs/arguments.dart';
 import 'package:doctor_on_call/views/Dashbord/doctor_services/specialist_doctor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -89,10 +90,11 @@ class _ServicesScreenState extends State<ServicesScreen> {
                     print(
                         "allServicesList[index].ptSubCatAvailable:=${allServicesList[index].ptSubCatAvailable}");
                     if (allServicesList[index].ptSubCatAvailable == "1") {
-                      Navigator.pushNamed(
-                        context,
-                        Routs.specialistDoctor,
-                      );
+                      print(
+                          "allServicesList[index].ptId  : == ${allServicesList[index].ptId}");
+                      Navigator.pushNamed(context, Routs.specialistDoctor,
+                          arguments:
+                              OtpArguments(ptId: allServicesList[index].ptId));
                     } else {
                       Navigator.pushNamed(context, Routs.doctorList);
                     }

@@ -13,13 +13,13 @@ class GetSubCategoryModel {
   });
 
   int status;
-  List<Message> message;
+  List<GetSubCategoryList> message;
 
   factory GetSubCategoryModel.fromJson(Map<String, dynamic> json) =>
       GetSubCategoryModel(
         status: json["status"],
-        message:
-            List<Message>.from(json["message"].map((x) => Message.fromJson(x))),
+        message: List<GetSubCategoryList>.from(
+            json["message"].map((x) => GetSubCategoryList.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -28,8 +28,8 @@ class GetSubCategoryModel {
       };
 }
 
-class Message {
-  Message({
+class GetSubCategoryList {
+  GetSubCategoryList({
     required this.categoryId,
     required this.categoryTt,
     required this.categoryName,
@@ -45,7 +45,8 @@ class Message {
   String categoryStatus;
   String brandId;
 
-  factory Message.fromJson(Map<String, dynamic> json) => Message(
+  factory GetSubCategoryList.fromJson(Map<String, dynamic> json) =>
+      GetSubCategoryList(
         categoryId: json["CATEGORY_ID"],
         categoryTt: DateTime.parse(json["CATEGORY_TT"]),
         categoryName: json["CATEGORY_NAME"],

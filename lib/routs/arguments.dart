@@ -2,8 +2,7 @@ class OtpArguments {
   String? phoneNumber;
   int? otpStatus;
   String? userId;
-  String? category_type;
+  String? ptId;
 
-  OtpArguments(
-      {this.phoneNumber, this.otpStatus, this.userId, this.category_type});
+  OtpArguments({this.phoneNumber, this.otpStatus, this.userId, this.ptId});
 }

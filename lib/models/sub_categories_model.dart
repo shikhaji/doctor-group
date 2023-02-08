@@ -7,7 +7,6 @@ class SubCategoriesModel {
       this.catImage});
 
   String? categoryId;
-
   String? categoryName;
   String? catImage;
   String? categoryStatus;

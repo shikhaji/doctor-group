@@ -111,6 +111,10 @@ class _LoginScreenState extends State<LoginScreen> with ValidationMixin {
                   // debugPrint("${firebaseToken}");
                   if (_formKey.currentState!.validate()) {
                     FormData data() {
+                      print("user_id:=${_phone.text}");
+                      print("password:=${_password.text}");
+                      print(
+                          "firebase_token:=${PreferenceManager.getFcmToken()}");
                       return FormData.fromMap({
                         "user_id": _phone.text.trim(),
                         "password": _password.text.trim(),

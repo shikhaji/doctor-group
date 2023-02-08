@@ -27,9 +27,10 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> verify() async {
     String userId = await Preferances.prefGetString("userId", '');
+    String profileStatus = await Preferances.prefGetString("profileStatus", '');
     Future.delayed(const Duration(seconds: 3)).then(
       (value) {
-        if (userId.isNotEmpty) {
+        if (userId.isNotEmpty && profileStatus == "1") {
           Navigator.pushNamedAndRemoveUntil(
               context, Routs.mainHome, (route) => false);
         } else {

@@ -48,13 +48,6 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen>
   CityModel cityModel = CityModel();
   GenderModel genderModel = GenderModel();
   SubCategoriesModel subCategoriesModel = SubCategoriesModel();
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    print("phone number otp screen${widget.arguments?.phoneNumber}");
-    print("phone number otp screen${widget.arguments?.category_type}");
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,25 +79,15 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen>
               hintText: "Enter your name",
             ),
             SizedBoxH10(),
-            appText("Phone number", style: AppTextStyle.lable),
+            appText("Email address", style: AppTextStyle.lable),
             SizedBoxH8(),
             PrimaryTextField(
-              controller: _phoneNumber,
-              keyboardInputType: TextInputType.number,
-              readOnly: true,
-              validator: mobileNumberValidator,
-              prefix: const Icon(Icons.phone),
-              hintText: "Enter phone number",
+              controller: _email,
+              validator: emailValidator,
+              prefix: const Icon(Icons.email),
+              hintText: "Enter email address",
             ),
             SizedBoxH10(),
-            appText("Enter address", style: AppTextStyle.lable),
-            SizedBoxH8(),
-            PrimaryTextField(
-              hintText: "Enter address",
-              controller: _address,
-              prefix: const Icon(Icons.email),
-              validator: addressValidation,
-            ),
             appText("Select gender", style: AppTextStyle.lable),
             SizedBoxH8(),
             PrimaryTextField(
@@ -133,6 +116,50 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen>
               },
             ),
             SizedBoxH10(),
+            widget.arguments?.ptId == "1"
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      appText("Select sub categories",
+                          style: AppTextStyle.lable),
+                      SizedBoxH8(),
+                      PrimaryTextField(
+                        controller: _subCategoriesType,
+                        readOnly: true,
+                        hintText: "Select sub categories",
+                        suffix: Icon(
+                          Icons.arrow_drop_down,
+                          size: Sizes.s30.h,
+                        ),
+                        onTap: () async {
+                          subCategoriesModel =
+                              await SubCategoriesPickerDailog.show(
+                                  context, "${widget.arguments?.ptId}");
+                          _subCategoriesType.text =
+                              subCategoriesModel.categoryName ?? '';
+                          setState(() {});
+                          setState(() {});
+                        },
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please select state';
+                          } else {
+                            return null;
+                          }
+                        },
+                      )
+                    ],
+                  )
+                : SizedBox.shrink(),
+            SizedBoxH10(),
+            appText("Enter address", style: AppTextStyle.lable),
+            SizedBoxH8(),
+            PrimaryTextField(
+              hintText: "Enter address",
+              controller: _address,
+              prefix: const Icon(Icons.home),
+              validator: addressValidation,
+            ),
             SizedBoxH10(),
             Row(
               children: [
@@ -202,32 +229,6 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen>
               ],
             ),
             SizedBoxH8(),
-            widget.arguments?.category_type == 1
-                ? PrimaryTextField(
-                    controller: _subCategoriesType,
-                    readOnly: true,
-                    hintText: "Select sub categories",
-                    suffix: Icon(
-                      Icons.arrow_drop_down,
-                      size: Sizes.s30.h,
-                    ),
-                    onTap: () async {
-                      subCategoriesModel =
-                          await SubCategoriesPickerDailog.show(context);
-                      _subCategoriesType.text =
-                          subCategoriesModel.categoryName ?? '';
-                      setState(() {});
-                      setState(() {});
-                    },
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'Please select state';
-                      } else {
-                        return null;
-                      }
-                    },
-                  )
-                : SizedBox.shrink(),
             PrimaryButton(
                 lable: "Save",
                 onPressed: () {
@@ -238,6 +239,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen>
                   print("address:=${_address.text}");
                   print("gender:=${_gender.text}");
                   print("login id:=${widget.arguments?.userId}");
+                  print(" _subCategoriesType.text:=${_subCategoriesType.text}");
                   // Navigator.pushNamed(context, Routs.mainHome);
                   if (_formKey.currentState!.validate()) {
                     FormData data() {

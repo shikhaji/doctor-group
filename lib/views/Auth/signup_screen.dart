@@ -131,10 +131,15 @@ class _SignUpScreenState extends State<SignUpScreen> with ValidationMixin {
                 lable: "Sign Up",
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
+                    print("name:=${_name.text}");
+                    print("_phone:=${widget.arguments?.phoneNumber}");
+                    print("_password:=${_password.text}");
+                    print("_referCode:=${_referCode.text}");
+                    print("categoriesModel.id:=${categoriesModel.ptId}");
                     FormData data() {
                       return FormData.fromMap({
                         "name": _name.text.trim(),
-                        "phone": _phone.text.trim(),
+                        "phone": widget.arguments?.phoneNumber,
                         "password": _password.text.trim(),
                         "referal_code": _referCode.text.trim(),
                         "categoryid": "${categoriesModel.ptId}",

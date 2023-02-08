@@ -23,7 +23,8 @@ class AppTextStyle {
       fontSize: Sizes.s14, fontWeight: FontWeight.w900, color: AppColor.grey);
   static const TextStyle textFieldFont = TextStyle(
       fontSize: Sizes.s16, fontWeight: FontWeight.w900, color: AppColor.black);
-
+  static const TextStyle bigTextTile =
+      TextStyle(fontSize: Sizes.s34, fontWeight: FontWeight.w900);
   static const TextStyle subTitle2 =
       TextStyle(fontSize: Sizes.s14, fontWeight: FontWeight.w400);
   static const TextStyle body1 =
