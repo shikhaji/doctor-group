@@ -6,6 +6,7 @@ import 'package:doctor_on_call/models/latest_news_model.dart';
 import 'package:doctor_on_call/services/api_services.dart';
 import 'package:doctor_on_call/utils/app_asset.dart';
 import 'package:doctor_on_call/utils/app_color.dart';
+import 'package:doctor_on_call/utils/app_text.dart';
 import 'package:doctor_on_call/utils/app_text_style.dart';
 import 'package:doctor_on_call/widget/custom_sized_box.dart';
 import 'package:doctor_on_call/widget/scrollview.dart';
@@ -153,7 +154,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         _selectedSliderIndex = index;
                       });
                     },
-                    aspectRatio: 12 / 8,
+                    aspectRatio: 15 / 8,
                     viewportFraction: 1,
                     initialPage: 0,
                     autoPlay: false,
@@ -248,8 +249,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: AppColor.orange,
                     )),
                 state != null && city != null
-                    ? Text(
-                        "${state!.replaceAll('"', '').toString()} ${city!.replaceAll('"', '').toString()}")
+                    ? appText("${city!.replaceAll('"', '').toString()}")
                     : SizedBox.shrink()
               ],
             )));

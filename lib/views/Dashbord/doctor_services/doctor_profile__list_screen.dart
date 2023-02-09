@@ -1,57 +1,74 @@
+import 'package:doctor_on_call/services/api_services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
+import '../../../models/get_all_profile_model.dart';
 import '../../../routs/arguments.dart';
 import '../../../utils/app_color.dart';
 import '../../../utils/app_sizes.dart';
 import '../../../utils/app_text.dart';
 import '../../../utils/app_text_style.dart';
 import '../../../utils/constant.dart';
-import '../../../utils/screen_utils.dart';
 import '../../../widget/custom_sized_box.dart';
-import '../../../widget/drawer_widget.dart';
 import '../../../widget/primary_appbar.dart';
 import '../../../widget/primary_botton.dart';
 import '../../../widget/scrollview.dart';
 
-class DoctorList extends StatefulWidget {
+class DoctorProfileList extends StatefulWidget {
   final OtpArguments? arguments;
-  const DoctorList({Key? key, this.arguments}) : super(key: key);
+  const DoctorProfileList({Key? key, this.arguments}) : super(key: key);
 
   @override
-  State<DoctorList> createState() => _DoctorListState();
+  State<DoctorProfileList> createState() => _DoctorProfileListState();
 }
 
-class _DoctorListState extends State<DoctorList> {
+class _DoctorProfileListState extends State<DoctorProfileList> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  List<GetAllProfileList> _getAllProfileList = [];
+  @override
+  void initState() {
+    super.initState();
+    ApiService()
+        .getAllProfileList(
+            "${widget.arguments?.ptId}", "${widget.arguments?.catId}")
+        .then((value) {
+      if (value != null) {
+        setState(() {
+          _getAllProfileList = value.message!;
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      body: CustomScroll(
-        children: [
-          // todo slider
-          SizedBox(
-            height: 20,
-          ),
-          ListView.builder(
-            padding: EdgeInsets.symmetric(vertical: Sizes.s20.h),
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: 1,
-            itemBuilder: (context, inx) {
-              return orderListContainer(
-                  "hina",
-                  "https://www.desktopbackground.org/download/1024x768/2014/01/01/694300_daniels-statistics-analysis-name-meaning-list-of-firstnames_1920x1200_h.jpg",
-                  "Cardio Specialist",
-                  "3-Years",
-                  "Gujarat");
-            },
-          )
-        ],
-      ),
+      body: _getAllProfileList.isNotEmpty
+          ? CustomScroll(
+              children: [
+                const SizedBox(
+                  height: 20,
+                ),
+                ListView.builder(
+                  padding: EdgeInsets.symmetric(vertical: Sizes.s20.h),
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: _getAllProfileList.length,
+                  itemBuilder: (context, inx) {
+                    return orderListContainer(
+                      "${_getAllProfileList[inx].branchName}",
+                      "https://www.desktopbackground.org/download/1024x768/2014/01/01/694300_daniels-statistics-analysis-name-meaning-list-of-firstnames_1920x1200_h.jpg",
+                      "Cardio Specialist",
+                      "3-Years",
+                      _getAllProfileList[inx].branchAddress ?? "",
+                    );
+                  },
+                )
+              ],
+            )
+          : Center(
+              child: appText("No Doctor", style: AppTextStyle.blackSubTitle),
+            ),
       appBar: const SecondaryAppBar(
         title: "Doctors",
         isLeading: true,
@@ -59,10 +76,11 @@ class _DoctorListState extends State<DoctorList> {
     );
   }
 
-  Widget orderListContainer(String name, String imgpath, String experience,
+  Widget orderListContainer(String name, String imgPath, String experience,
       String address, String specialist) {
     return Container(
       alignment: Alignment.center,
+      margin: const EdgeInsets.only(bottom: Sizes.s9),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(textFieldBorderRadius),
           border: Border.all(color: AppColor.grey)),
@@ -79,7 +97,7 @@ class _DoctorListState extends State<DoctorList> {
                         shape: BoxShape.circle,
                         image: DecorationImage(
                           fit: BoxFit.cover,
-                          image: NetworkImage("${imgpath}"),
+                          image: NetworkImage(imgPath),
                         ))),
                 SizedBoxW8(),
                 Column(

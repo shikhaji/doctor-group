@@ -5,8 +5,8 @@ import 'package:doctor_on_call/views/Auth/otp_verification_screen.dart';
 import 'package:doctor_on_call/views/Auth/reset_password_screen.dart';
 import 'package:doctor_on_call/views/Auth/signup_screen.dart';
 
-import 'package:doctor_on_call/views/Dashbord/doctor_services/doctor_list_screen.dart';
-import 'package:doctor_on_call/views/Dashbord/doctor_services/specialist_doctor.dart';
+import 'package:doctor_on_call/views/Dashbord/doctor_services/doctor_profile__list_screen.dart';
+import 'package:doctor_on_call/views/Dashbord/doctor_services/sub_category_doctor.dart';
 import 'package:doctor_on_call/views/Dashbord/home_screen.dart';
 import 'package:doctor_on_call/views/Dashbord/main_home_screen.dart';
 import 'package:doctor_on_call/views/Dashbord/meeting_schedule_screen.dart';
@@ -97,7 +97,7 @@ class RoutGenerator {
 
       case Routs.doctorList:
         return MaterialPageRoute(
-            builder: (_) => DoctorList(
+            builder: (_) => DoctorProfileList(
                   arguments: arguments as OtpArguments,
                 ));
 
@@ -106,7 +106,7 @@ class RoutGenerator {
 
       case Routs.specialistDoctor:
         return MaterialPageRoute(
-            builder: (_) => SpecialistDoctor(
+            builder: (_) => SubCategoryDoctor(
                   arguments: arguments as OtpArguments,
                 ));
 

@@ -13,7 +13,7 @@ import '../../utils/screen_utils.dart';
 import '../../widget/drawer_widget.dart';
 import '../../widget/primary_bottom_navigation_bar.dart';
 
-import 'doctor_services/doctor_list_screen.dart';
+import 'doctor_services/doctor_profile__list_screen.dart';
 
 class MainHomeScreen extends StatefulWidget {
   const MainHomeScreen({Key? key}) : super(key: key);

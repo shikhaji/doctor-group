@@ -12,6 +12,7 @@ import '../api/dio_client.dart';
 import '../api/url.dart';
 import '../models/about_us_model.dart';
 import '../models/common_model.dart';
+import '../models/get_all_profile_model.dart';
 import '../models/get_all_service_model.dart';
 import '../models/get_categories_list_model.dart';
 import '../models/get_city_list_model.dart';
@@ -212,7 +213,6 @@ class ApiService {
           backgroundColor: Colors.grey,
         );
         if (responseData.profileStatus == "0") {
-          Preferances.setString("profileStatus", responseData.profileStatus);
           print("phoneNumber is here:=${phoneNumber}");
           Navigator.pushNamed(
             context,
@@ -223,7 +223,6 @@ class ApiService {
                 ptId: responseData.businessType),
           );
         } else {
-          Preferances.setString("profileStatus", responseData.profileStatus);
           Navigator.pushNamed(context, Routs.mainHome);
         }
 
@@ -501,6 +500,38 @@ class ApiService {
       if (response.statusCode == 200) {
         GetSubCategoryModel responseData =
             GetSubCategoryModel.fromJson(response.data);
+        Loader.hideLoader();
+        return responseData;
+      } else {
+        Loader.hideLoader();
+        throw Exception(response.data);
+      }
+    } on DioError catch (e) {
+      Loader.hideLoader();
+      debugPrint('Dio E  $e');
+    } finally {
+      Loader.hideLoader();
+    }
+    return null;
+  }
+
+  //----------------------------SUB CATEGORIES LIST API-----------------------//
+  Future<GetAllProfileModel?> getAllProfileList(
+      String ptId, String catId) async {
+    try {
+      Loader.showLoader();
+      Response response;
+      FormData formData =
+          FormData.fromMap({"catid": catId, "profile_type": ptId});
+      response = await dio.post(EndPoints.getAllProfileList,
+          options: Options(headers: {
+            "Client-Service": "frontend-client",
+            "Auth-Key": 'simplerestapi',
+          }),
+          data: formData);
+      if (response.statusCode == 200) {
+        GetAllProfileModel responseData =
+            GetAllProfileModel.fromJson(response.data);
         Loader.hideLoader();
         return responseData;
       } else {
