@@ -13,6 +13,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/utils.dart';
 
 import '../../commonMethod/storage_handler.dart';
+import '../../routs/app_routs.dart';
 import '../../services/api_services.dart';
 import '../../utils/app_asset.dart';
 import '../../utils/app_color.dart';
@@ -110,6 +111,10 @@ class _LoginScreenState extends State<LoginScreen> with ValidationMixin {
                   // debugPrint("${firebaseToken}");
                   if (_formKey.currentState!.validate()) {
                     FormData data() {
+                      print("user_id:=${_phone.text}");
+                      print("password:=${_password.text}");
+                      print(
+                          "firebase_token:=${PreferenceManager.getFcmToken()}");
                       return FormData.fromMap({
                         "user_id": _phone.text.trim(),
                         "password": _password.text.trim(),
@@ -124,8 +129,7 @@ class _LoginScreenState extends State<LoginScreen> with ValidationMixin {
             SizedBoxH18(),
             GestureDetector(
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => SignUpScreen()));
+                Navigator.pushNamed(context, Routs.mobileVerification);
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,

@@ -57,7 +57,9 @@ class DrawerWidget extends StatelessWidget {
                     // ),
                     _DrawerMenuListTile.asset(
                       title: 'Terms & Conditions',
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.pushNamed(context, Routs.termsAndCondition);
+                      },
                       child: Icon(Icons.local_police_outlined),
                     ),
                     _DrawerMenuListTile.asset(
@@ -69,7 +71,9 @@ class DrawerWidget extends StatelessWidget {
                     ),
                     _DrawerMenuListTile.asset(
                       title: 'About Us',
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.pushNamed(context, Routs.aboutUs);
+                      },
                       child: const Icon(Icons.account_box),
                     ),
                     ScreenUtil().setVerticalSpacing(30),

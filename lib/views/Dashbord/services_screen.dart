@@ -1,8 +1,10 @@
-import 'package:doctor_on_call/views/Dashbord/doctor_services/specialist_doctor.dart';
+import 'package:doctor_on_call/routs/arguments.dart';
+import 'package:doctor_on_call/views/Dashbord/doctor_services/sub_category_doctor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/categories_model.dart';
+import '../../models/get_all_service_model.dart';
 import '../../models/get_categories_list_model.dart';
 import '../../routs/app_routs.dart';
 import '../../services/api_services.dart';
@@ -27,14 +29,15 @@ class ServicesScreen extends StatefulWidget {
 }
 
 class _ServicesScreenState extends State<ServicesScreen> {
-  final TextEditingController _search = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  List<GetAllServicesList> allServicesList = [];
+  List<GetAllServicesList> allServicesListRes = [];
+  bool _isSearching = false;
 
   void openDrawer() {
     _scaffoldKey.currentState?.openDrawer();
   }
-
-  List<CategoriesData> _categoriesData = [];
 
   @override
   void initState() {
@@ -42,14 +45,35 @@ class _ServicesScreenState extends State<ServicesScreen> {
     fetchCategories();
   }
 
+  Future<void> _onSearchHandler(String qurey) async {
+    if (qurey.isNotEmpty) {
+      _isSearching = true;
+      allServicesList = _isSearching ? searchDoctor(qurey) : allServicesList;
+    } else {
+      allServicesList.clear();
+      allServicesList = allServicesListRes;
+      _isSearching = false;
+    }
+    setState(() {});
+  }
+
+  List<GetAllServicesList> searchDoctor(String qurey) {
+    return allServicesListRes
+        .where((e) => e.ptName.toLowerCase().contains(qurey.toLowerCase()))
+        .toList();
+  }
+
   Future<void> fetchCategories() async {
-    ApiService().getCategoriesList().then((value) {
-      if (value != null) {
-        setState(() {
-          _categoriesData = value.message;
-        });
-      }
-    });
+    GetAllServicesModel? response = await ApiService().getServicesList();
+    if (response != null) {
+      allServicesList = response.message
+          .map((e) => GetAllServicesList.fromJson(e.toJson()))
+          .toList();
+      allServicesListRes = response.message
+          .map((e) => GetAllServicesList.fromJson(e.toJson()))
+          .toList();
+      setState(() {});
+    }
   }
 
   @override
@@ -58,16 +82,34 @@ class _ServicesScreenState extends State<ServicesScreen> {
         key: _scaffoldKey,
         body: CustomScroll(
           children: [
-            // todo slider
             const SizedBox(
               height: 20,
             ),
             PrimaryTextField(
-              controller: _search,
-              hintText: "Search Here",
-              suffix: Icon(CupertinoIcons.search),
+              controller: _searchController,
+              onChanged: _onSearchHandler,
+              hintText: 'Search Doctor',
+              color: AppColor.textFieldColor,
+              suffix: _isSearching
+                  ? InkWell(
+                      onTap: () {
+                        _searchController.clear();
+                        _isSearching = false;
+                        allServicesList.clear();
+                        allServicesList = allServicesListRes;
+                        setState(() {});
+                      },
+                      child: const Padding(
+                        padding: EdgeInsets.only(right: 10),
+                        child: Icon(
+                          Icons.clear,
+                          color: Colors.black,
+                        ),
+                      ),
+                    )
+                  : null,
             ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
             GridView.builder(
@@ -75,7 +117,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
               padding: EdgeInsets.zero,
               cacheExtent: 30,
               physics: const ClampingScrollPhysics(),
-              itemCount: _categoriesData.length,
+              itemCount: allServicesList.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 childAspectRatio: 12 / 9,
@@ -85,16 +127,23 @@ class _ServicesScreenState extends State<ServicesScreen> {
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {
-                    Navigator.pushNamed(
-                      context,
-                      Routs.specialistDoctor,
-                    );
+                    if (allServicesList[index].ptSubCatAvailable == "1") {
+                      Navigator.pushNamed(context, Routs.specialistDoctor,
+                          arguments:
+                              OtpArguments(ptId: allServicesList[index].ptId));
+                    } else {
+                      Navigator.pushNamed(context, Routs.doctorList,
+                          arguments: OtpArguments(
+                            ptId: allServicesList[index].ptId,
+                            catId: "0",
+                          ));
+                    }
                   },
                   child: CustomContainerBox(
-                    title: _categoriesData[index].ptName,
+                    title: allServicesList[index].ptName,
                     iconBool: true,
                     icon:
-                        "https://appointment.doctoroncalls.in/uploads/${_categoriesData[index].ptImage.toString()}",
+                        "https://appointment.doctoroncalls.in/uploads/${allServicesList[index].ptImage.toString()}",
                   ),
                 );
               },
@@ -122,26 +171,4 @@ class _ServicesScreenState extends State<ServicesScreen> {
           },
         ));
   }
-
-  final List<HomeData> _servicesData = [
-    HomeData(
-        name: 'Doctor',
-        icon: AppAsset.doctorIcon,
-        onPressed: Routs.specialistDoctor),
-    HomeData(
-      name: 'Pathology',
-      icon: AppAsset.pathologyIcon,
-      //onPressed: "
-    ),
-    HomeData(
-      name: 'Ambulance',
-      icon: AppAsset.ambulanceIcon,
-      //onPressed: ""
-    ),
-    HomeData(
-      name: 'Chemist',
-      icon: AppAsset.chemistIcon,
-      // onPressed: ""
-    ),
-  ];
 }

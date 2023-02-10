@@ -16,4 +16,8 @@ class EndPoints {
   static const String latestNews = '$baseUrl/$get/latest_news';
   static const String privacyPolicy = '$baseUrl/$get/get_privacy_policy';
   static const String termsAndConditions = '$baseUrl/$get/get_terms_conditions';
+  static const String aboutUs = '$baseUrl/$get/get_about_us';
+  static const String allService = '$baseUrl/$get/get_all_services';
+  static const String allMainCategory = '$baseUrl/$get/get_all_main_category';
+  static const String getAllProfileList = '$baseUrl/$get/get_all_profile_list';
 }

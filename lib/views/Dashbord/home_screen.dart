@@ -1,14 +1,18 @@
+import 'dart:async';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dio/dio.dart';
 import 'package:doctor_on_call/models/latest_news_model.dart';
 import 'package:doctor_on_call/services/api_services.dart';
 import 'package:doctor_on_call/utils/app_asset.dart';
 import 'package:doctor_on_call/utils/app_color.dart';
+import 'package:doctor_on_call/utils/app_text.dart';
 import 'package:doctor_on_call/utils/app_text_style.dart';
 import 'package:doctor_on_call/widget/custom_sized_box.dart';
 import 'package:doctor_on_call/widget/scrollview.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:marquee/marquee.dart';
 import 'package:text_scroll/text_scroll.dart';
 import '../../models/slider_model.dart';
 import '../../routs/app_routs.dart';
@@ -98,24 +102,34 @@ class _HomeScreenState extends State<HomeScreen> {
         body: CustomScroll(
           children: [
             SizedBoxH18(),
-            ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 400),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: List.generate(
-                      1,
-                      (index) => SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
-                              children: const [
-                                TextScroll(
-                                  'Hey! I\'m a RTL text, check me out. Hey! ',
-                                  textDirection: TextDirection.rtl,
-                                )
-                              ],
-                            ),
-                          ))),
-            ),
+            Container(
+                height: 50,
+                padding: const EdgeInsets.only(top: 1, bottom: 1),
+                decoration: BoxDecoration(
+                  color: AppColor.textFieldColor,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: latestNewsList.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return SizedBox(
+                        height: 30,
+                        child: Marquee(
+                          scrollAxis: Axis.horizontal,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          blankSpace: 20.0,
+                          startPadding: 10.0,
+                          accelerationDuration: const Duration(seconds: 1),
+                          accelerationCurve: Curves.linear,
+                          textDirection: TextDirection.ltr,
+                          text:
+                              '${latestNewsList[index].newsDesc}  ${latestNewsList[index].newsLink}',
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      );
+                    })),
+            SizedBoxH18(),
             SizedBox(
               width: double.infinity,
               child: CarouselSlider.builder(
@@ -140,7 +154,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         _selectedSliderIndex = index;
                       });
                     },
-                    aspectRatio: 12 / 8,
+                    aspectRatio: 15 / 8,
                     viewportFraction: 1,
                     initialPage: 0,
                     autoPlay: false,
@@ -235,8 +249,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: AppColor.orange,
                     )),
                 state != null && city != null
-                    ? Text(
-                        "${state!.replaceAll('"', '').toString()} ${city!.replaceAll('"', '').toString()}")
+                    ? appText("${city!.replaceAll('"', '').toString()}")
                     : SizedBox.shrink()
               ],
             )));
@@ -247,10 +260,7 @@ class _HomeScreenState extends State<HomeScreen> {
         name: 'Meeting Schedule',
         icon: AppAsset.meetingSchedule,
         onPressed: Routs.meetingSchedule),
-    HomeData(
-      name: 'Wallets', icon: AppAsset.wallets,
-      // onPressed: ""
-    ),
+    HomeData(name: 'Wallets', icon: AppAsset.wallets, onPressed: Routs.wallet),
     HomeData(
       name: 'Clients',
       icon: AppAsset.myAppointmentIcon,

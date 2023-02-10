@@ -52,7 +52,7 @@ class CustomContainerBox extends StatelessWidget {
             appText(
               "${title}",
               style: titleStyle ??
-                  AppTextStyle.alertSubtitle.copyWith(fontSize: Sizes.s18.h),
+                  AppTextStyle.alertSubtitle.copyWith(fontSize: Sizes.s16.h),
             )
           ],
         ),

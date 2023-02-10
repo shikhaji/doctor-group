@@ -5,20 +5,23 @@ import 'package:doctor_on_call/views/Auth/otp_verification_screen.dart';
 import 'package:doctor_on_call/views/Auth/reset_password_screen.dart';
 import 'package:doctor_on_call/views/Auth/signup_screen.dart';
 
-import 'package:doctor_on_call/views/Dashbord/doctor_services/doctor_list_screen.dart';
-import 'package:doctor_on_call/views/Dashbord/doctor_services/specialist_doctor.dart';
+import 'package:doctor_on_call/views/Dashbord/doctor_services/doctor_profile__list_screen.dart';
+import 'package:doctor_on_call/views/Dashbord/doctor_services/sub_category_doctor.dart';
 import 'package:doctor_on_call/views/Dashbord/home_screen.dart';
 import 'package:doctor_on_call/views/Dashbord/main_home_screen.dart';
 import 'package:doctor_on_call/views/Dashbord/meeting_schedule_screen.dart';
 import 'package:doctor_on_call/views/Dashbord/my_appointment_screen.dart';
 import 'package:doctor_on_call/views/Dashbord/my_order_screen.dart';
 import 'package:doctor_on_call/views/Dashbord/services_screen.dart';
+import 'package:doctor_on_call/views/Dashbord/wallet/wallet_screen.dart';
+import 'package:doctor_on_call/views/Side%20menu/about_us.dart';
 import 'package:doctor_on_call/views/Side%20menu/privacy_policy.dart';
-import 'package:doctor_on_call/views/wallet/wallet_main_screen.dart';
+import 'package:doctor_on_call/views/Side%20menu/terms_and_condition_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../views/Auth/forgot_password_screen.dart';
 import '../views/Auth/update_profile_screen.dart';
+import '../views/Dashbord/wallet/transation_history_screen.dart';
 import '../views/splash/splash_screen.dart';
 
 class Routs {
@@ -37,10 +40,12 @@ class Routs {
   static const String doctorList = "/doctor_list_screen";
   static const String specialistDoctor = "/specialist_doctor";
   static const String updateProfile = "/update_profile_screen";
-
   static const String meetingSchedule = "/meeting_schedule";
   static const String privacyPolicy = "/privacy_policy";
-  static const String walletMainScreen = "/wallet_main_screen";
+  static const String termsAndCondition = "/terms_and_condition_screen";
+  static const String aboutUs = "/about_us";
+  static const String wallet = "/wallet_screen";
+  static const String transactionHistory = "/transaction_history_screen";
 }
 
 class RoutGenerator {
@@ -61,7 +66,11 @@ class RoutGenerator {
         return MaterialPageRoute(builder: (_) => const ResetPasswordScreen());
 
       case Routs.signUp:
-        return MaterialPageRoute(builder: (_) => const SignUpScreen());
+        return MaterialPageRoute(
+            builder: (_) => SignUpScreen(
+                  arguments: arguments as OtpArguments,
+                ));
+
       case Routs.updateProfile:
         return MaterialPageRoute(
             builder: (_) => UpdateProfileScreen(
@@ -87,13 +96,19 @@ class RoutGenerator {
         return MaterialPageRoute(builder: (_) => const MyOrderScreen());
 
       case Routs.doctorList:
-        return MaterialPageRoute(builder: (_) => const DoctorList());
+        return MaterialPageRoute(
+            builder: (_) => DoctorProfileList(
+                  arguments: arguments as OtpArguments,
+                ));
 
       case Routs.services:
         return MaterialPageRoute(builder: (_) => const ServicesScreen());
 
       case Routs.specialistDoctor:
-        return MaterialPageRoute(builder: (_) => const SpecialistDoctor());
+        return MaterialPageRoute(
+            builder: (_) => SubCategoryDoctor(
+                  arguments: arguments as OtpArguments,
+                ));
 
       case Routs.mobileVerification:
         return MaterialPageRoute(
@@ -104,8 +119,17 @@ class RoutGenerator {
 
       case Routs.privacyPolicy:
         return MaterialPageRoute(builder: (_) => const PrivacyPolicyScreen());
-      case Routs.walletMainScreen:
-        return MaterialPageRoute(builder: (_) => const WalletMainScreen());
+
+      case Routs.termsAndCondition:
+        return MaterialPageRoute(
+            builder: (_) => const TermsAndConditionScreen());
+      case Routs.aboutUs:
+        return MaterialPageRoute(builder: (_) => const AboutUsScreen());
+      case Routs.wallet:
+        return MaterialPageRoute(builder: (_) => const WalletScreen());
+      case Routs.transactionHistory:
+        return MaterialPageRoute(
+            builder: (_) => const TransactionHistoryScreen());
 
       default:
         return null;

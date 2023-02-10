@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:doctor_on_call/models/all_main_category_model.dart';
 import 'package:doctor_on_call/models/mobile_verify_model.dart';
 import 'package:doctor_on_call/services/shared_referances.dart';
 import 'package:doctor_on_call/utils/loder.dart';
@@ -9,14 +10,19 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import '../api/dio_client.dart';
 import '../api/url.dart';
+import '../models/about_us_model.dart';
 import '../models/common_model.dart';
+import '../models/get_all_profile_model.dart';
+import '../models/get_all_service_model.dart';
 import '../models/get_categories_list_model.dart';
 import '../models/get_city_list_model.dart';
 import '../models/get_state_list_model.dart';
+import '../models/get_sub_categories_model.dart';
 import '../models/latest_news_model.dart';
 import '../models/login_model.dart';
 import '../models/slider_model.dart';
 import '../models/privacy_policy_model.dart';
+import '../models/terms_and_condition_model.dart';
 import '../routs/app_routs.dart';
 import '../routs/arguments.dart';
 import '../views/Auth/login_screen.dart';
@@ -155,19 +161,22 @@ class ApiService {
             "Auth-Key": 'simplerestapi',
           }),
           data: data);
-
-      if (response.statusCode == 200) {
+      CommonModel commonModel = CommonModel.fromJson(response.data);
+      if (commonModel.status == 200) {
         Loader.hideLoader();
         Fluttertoast.showToast(
-          msg: 'Sign Up Successfully...',
+          msg: '${commonModel.message}',
           backgroundColor: Colors.grey,
         );
         Navigator.pushNamed(context, Routs.login);
-
         debugPrint('responseData ----- > ${response.data}');
         return response.data;
       } else {
         Loader.hideLoader();
+        Fluttertoast.showToast(
+          msg: '${commonModel.message}',
+          backgroundColor: Colors.grey,
+        );
         throw Exception(response.data);
       }
     } on DioError catch (e) {
@@ -192,23 +201,26 @@ class ApiService {
             "Auth-Key": 'simplerestapi',
           }),
           data: data);
-      if (response.statusMessage == "OK") {
-        LoginModel responseData = LoginModel.fromJson(response.data);
+      LoginModel responseData = LoginModel.fromJson(response.data);
+      if (responseData.message == "ok") {
         Preferances.setString("userId", responseData.id);
         Preferances.setString("Token", responseData.loginToken);
         Preferances.setString("userType", responseData.businessType);
+        Preferances.setString("profileStatus", responseData.profileStatus);
         Loader.hideLoader();
         Fluttertoast.showToast(
           msg: 'login Successfully...',
           backgroundColor: Colors.grey,
         );
-        if (responseData.profileStatus == 0) {
+        if (responseData.profileStatus == "0") {
           print("phoneNumber is here:=${phoneNumber}");
           Navigator.pushNamed(
             context,
             Routs.updateProfile,
-            arguments:
-                OtpArguments(userId: responseData.id, phoneNumber: phoneNumber),
+            arguments: OtpArguments(
+                userId: responseData.id,
+                phoneNumber: phoneNumber,
+                ptId: responseData.businessType),
           );
         } else {
           Navigator.pushNamed(context, Routs.mainHome);
@@ -371,7 +383,7 @@ class ApiService {
     }
   }
 
-  //----------------------------Privacy Policy-----------------------//
+  //----------------------------PRIVACY POLICY API-----------------------//
   Future<PrivacyPolicyModel?> privacyPolicy(BuildContext context) async {
     try {
       Loader.showLoader();
@@ -393,5 +405,145 @@ class ApiService {
       debugPrint('Dio E  $e');
       throw e.error;
     }
+  }
+
+  //----------------------------TERMS AND CONDITION API-----------------------//
+  Future<TermsAndConditionModel?> termsAndCondition(
+      BuildContext context) async {
+    try {
+      Loader.showLoader();
+      Response response;
+      response = await dio.post(EndPoints.termsAndConditions);
+      if (response.statusCode == 200) {
+        TermsAndConditionModel responseData =
+            TermsAndConditionModel.fromJson(response.data);
+        Loader.hideLoader();
+
+        debugPrint('responseData ----- > $responseData');
+        return responseData;
+      } else {
+        Loader.hideLoader();
+        throw Exception(response.data);
+      }
+    } on DioError catch (e) {
+      Loader.hideLoader();
+      debugPrint('Dio E  $e');
+      throw e.error;
+    }
+  }
+
+  //----------------------------ABOUT US API-----------------------//
+  Future<AboutUsModel?> aboutUs(BuildContext context) async {
+    try {
+      Loader.showLoader();
+      Response response;
+      response = await dio.post(EndPoints.aboutUs);
+      if (response.statusCode == 200) {
+        AboutUsModel responseData = AboutUsModel.fromJson(response.data);
+        Loader.hideLoader();
+
+        debugPrint('responseData ----- > $responseData');
+        return responseData;
+      } else {
+        Loader.hideLoader();
+        throw Exception(response.data);
+      }
+    } on DioError catch (e) {
+      Loader.hideLoader();
+      debugPrint('Dio E  $e');
+      throw e.error;
+    }
+  }
+
+  //----------------------------ALL SERVICES LIST API-----------------------//
+  Future<GetAllServicesModel?> getServicesList() async {
+    try {
+      Loader.showLoader();
+      Response response;
+      response = await dio.post(
+        EndPoints.allService,
+        options: Options(headers: {
+          "Client-Service": "frontend-client",
+          "Auth-Key": 'simplerestapi',
+        }),
+      );
+      if (response.statusCode == 200) {
+        GetAllServicesModel responseData =
+            GetAllServicesModel.fromJson(response.data);
+        Loader.hideLoader();
+        return responseData;
+      } else {
+        Loader.hideLoader();
+        throw Exception(response.data);
+      }
+    } on DioError catch (e) {
+      Loader.hideLoader();
+      debugPrint('Dio E  $e');
+    } finally {
+      Loader.hideLoader();
+    }
+    return null;
+  }
+
+  //----------------------------SUB CATEGORIES LIST API-----------------------//
+  Future<GetSubCategoryModel?> getSubCategoriesList(String ptid) async {
+    try {
+      Loader.showLoader();
+      Response response;
+      FormData formData = FormData.fromMap({"ptid": ptid});
+      response = await dio.post(EndPoints.allMainCategory,
+          options: Options(headers: {
+            "Client-Service": "frontend-client",
+            "Auth-Key": 'simplerestapi',
+          }),
+          data: formData);
+      if (response.statusCode == 200) {
+        GetSubCategoryModel responseData =
+            GetSubCategoryModel.fromJson(response.data);
+        Loader.hideLoader();
+        return responseData;
+      } else {
+        Loader.hideLoader();
+        throw Exception(response.data);
+      }
+    } on DioError catch (e) {
+      Loader.hideLoader();
+      debugPrint('Dio E  $e');
+    } finally {
+      Loader.hideLoader();
+    }
+    return null;
+  }
+
+  //----------------------------SUB CATEGORIES LIST API-----------------------//
+  Future<GetAllProfileModel?> getAllProfileList(
+      String ptId, String catId) async {
+    try {
+      Loader.showLoader();
+      Response response;
+      FormData formData =
+          FormData.fromMap({"catid": catId, "profile_type": ptId});
+      response = await dio.post(EndPoints.getAllProfileList,
+          options: Options(headers: {
+            "Client-Service": "frontend-client",
+            "Auth-Key": 'simplerestapi',
+          }),
+          data: formData);
+      if (response.statusCode == 200) {
+        GetAllProfileModel responseData =
+            GetAllProfileModel.fromJson(response.data);
+        Loader.hideLoader();
+        return responseData;
+      } else {
+        Loader.hideLoader();
+        throw Exception(response.data);
+      }
+    } on DioError catch (e) {
+      Loader.hideLoader();
+      debugPrint('Dio E  $e');
+    } finally {
+      Loader.hideLoader();
+    }
+    return null;
   }
 }
