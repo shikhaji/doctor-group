@@ -1,3 +1,4 @@
+import 'package:doctor_on_call/routs/app_routs.dart';
 import 'package:doctor_on_call/services/api_services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -56,12 +57,16 @@ class _DoctorProfileListState extends State<DoctorProfileList> {
                   itemCount: _getAllProfileList.length,
                   itemBuilder: (context, inx) {
                     return orderListContainer(
-                      "${_getAllProfileList[inx].branchName}",
-                      "https://www.desktopbackground.org/download/1024x768/2014/01/01/694300_daniels-statistics-analysis-name-meaning-list-of-firstnames_1920x1200_h.jpg",
-                      "Cardio Specialist",
-                      "3-Years",
-                      _getAllProfileList[inx].branchAddress ?? "",
-                    );
+                        name: 'Cardio Specialist',
+                        imgPath:
+                            'https://www.desktopbackground.org/download/1024x768/2014/01/01/694300_daniels-statistics-analysis-name-meaning-list-of-firstnames_1920x1200_h.jpg',
+                        experience: '3-Years',
+                        address: _getAllProfileList[inx].branchAddress ?? "",
+                        specialist: '${_getAllProfileList[inx].branchName}',
+                        viewProfileCallBack: () {},
+                        bookAppointmentCallBack: () {
+                          Navigator.pushNamed(context, Routs.bookAppointment);
+                        });
                   },
                 )
               ],
@@ -76,8 +81,14 @@ class _DoctorProfileListState extends State<DoctorProfileList> {
     );
   }
 
-  Widget orderListContainer(String name, String imgPath, String experience,
-      String address, String specialist) {
+  Widget orderListContainer(
+      {required String name,
+      required String imgPath,
+      required String experience,
+      required String address,
+      required String specialist,
+      required VoidCallback viewProfileCallBack,
+      required VoidCallback bookAppointmentCallBack}) {
     return Container(
       alignment: Alignment.center,
       margin: const EdgeInsets.only(bottom: Sizes.s9),
@@ -112,7 +123,7 @@ class _DoctorProfileListState extends State<DoctorProfileList> {
                         style: AppTextStyle.alertSubtitle
                             .copyWith(fontSize: Sizes.s16.h)),
                     SizedBoxH6(),
-                    appText(experience,
+                    appText(experience!,
                         style: AppTextStyle.alertSubtitle
                             .copyWith(fontSize: Sizes.s16.h)),
                     SizedBoxH6(),
@@ -132,7 +143,7 @@ class _DoctorProfileListState extends State<DoctorProfileList> {
                 CustomButton(
                   lable: "View profile",
                   color: AppColor.primaryColor,
-                  onPressed: () {},
+                  onPressed: viewProfileCallBack,
                 ),
                 SizedBoxW10(),
                 Expanded(
@@ -140,7 +151,7 @@ class _DoctorProfileListState extends State<DoctorProfileList> {
                     lable: "Book Appointment",
                     color: AppColor.white,
                     bgColor: AppColor.primaryColor,
-                    onPressed: () {},
+                    onPressed: bookAppointmentCallBack,
                   ),
                 )
               ],

@@ -12,6 +12,7 @@ import '../../../utils/app_color.dart';
 import '../../../utils/constant.dart';
 import '../../../widget/primary_botton.dart';
 import '../../../widget/primary_textfield.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 class WalletScreen extends StatefulWidget {
   const WalletScreen({Key? key}) : super(key: key);
@@ -22,6 +23,25 @@ class WalletScreen extends StatefulWidget {
 
 class _WalletScreenState extends State<WalletScreen> {
   final TextEditingController _amountController = TextEditingController();
+  late var _razorpay;
+  String? paymentId;
+
+  @override
+  void initState() {
+    _razorpay = Razorpay();
+    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+    super.initState();
+  }
+
+  List<AmountModel?> amountList = [
+    AmountModel(amount: "50", selected: false),
+    AmountModel(amount: "100", selected: false),
+    AmountModel(amount: "500", selected: false),
+    AmountModel(amount: "1000", selected: false),
+    AmountModel(amount: "2000", selected: false),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -81,51 +101,30 @@ class _WalletScreenState extends State<WalletScreen> {
                     style: AppTextStyle.appBarTextTitle,
                   ),
                   SizedBoxH28(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: Colors.black12)),
-                        child: const FittedBox(
-                          child: Text("500"),
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: Colors.black12)),
-                        child: const FittedBox(
-                          child: Text("1000"),
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: Colors.black12)),
-                        child: const FittedBox(
-                          child: Text("2000"),
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: Colors.black12)),
-                        child: const FittedBox(
-                          child: Text("2500"),
-                        ),
-                      )
-                    ],
-                  ),
+                  amountContainer(),
                   SizedBoxH28(),
                   PrimaryButton(
                     lable: 'continue',
-                    onPressed: () {},
+                    onPressed: () {
+                      Razorpay razorpay = Razorpay();
+                      Navigator.pop(context);
+                      print("send amount :=${_amountController.text}");
+                      var options = {
+                        'key': 'rzp_test_YoriHE0YT6XVEs',
+                        'amount': int.parse(_amountController.text) * 100,
+                        'name': 'Doctor On Call',
+                        'description': 'Payment',
+                        'send_sms_hash': true,
+                        'prefill': {
+                          'contact': 'Hina Patel',
+                          'email': 'hp@mailinator.com',
+                          'phone': '8320591633',
+                        },
+                      };
+                      razorpay.open(options);
+                      razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS,
+                          _handlePaymentSuccess);
+                    },
                   ),
                 ],
               ),
@@ -139,6 +138,29 @@ class _WalletScreenState extends State<WalletScreen> {
             Navigator.pop(context);
           },
         ));
+  }
+
+  Widget amountContainer() {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+          children: List.generate(amountList.length, (index) {
+        return GestureDetector(
+            onTap: () {
+              setState(() {
+                _amountController.text = "${amountList[index]!.amount}";
+              });
+            },
+            child: Container(
+              margin: const EdgeInsets.all(6),
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Colors.black12)),
+              child: Text("${amountList[index]!.amount}"),
+            ));
+      })),
+    );
   }
 
   Widget balanceContainer(
@@ -183,4 +205,22 @@ class _WalletScreenState extends State<WalletScreen> {
       ),
     );
   }
+
+  void _handlePaymentSuccess(PaymentSuccessResponse response) {
+    paymentId = response.paymentId;
+  }
+
+  void _handlePaymentError(PaymentFailureResponse response) {
+    print("Payment Fail");
+  }
+
+  void _handleExternalWallet(ExternalWalletResponse response) {
+    // Do something when an external wallet is selected
+  }
+}
+
+class AmountModel {
+  String? amount;
+  bool? selected;
+  AmountModel({this.amount, this.selected});
 }
