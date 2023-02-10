@@ -107,7 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       (index) => SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
                             child: Row(
-                              children: [
+                              children: const [
                                 TextScroll(
                                   'Hey! I\'m a RTL text, check me out. Hey! ',
                                   textDirection: TextDirection.rtl,
