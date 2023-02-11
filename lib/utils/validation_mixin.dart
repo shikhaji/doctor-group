@@ -51,7 +51,6 @@ mixin ValidationMixin {
   }
 
   String? mobileNumberValidator(String? mobileNumber) {
-
     if (mobileNumber!.isNotEmpty) {
       if (mobileNumber.length != 10) {
         return "Please enter valid mobile number";
@@ -96,11 +95,11 @@ mixin ValidationMixin {
 
   // ======= create job ========= //
 
-  String? jobTitleValidation(String? jobtitle) {
-    if (jobtitle!.isNotEmpty) {
+  String? patientNameValidation(String? patientName) {
+    if (patientName!.isNotEmpty) {
       return null;
     } else {
-      return "Please Enter JobTitle";
+      return "Please Enter Patient Name";
     }
   }
 
@@ -128,11 +127,19 @@ mixin ValidationMixin {
     }
   }
 
-  String? picupTimeValidation(String? pickupTime) {
-    if (pickupTime!.isNotEmpty) {
+  String? startTimeValidation(String? startTime) {
+    if (startTime!.isNotEmpty) {
       return null;
     } else {
-      return "Please Enter Time";
+      return "Please Enter Start Time";
+    }
+  }
+
+  String? endTimeValidation(String? endTime) {
+    if (endTime!.isNotEmpty) {
+      return null;
+    } else {
+      return "Please Enter End Time";
     }
   }
 
