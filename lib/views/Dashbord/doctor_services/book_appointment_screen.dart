@@ -1,3 +1,4 @@
+import 'package:doctor_on_call/utils/file_utils.dart';
 import 'package:doctor_on_call/utils/validation_mixin.dart';
 import 'package:doctor_on_call/widget/primary_botton.dart';
 import 'package:flutter/material.dart';
@@ -23,8 +24,30 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen>
   final TextEditingController _phoneNumber = TextEditingController();
   final TextEditingController _patientName = TextEditingController();
   final TextEditingController _address = TextEditingController();
-
+  DateTime? firstDate;
   final _formKey = GlobalKey<FormState>();
+  @override
+  void initState() {
+    super.initState();
+    final currentDate = DateTime.now();
+    firstDate = FileUtils.firstDayOfWeek(currentDate);
+    print("first week date:=${firstDate}");
+
+    DateTime date = DateTime.now();
+    print("weekday is ${date.weekday}");
+
+    const Map<int, String> weekdayName = {
+      1: "Monday",
+      2: "Tuesday",
+      3: "Wednesday",
+      4: "Thursday",
+      5: "Friday",
+      6: "Saturday",
+      7: "Sunday"
+    };
+    print("week here:=${weekdayName[DateTime.now().weekday]}");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,6 +85,40 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen>
                 ),
                 appText("Next Week"),
               ],
+            ),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: List.generate(10, (index) {
+                  return GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                      margin: EdgeInsets.all(Sizes.s10),
+                      padding: EdgeInsets.only(
+                          top: Sizes.s14,
+                          bottom: Sizes.s14,
+                          left: Sizes.s16,
+                          right: Sizes.s16),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: AppColor.primaryColor),
+                      child: Column(
+                        children: [
+                          Text(
+                            "Mon",
+                            style: AppTextStyle.body1
+                                .copyWith(color: AppColor.white),
+                          ),
+                          Text(
+                            "01",
+                            style: AppTextStyle.appBarTitle,
+                          )
+                        ],
+                      ),
+                    ),
+                  );
+                }),
+              ),
             ),
             SizedBoxH34(),
             Row(

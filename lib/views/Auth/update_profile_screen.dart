@@ -232,15 +232,6 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen>
             PrimaryButton(
                 lable: "Save",
                 onPressed: () {
-                  print("state:=${stateModel.stateId}");
-                  print("city:=${cityModel.districtId}");
-                  print("name:=${_name.text}");
-                  print("email:=${_email.text}");
-                  print("address:=${_address.text}");
-                  print("gender:=${_gender.text}");
-                  print("login id:=${widget.arguments?.userId}");
-                  print(" _subCategoriesType.text:=${_subCategoriesType.text}");
-                  // Navigator.pushNamed(context, Routs.mainHome);
                   if (_formKey.currentState!.validate()) {
                     FormData data() {
                       return FormData.fromMap({

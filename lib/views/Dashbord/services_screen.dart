@@ -127,7 +127,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {
-                    if (allServicesList[index].ptSubCatAvailable == "1") {
+                    if (allServicesList[index].ptScreen == "1") {
                       Navigator.pushNamed(context, Routs.specialistDoctor,
                           arguments:
                               OtpArguments(ptId: allServicesList[index].ptId));

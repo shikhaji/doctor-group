@@ -667,6 +667,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.2.4"
+  r_dotted_line_border:
+    dependency: "direct main"
+    description:
+      name: r_dotted_line_border
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.1"
   razorpay_flutter:
     dependency: "direct main"
     description:

@@ -80,6 +80,13 @@ class FileUtils {
     }
   }
 
+  static DateTime firstDayOfWeek(DateTime day) {
+    day = DateTime.utc(day.year, day.month, day.day, 12);
+
+    var decreaseNum = day.weekday % 7;
+    return day.subtract(Duration(days: decreaseNum));
+  }
+
   static Future<DateTimeRange?> pickDateRange(BuildContext context) async {
     DateTimeRange initialDate = DateTimeRange(
         start: DateTime.now().subtract(

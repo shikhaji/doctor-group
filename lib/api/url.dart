@@ -20,4 +20,6 @@ class EndPoints {
   static const String allService = '$baseUrl/$get/get_all_services';
   static const String allMainCategory = '$baseUrl/$get/get_all_main_category';
   static const String getAllProfileList = '$baseUrl/$get/get_all_profile_list';
+  static const String getTimeSlot = '$baseUrl/$get/get_time_slot';
+  static const String getDays = '$baseUrl/$get/get_days';
 }

@@ -2,6 +2,7 @@ import 'package:doctor_on_call/routs/app_routs.dart';
 import 'package:doctor_on_call/services/api_services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import '../../../models/get_all_profile_model.dart';
 import '../../../routs/arguments.dart';
 import '../../../utils/app_color.dart';
@@ -16,6 +17,7 @@ import '../../../widget/scrollview.dart';
 
 class DoctorProfileList extends StatefulWidget {
   final OtpArguments? arguments;
+
   const DoctorProfileList({Key? key, this.arguments}) : super(key: key);
 
   @override
@@ -65,7 +67,17 @@ class _DoctorProfileListState extends State<DoctorProfileList> {
                         specialist: '${_getAllProfileList[inx].branchName}',
                         viewProfileCallBack: () {},
                         bookAppointmentCallBack: () {
-                          Navigator.pushNamed(context, Routs.bookAppointment);
+                          if (_getAllProfileList[inx].pTSCREEN == "1") {
+                            Navigator.pushNamed(context, Routs.bookAppointment);
+                          } else if (_getAllProfileList[inx].pTSCREEN == "2") {
+                            Navigator.pushNamed(
+                                context, Routs.pathologyAndChemistForm);
+                          } else {
+                            Fluttertoast.showToast(
+                              msg: 'Call Ambulance',
+                              backgroundColor: Colors.grey,
+                            );
+                          }
                         });
                   },
                 )
@@ -123,7 +135,7 @@ class _DoctorProfileListState extends State<DoctorProfileList> {
                         style: AppTextStyle.alertSubtitle
                             .copyWith(fontSize: Sizes.s16.h)),
                     SizedBoxH6(),
-                    appText(experience!,
+                    appText(experience,
                         style: AppTextStyle.alertSubtitle
                             .copyWith(fontSize: Sizes.s16.h)),
                     SizedBoxH6(),

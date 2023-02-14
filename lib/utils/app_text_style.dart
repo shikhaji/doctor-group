@@ -50,6 +50,9 @@ class AppTextStyle {
   static const TextStyle appBarTextTitle =
       TextStyle(fontSize: Sizes.s20, fontWeight: FontWeight.w900);
 
+  static const TextStyle timeTitle = TextStyle(
+      fontSize: Sizes.s18, fontWeight: FontWeight.w700, color: AppColor.white);
+
   static const TextStyle headingTextTile =
       TextStyle(fontSize: Sizes.s18, fontWeight: FontWeight.w900);
 

@@ -68,6 +68,7 @@ class GetAllProfileList {
     this.aboutUs,
     this.speciality,
     this.patientPhoto,
+    this.pTSCREEN,
   });
 
   String? branchId;
@@ -108,6 +109,7 @@ class GetAllProfileList {
   String? aboutUs;
   String? speciality;
   String? patientPhoto;
+  String? pTSCREEN;
 
   factory GetAllProfileList.fromJson(Map<String, dynamic> json) =>
       GetAllProfileList(
@@ -149,6 +151,7 @@ class GetAllProfileList {
         aboutUs: json["ABOUT_US"],
         speciality: json["SPECIALITY"],
         patientPhoto: json["PATIENT_PHOTO"],
+        pTSCREEN: json["PT_SCREEN"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -190,5 +193,6 @@ class GetAllProfileList {
         "ABOUT_US": aboutUs,
         "SPECIALITY": speciality,
         "PATIENT_PHOTO": patientPhoto,
+        "PT_SCREEN": pTSCREEN,
       };
 }

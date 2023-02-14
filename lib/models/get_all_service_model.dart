@@ -37,6 +37,7 @@ class GetAllServicesList {
     required this.profileUrl,
     required this.ptSubCatAvailable,
     required this.ptActive,
+    required this.ptScreen,
   });
 
   String ptId;
@@ -46,6 +47,7 @@ class GetAllServicesList {
   String profileUrl;
   String ptSubCatAvailable;
   String ptActive;
+  String ptScreen;
 
   factory GetAllServicesList.fromJson(Map<String, dynamic> json) =>
       GetAllServicesList(
@@ -56,6 +58,7 @@ class GetAllServicesList {
         profileUrl: json["PROFILE_URL"],
         ptSubCatAvailable: json["PT_SUB_CAT_AVAILABLE"],
         ptActive: json["PT_ACTIVE"],
+        ptScreen: json["PT_SCREEN"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -66,5 +69,6 @@ class GetAllServicesList {
         "PROFILE_URL": profileUrl,
         "PT_SUB_CAT_AVAILABLE": ptSubCatAvailable,
         "PT_ACTIVE": ptActive,
+        "PT_SCREEN": ptScreen,
       };
 }

@@ -4,6 +4,7 @@ import 'package:doctor_on_call/views/Auth/mobile_verification_screen.dart';
 import 'package:doctor_on_call/views/Auth/otp_verification_screen.dart';
 import 'package:doctor_on_call/views/Auth/reset_password_screen.dart';
 import 'package:doctor_on_call/views/Auth/signup_screen.dart';
+import 'package:doctor_on_call/views/Dashbord/doctor_services/pathology_and_chemist_form_screen.dart';
 import 'package:doctor_on_call/views/Dashbord/doctor_services/book_appointment_screen.dart';
 
 import 'package:doctor_on_call/views/Dashbord/doctor_services/doctor_profile__list_screen.dart';
@@ -48,6 +49,8 @@ class Routs {
   static const String wallet = "/wallet_screen";
   static const String transactionHistory = "/transaction_history_screen";
   static const String bookAppointment = "/book_appointment_screen";
+  static const String pathologyAndChemistForm =
+      "/pathology_and_chemist_form_screen";
 }
 
 class RoutGenerator {
@@ -134,6 +137,9 @@ class RoutGenerator {
             builder: (_) => const TransactionHistoryScreen());
       case Routs.bookAppointment:
         return MaterialPageRoute(builder: (_) => const BookAppointmentScreen());
+      case Routs.pathologyAndChemistForm:
+        return MaterialPageRoute(
+            builder: (_) => const PathologyAndChemistFormScreen());
       default:
         return null;
     }

@@ -16,8 +16,10 @@ import '../models/get_all_profile_model.dart';
 import '../models/get_all_service_model.dart';
 import '../models/get_categories_list_model.dart';
 import '../models/get_city_list_model.dart';
+import '../models/get_days_model.dart';
 import '../models/get_state_list_model.dart';
 import '../models/get_sub_categories_model.dart';
+import '../models/get_time_slot_model.dart';
 import '../models/latest_news_model.dart';
 import '../models/login_model.dart';
 import '../models/slider_model.dart';
@@ -203,6 +205,7 @@ class ApiService {
           data: data);
       LoginModel responseData = LoginModel.fromJson(response.data);
       if (responseData.message == "ok") {
+        print("responseData.profileStatus:=${responseData.profileStatus}");
         Preferances.setString("userId", responseData.id);
         Preferances.setString("Token", responseData.loginToken);
         Preferances.setString("userType", responseData.businessType);
@@ -272,7 +275,7 @@ class ApiService {
           backgroundColor: Colors.grey,
         );
         Navigator.pushNamed(context, Routs.mainHome);
-
+        Preferances.setString("profileStatus", "1");
         debugPrint('responseData ----- > ${response.data}');
         return response.data;
       } else {
@@ -532,6 +535,69 @@ class ApiService {
       if (response.statusCode == 200) {
         GetAllProfileModel responseData =
             GetAllProfileModel.fromJson(response.data);
+        Loader.hideLoader();
+        return responseData;
+      } else {
+        Loader.hideLoader();
+        throw Exception(response.data);
+      }
+    } on DioError catch (e) {
+      Loader.hideLoader();
+      debugPrint('Dio E  $e');
+    } finally {
+      Loader.hideLoader();
+    }
+    return null;
+  }
+
+  //----------------------------TIME SLOT LIST API-----------------------//
+  Future<GetTimeSlotModel?> getTimeSlotList() async {
+    try {
+      Loader.showLoader();
+      Response response;
+
+      response = await dio.post(
+        EndPoints.getTimeSlot,
+        options: Options(headers: {
+          "Client-Service": "frontend-client",
+          "Auth-Key": 'simplerestapi',
+        }),
+      );
+      if (response.statusCode == 200) {
+        GetTimeSlotModel responseData =
+            GetTimeSlotModel.fromJson(response.data);
+
+        Loader.hideLoader();
+        return responseData;
+      } else {
+        Loader.hideLoader();
+        throw Exception(response.data);
+      }
+    } on DioError catch (e) {
+      Loader.hideLoader();
+      debugPrint('Dio E  $e');
+    } finally {
+      Loader.hideLoader();
+    }
+    return null;
+  }
+
+  //----------------------------DAYS LIST API-----------------------//
+  Future<GetDaysModel?> getDaysList() async {
+    try {
+      Loader.showLoader();
+      Response response;
+
+      response = await dio.post(
+        EndPoints.getDays,
+        options: Options(headers: {
+          "Client-Service": "frontend-client",
+          "Auth-Key": 'simplerestapi',
+        }),
+      );
+      if (response.statusCode == 200) {
+        GetDaysModel responseData = GetDaysModel.fromJson(response.data);
+
         Loader.hideLoader();
         return responseData;
       } else {
