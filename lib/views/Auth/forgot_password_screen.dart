@@ -1,8 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:doctor_on_call/views/Auth/reset_password_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
 import '../../routs/app_routs.dart';
 import '../../routs/arguments.dart';
 import '../../services/api_services.dart';
@@ -14,7 +12,6 @@ import '../../widget/custom_sized_box.dart';
 import '../../widget/primary_botton.dart';
 import '../../widget/primary_textfield.dart';
 import '../../widget/scrollview.dart';
-import 'otp_verification_screen.dart';
 
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({Key? key}) : super(key: key);

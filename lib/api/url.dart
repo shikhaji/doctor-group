@@ -22,4 +22,6 @@ class EndPoints {
   static const String getAllProfileList = '$baseUrl/$get/get_all_profile_list';
   static const String getTimeSlot = '$baseUrl/$get/get_time_slot';
   static const String getDays = '$baseUrl/$get/get_days';
+  static const String addDoctorMeetingSchedule =
+      '$baseUrl/$get/add_doctor_meeting_schedule';
 }

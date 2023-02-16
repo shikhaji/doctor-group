@@ -1,24 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import '../../../models/get_all_service_model.dart';
 import '../../../models/get_sub_categories_model.dart';
-import '../../../models/sub_categories_model.dart';
 import '../../../routs/app_routs.dart';
 import '../../../routs/arguments.dart';
 import '../../../services/api_services.dart';
-import '../../../utils/app_asset.dart';
 import '../../../utils/app_color.dart';
 import '../../../utils/app_sizes.dart';
-import '../../../utils/app_text.dart';
-import '../../../utils/app_text_style.dart';
-import '../../../utils/screen_utils.dart';
 import '../../../widget/custom_container_box.dart';
-import '../../../widget/drawer_widget.dart';
 import '../../../widget/primary_appbar.dart';
 import '../../../widget/primary_textfield.dart';
 import '../../../widget/scrollview.dart';
-import '../home_screen.dart';
 
 class SubCategoryDoctor extends StatefulWidget {
   final OtpArguments? arguments;

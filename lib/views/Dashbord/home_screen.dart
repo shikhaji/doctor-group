@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dio/dio.dart';
 import 'package:doctor_on_call/models/latest_news_model.dart';
@@ -7,13 +6,10 @@ import 'package:doctor_on_call/services/api_services.dart';
 import 'package:doctor_on_call/utils/app_asset.dart';
 import 'package:doctor_on_call/utils/app_color.dart';
 import 'package:doctor_on_call/utils/app_text.dart';
-import 'package:doctor_on_call/utils/app_text_style.dart';
 import 'package:doctor_on_call/widget/custom_sized_box.dart';
 import 'package:doctor_on_call/widget/scrollview.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:marquee/marquee.dart';
-import 'package:text_scroll/text_scroll.dart';
 import '../../models/slider_model.dart';
 import '../../routs/app_routs.dart';
 import '../../services/shared_referances.dart';
@@ -23,7 +19,6 @@ import '../../widget/custom_container_box.dart';
 import '../../widget/dailogs/location_dailog.dart';
 import '../../widget/drawer_widget.dart';
 import '../../widget/primary_appbar.dart';
-import '../../widget/primary_bottom_navigation_bar.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -57,7 +52,6 @@ class _HomeScreenState extends State<HomeScreen> {
     state = await Preferances.getString("stateName");
     city = await Preferances.getString("cityName");
     stateId = await Preferances.getString("stateId");
-    print("ststeId:===${stateId}");
     if (stateId == null) {
       stateId = "0";
     }
@@ -71,15 +65,12 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {
         sliderImageList = value.message!;
       });
-      print("slider images ;=${sliderImageList[0].sliderImage}");
     });
 
     ApiService().latestNews(context).then((value) {
       setState(() {
         latestNewsList = value.message!.notice!;
       });
-      print("news ;=${latestNewsList[0].newsDesc}");
-      print("news link ;=${latestNewsList[0].newsLink}");
     });
   }
 
@@ -230,15 +221,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                   stateId?.replaceAll('"', '').toString(),
                             });
                           }
-
                           ApiService()
                               .slider(context, data: data())
                               .then((value) {
                             setState(() {
                               sliderImageList = value.message!;
                             });
-                            print(
-                                "slider images ;=${sliderImageList[0].sliderImage}");
+
                           });
                           await callApi();
                         });

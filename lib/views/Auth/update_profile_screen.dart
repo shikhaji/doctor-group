@@ -286,7 +286,6 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen>
         onChanged: (String? value) {
           setState(() {
             genderInitialValue = value!;
-            print(value);
             genderValue = value;
           });
         },

@@ -210,6 +210,10 @@ class ApiService {
         Preferances.setString("Token", responseData.loginToken);
         Preferances.setString("userType", responseData.businessType);
         Preferances.setString("profileStatus", responseData.profileStatus);
+        String profileStatus =
+            await Preferances.prefGetString("profileStatus", '');
+
+        print("profile store get Status:=${profileStatus}");
         Loader.hideLoader();
         Fluttertoast.showToast(
           msg: 'login Successfully...',
@@ -226,7 +230,8 @@ class ApiService {
                 ptId: responseData.businessType),
           );
         } else {
-          Navigator.pushNamed(context, Routs.mainHome);
+          Navigator.pushNamedAndRemoveUntil(
+              context, Routs.mainHome, (route) => false);
         }
 
         return responseData;
@@ -274,8 +279,9 @@ class ApiService {
           msg: 'Your Profile Updated Successfully...',
           backgroundColor: Colors.grey,
         );
-        Navigator.pushNamed(context, Routs.mainHome);
-        Preferances.setString("profileStatus", "1");
+
+        Navigator.pushNamedAndRemoveUntil(
+            context, Routs.mainHome, (route) => false);
         debugPrint('responseData ----- > ${response.data}');
         return response.data;
       } else {
@@ -611,5 +617,34 @@ class ApiService {
       Loader.hideLoader();
     }
     return null;
+  }
+
+//----------------------------ADD DOCTOR MEETING SCHEDULE  API-----------------------//
+  Future<SliderModel> addDoctorMeetingSchedule(BuildContext context,
+      {FormData? data}) async {
+    try {
+      Loader.showLoader();
+      Response response;
+      response = await dio.post(EndPoints.addDoctorMeetingSchedule,
+          options: Options(headers: {
+            "Client-Service": "frontend-client",
+            "Auth-Key": 'simplerestapi',
+          }),
+          data: data);
+
+      if (response.statusCode == 200) {
+        SliderModel responseData = SliderModel.fromJson(response.data);
+        Loader.hideLoader();
+        debugPrint('responseData ----- > ${response.data}');
+        return responseData;
+      } else {
+        Loader.hideLoader();
+        throw Exception(response.data);
+      }
+    } on DioError catch (e) {
+      Loader.hideLoader();
+      debugPrint('Dio E  $e');
+      throw e.error;
+    }
   }
 }

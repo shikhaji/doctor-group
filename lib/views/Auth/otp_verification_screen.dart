@@ -118,7 +118,6 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen>
                   if (_controller.text == "") {
                     CommonFunctions.toast("please enter otp code !!");
                   } else {
-                    print("co_controller.text:=${_controller.text}");
                     AuthResult result = await _verify(_controller.text);
                     if (result.status) {}
                   }
@@ -147,9 +146,6 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen>
       },
       codeAutoRetrievalTimeout: (String verificationId) {
         _verificationId = verificationId;
-        print("verificationId:=$verificationId");
-        print("_verificationId_verificationId:=$_verificationId");
-
         setState(() {});
       },
     );

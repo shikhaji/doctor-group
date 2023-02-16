@@ -24,28 +24,10 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen>
   final TextEditingController _phoneNumber = TextEditingController();
   final TextEditingController _patientName = TextEditingController();
   final TextEditingController _address = TextEditingController();
-  DateTime? firstDate;
   final _formKey = GlobalKey<FormState>();
   @override
   void initState() {
     super.initState();
-    final currentDate = DateTime.now();
-    firstDate = FileUtils.firstDayOfWeek(currentDate);
-    print("first week date:=${firstDate}");
-
-    DateTime date = DateTime.now();
-    print("weekday is ${date.weekday}");
-
-    const Map<int, String> weekdayName = {
-      1: "Monday",
-      2: "Tuesday",
-      3: "Wednesday",
-      4: "Thursday",
-      5: "Friday",
-      6: "Saturday",
-      7: "Sunday"
-    };
-    print("week here:=${weekdayName[DateTime.now().weekday]}");
   }
 
   @override

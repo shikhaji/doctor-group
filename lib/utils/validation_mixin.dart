@@ -31,6 +31,14 @@ mixin ValidationMixin {
     }
   }
 
+  String? amountValidator(String? amount) {
+    if (amount!.isNotEmpty) {
+      return null;
+    } else {
+      return 'Please Enter Amount';
+    }
+  }
+
   String? emailValidator(String? email, {bool isLogin = false}) {
     Pattern pattern =
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
