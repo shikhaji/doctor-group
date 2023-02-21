@@ -81,7 +81,7 @@ class _MobileVerificationScreenState extends State<MobileVerificationScreen>
                       if (value!.status == 200) {
                         if (value.count == 0) {
                           Navigator.pushNamed(context, Routs.otp,
-                              arguments: OtpArguments(
+                              arguments: SendArguments(
                                   phoneNumber: _phone.text.trim()));
                         } else if (value.count == 1) {
                           Fluttertoast.showToast(

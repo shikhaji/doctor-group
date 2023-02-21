@@ -12,7 +12,7 @@ import '../../../widget/primary_textfield.dart';
 import '../../../widget/scrollview.dart';
 
 class SubCategoryDoctor extends StatefulWidget {
-  final OtpArguments? arguments;
+  final SendArguments? arguments;
   const SubCategoryDoctor({Key? key, this.arguments}) : super(key: key);
 
   @override
@@ -122,7 +122,7 @@ class _SubCategoryDoctorState extends State<SubCategoryDoctor> {
                 return GestureDetector(
                   onTap: () {
                     Navigator.pushNamed(context, Routs.doctorList,
-                        arguments: OtpArguments(
+                        arguments: SendArguments(
                           ptId: widget.arguments?.ptId,
                           catId: _getSubCategoryList[index].categoryId,
                         ));

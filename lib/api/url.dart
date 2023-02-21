@@ -23,5 +23,11 @@ class EndPoints {
   static const String getTimeSlot = '$baseUrl/$get/get_time_slot';
   static const String getDays = '$baseUrl/$get/get_days';
   static const String addDoctorMeetingSchedule =
-      '$baseUrl/$get/add_doctor_meeting_schedule';
+      '$baseUrl/$post/add_doctor_meeting_schedule';
+  static const String getCurrentBalance = '$baseUrl/$get/get_current_balance';
+  static const String addWallet = '$baseUrl/$post/add_wallet';
+  static const String transactionHistory =
+      '$baseUrl/$get/get_transaction_history';
+  static const String getTimeSlotByDoctor =
+      '$baseUrl/$get/get_time_slot_by_doctorid';
 }

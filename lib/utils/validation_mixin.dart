@@ -159,6 +159,14 @@ mixin ValidationMixin {
     }
   }
 
+  String? descriptionValidation(String? description) {
+    if (description!.isNotEmpty) {
+      return null;
+    } else {
+      return "Please Enter Description";
+    }
+  }
+
   String? cityValidation(String? city) {
     if (city!.isNotEmpty) {
       return null;

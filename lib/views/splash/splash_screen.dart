@@ -24,6 +24,10 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> verify() async {
     String userId = await Preferances.prefGetString("userId", '');
     String profileStatus = await Preferances.prefGetString("profileStatus", '');
+    print("userId:=${userId}");
+    print("userId:=${userId != null}");
+    print("profileStatus:=${profileStatus.replaceAll('"', '').toString()}");
+    print("userId:=${profileStatus.replaceAll('"', '').toString() == "1"}");
     Future.delayed(const Duration(seconds: 3)).then(
       (value) {
         if (userId != null &&

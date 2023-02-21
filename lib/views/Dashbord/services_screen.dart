@@ -122,10 +122,10 @@ class _ServicesScreenState extends State<ServicesScreen> {
                     if (allServicesList[index].ptScreen == "1") {
                       Navigator.pushNamed(context, Routs.specialistDoctor,
                           arguments:
-                              OtpArguments(ptId: allServicesList[index].ptId));
+                              SendArguments(ptId: allServicesList[index].ptId));
                     } else {
                       Navigator.pushNamed(context, Routs.doctorList,
-                          arguments: OtpArguments(
+                          arguments: SendArguments(
                             ptId: allServicesList[index].ptId,
                             catId: "0",
                           ));

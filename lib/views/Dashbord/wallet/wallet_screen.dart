@@ -1,3 +1,7 @@
+import 'package:dio/dio.dart';
+import 'package:doctor_on_call/models/get_wallet_model.dart';
+import 'package:doctor_on_call/services/api_services.dart';
+import 'package:doctor_on_call/services/shared_referances.dart';
 import 'package:doctor_on_call/utils/app_sizes.dart';
 import 'package:doctor_on_call/utils/app_text.dart';
 import 'package:doctor_on_call/utils/app_text_style.dart';
@@ -28,13 +32,34 @@ class _WalletScreenState extends State<WalletScreen> with ValidationMixin {
   late var _razorpay;
   String? paymentId;
   final _formKey = GlobalKey<FormState>();
+  GetWalletModel? getWalletModel;
+  String? loginId;
   @override
   void initState() {
     _razorpay = Razorpay();
     _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+    getLoginId();
+    ApiService().getWalletBalance().then((value) {
+      setState(() {
+        getWalletModel = value;
+      });
+    });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _amountController.clear();
+  }
+
+  Future<void> getLoginId() async {
+    String? id = await Preferances.getString("userId");
+    setState(() {
+      loginId = id;
+    });
   }
 
   List<AmountModel?> amountList = [
@@ -56,7 +81,8 @@ class _WalletScreenState extends State<WalletScreen> with ValidationMixin {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBoxH28(),
-                    balanceContainer("850"),
+                    balanceContainer(
+                        "${getWalletModel != null && getWalletModel!.balance != null ? getWalletModel!.balance : " 0"}"),
                     SizedBoxH28(),
                     GestureDetector(
                       onTap: () {
@@ -211,11 +237,30 @@ class _WalletScreenState extends State<WalletScreen> with ValidationMixin {
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
     paymentId = response.paymentId;
-    Fluttertoast.showToast(
-      msg: 'Payment Success or PaymentId:=${paymentId}',
-      backgroundColor: Colors.grey,
-    );
-    Navigator.pop(context);
+
+    try {
+      ApiService()
+          .addWallet(context,
+              data: FormData.fromMap({
+                "loginid":
+                    loginId!.replaceAll('"', '').replaceAll('"', '').toString(),
+                "amount": _amountController.text.trim(),
+                "payment_type": "1",
+                "transactionid": paymentId,
+              }))
+          .then((value) {
+        print("api call done");
+
+        Navigator.pushNamed(context, Routs.transactionHistory);
+        ApiService().getWalletBalance().then((value) {
+          setState(() {
+            getWalletModel = value;
+          });
+        });
+      });
+    } catch (e) {
+      debugPrint("errror here:=${e.toString()}");
+    }
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {

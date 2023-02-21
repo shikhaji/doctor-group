@@ -19,7 +19,7 @@ import '../../widget/primary_textfield.dart';
 import '../../widget/scrollview.dart';
 
 class SignUpScreen extends StatefulWidget {
-  final OtpArguments? arguments;
+  final SendArguments? arguments;
   const SignUpScreen({Key? key, this.arguments}) : super(key: key);
 
   @override

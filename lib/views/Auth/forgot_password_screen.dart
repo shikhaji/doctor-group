@@ -78,7 +78,7 @@ class _ForgotPasswordState extends State<ForgotPassword> with ValidationMixin {
                           Navigator.pushNamed(
                             context,
                             Routs.otp,
-                            arguments: OtpArguments(
+                            arguments: SendArguments(
                                 phoneNumber: _phone.text.trim(), otpStatus: 1),
                           );
                         } else if (value.count == 0) {

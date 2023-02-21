@@ -73,19 +73,19 @@ class RoutGenerator {
       case Routs.signUp:
         return MaterialPageRoute(
             builder: (_) => SignUpScreen(
-                  arguments: arguments as OtpArguments,
+                  arguments: arguments as SendArguments,
                 ));
 
       case Routs.updateProfile:
         return MaterialPageRoute(
             builder: (_) => UpdateProfileScreen(
-                  arguments: arguments as OtpArguments,
+                  arguments: arguments as SendArguments,
                 ));
 
       case Routs.otp:
         return MaterialPageRoute(
             builder: (_) => OtpVerificationScreen(
-                  arguments: arguments as OtpArguments,
+                  arguments: arguments as SendArguments,
                 ));
 
       case Routs.mainHome:
@@ -103,7 +103,7 @@ class RoutGenerator {
       case Routs.doctorList:
         return MaterialPageRoute(
             builder: (_) => DoctorProfileList(
-                  arguments: arguments as OtpArguments,
+                  arguments: arguments as SendArguments,
                 ));
 
       case Routs.services:
@@ -112,7 +112,7 @@ class RoutGenerator {
       case Routs.specialistDoctor:
         return MaterialPageRoute(
             builder: (_) => SubCategoryDoctor(
-                  arguments: arguments as OtpArguments,
+                  arguments: arguments as SendArguments,
                 ));
 
       case Routs.mobileVerification:
@@ -136,7 +136,10 @@ class RoutGenerator {
         return MaterialPageRoute(
             builder: (_) => const TransactionHistoryScreen());
       case Routs.bookAppointment:
-        return MaterialPageRoute(builder: (_) => const BookAppointmentScreen());
+        return MaterialPageRoute(
+            builder: (_) => BookAppointmentScreen(
+                  arguments: arguments as SendArguments,
+                ));
       case Routs.pathologyAndChemistForm:
         return MaterialPageRoute(
             builder: (_) => const PathologyAndChemistFormScreen());

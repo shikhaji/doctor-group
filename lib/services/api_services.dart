@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:doctor_on_call/models/all_main_category_model.dart';
+import 'package:doctor_on_call/models/get_transation_model.dart';
+import 'package:doctor_on_call/models/get_wallet_model.dart';
 import 'package:doctor_on_call/models/mobile_verify_model.dart';
 import 'package:doctor_on_call/services/shared_referances.dart';
 import 'package:doctor_on_call/utils/loder.dart';
@@ -19,6 +21,7 @@ import '../models/get_city_list_model.dart';
 import '../models/get_days_model.dart';
 import '../models/get_state_list_model.dart';
 import '../models/get_sub_categories_model.dart';
+import '../models/get_time_slot_by_doctor_model.dart';
 import '../models/get_time_slot_model.dart';
 import '../models/latest_news_model.dart';
 import '../models/login_model.dart';
@@ -224,7 +227,7 @@ class ApiService {
           Navigator.pushNamed(
             context,
             Routs.updateProfile,
-            arguments: OtpArguments(
+            arguments: SendArguments(
                 userId: responseData.id,
                 phoneNumber: phoneNumber,
                 ptId: responseData.businessType),
@@ -620,7 +623,7 @@ class ApiService {
   }
 
 //----------------------------ADD DOCTOR MEETING SCHEDULE  API-----------------------//
-  Future<SliderModel> addDoctorMeetingSchedule(BuildContext context,
+  Future addDoctorMeetingSchedule(BuildContext context,
       {FormData? data}) async {
     try {
       Loader.showLoader();
@@ -631,12 +634,13 @@ class ApiService {
             "Auth-Key": 'simplerestapi',
           }),
           data: data);
-
       if (response.statusCode == 200) {
-        SliderModel responseData = SliderModel.fromJson(response.data);
         Loader.hideLoader();
-        debugPrint('responseData ----- > ${response.data}');
-        return responseData;
+        debugPrint('meeting add data responseData ----- > ${response.data}');
+        Fluttertoast.showToast(
+          msg: 'Meeting schedule Successfully !',
+          backgroundColor: Colors.grey,
+        );
       } else {
         Loader.hideLoader();
         throw Exception(response.data);
@@ -646,5 +650,133 @@ class ApiService {
       debugPrint('Dio E  $e');
       throw e.error;
     }
+  }
+
+  //---------------------------- GET WALLET BALANCE API-----------------------//
+  Future<GetWalletModel?> getWalletBalance() async {
+    try {
+      String? id = await Preferances.getString("userId");
+      FormData formData = FormData.fromMap({
+        "loginid": id!.replaceAll('"', '').replaceAll('"', '').toString(),
+      });
+      Loader.showLoader();
+      Response response;
+      response = await dio.post(EndPoints.getCurrentBalance,
+          options: Options(headers: {
+            "Client-Service": "frontend-client",
+            "Auth-Key": 'simplerestapi',
+          }),
+          data: formData);
+      if (response.statusCode == 200) {
+        GetWalletModel responseData = GetWalletModel.fromJson(response.data);
+        Loader.hideLoader();
+        return responseData;
+      } else {
+        Loader.hideLoader();
+        throw Exception(response.data);
+      }
+    } on DioError catch (e) {
+      Loader.hideLoader();
+      debugPrint('Dio E  $e');
+    } finally {
+      Loader.hideLoader();
+    }
+    return null;
+  }
+
+  //---------------------------- ADD WALLET BALANCE API-----------------------//
+  Future addWallet(BuildContext context, {FormData? data}) async {
+    try {
+      Loader.showLoader();
+      Response response;
+      response = await dio.post(EndPoints.addWallet,
+          options: Options(headers: {
+            "Client-Service": "frontend-client",
+            "Auth-Key": 'simplerestapi',
+          }),
+          data: data);
+      if (response.statusCode == 200) {
+        Fluttertoast.showToast(
+          msg: 'Wallet Balance amount added !',
+          backgroundColor: Colors.grey,
+        );
+        Loader.hideLoader();
+      } else {
+        Loader.hideLoader();
+        throw Exception(response.data);
+      }
+    } on DioError catch (e) {
+      Loader.hideLoader();
+      debugPrint('Dio E  $e');
+    } finally {
+      Loader.hideLoader();
+    }
+    return null;
+  }
+
+  //---------------------------- GET TRANSACTION HISTORY API-----------------------//
+  Future<GetTransactionModel?> getTransactionHistoryApi() async {
+    try {
+      String? id = await Preferances.getString("userId");
+      FormData formData = FormData.fromMap({
+        "loginid": id!.replaceAll('"', '').replaceAll('"', '').toString(),
+      });
+      Loader.showLoader();
+      Response response;
+      response = await dio.post(EndPoints.transactionHistory,
+          options: Options(headers: {
+            "Client-Service": "frontend-client",
+            "Auth-Key": 'simplerestapi',
+          }),
+          data: formData);
+      if (response.statusCode == 200) {
+        GetTransactionModel responseData =
+            GetTransactionModel.fromJson(response.data);
+        Loader.hideLoader();
+        return responseData;
+      } else {
+        Loader.hideLoader();
+        throw Exception(response.data);
+      }
+    } on DioError catch (e) {
+      Loader.hideLoader();
+      debugPrint('Dio E  $e');
+    } finally {
+      Loader.hideLoader();
+    }
+    return null;
+  }
+
+  //----------------------------GET TIME SLOT BY DOCTOR LIST API-----------------------//
+  Future<GetTimeSlotByDoctorModel?> getTimeSlotByDoctor(BuildContext context,
+      {FormData? data}) async {
+    try {
+      Loader.showLoader();
+      Response response;
+      response = await dio.post(
+        EndPoints.getTimeSlotByDoctor,
+        options: Options(headers: {
+          "Client-Service": "frontend-client",
+          "Auth-Key": 'simplerestapi',
+        }),
+        data: data,
+      );
+      if (response.statusCode == 200) {
+        GetTimeSlotByDoctorModel responseData =
+            GetTimeSlotByDoctorModel.fromJson(response.data);
+
+        Loader.hideLoader();
+        return responseData;
+      } else {
+        Loader.hideLoader();
+        throw Exception(response.data);
+      }
+    } on DioError catch (e) {
+      Loader.hideLoader();
+      debugPrint('Dio E  $e');
+    } finally {
+      Loader.hideLoader();
+    }
+    return null;
   }
 }

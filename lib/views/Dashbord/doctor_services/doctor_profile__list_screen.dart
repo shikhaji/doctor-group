@@ -16,7 +16,7 @@ import '../../../widget/primary_botton.dart';
 import '../../../widget/scrollview.dart';
 
 class DoctorProfileList extends StatefulWidget {
-  final OtpArguments? arguments;
+  final SendArguments? arguments;
 
   const DoctorProfileList({Key? key, this.arguments}) : super(key: key);
 
@@ -30,6 +30,8 @@ class _DoctorProfileListState extends State<DoctorProfileList> {
   @override
   void initState() {
     super.initState();
+    print("PTID:=${widget.arguments?.ptId}");
+    print("CTID:=${widget.arguments?.catId}");
     ApiService()
         .getAllProfileList(
             "${widget.arguments?.ptId}", "${widget.arguments?.catId}")
@@ -59,16 +61,19 @@ class _DoctorProfileListState extends State<DoctorProfileList> {
                   itemCount: _getAllProfileList.length,
                   itemBuilder: (context, inx) {
                     return orderListContainer(
-                        name: 'Cardio Specialist',
+                        name: _getAllProfileList[inx].branchName ?? '',
                         imgPath:
                             'https://www.desktopbackground.org/download/1024x768/2014/01/01/694300_daniels-statistics-analysis-name-meaning-list-of-firstnames_1920x1200_h.jpg',
                         experience: '3-Years',
                         address: _getAllProfileList[inx].branchAddress ?? "",
-                        specialist: '${_getAllProfileList[inx].branchName}',
+                        specialist: '${_getAllProfileList[inx].speciality}',
                         viewProfileCallBack: () {},
                         bookAppointmentCallBack: () {
                           if (_getAllProfileList[inx].pTSCREEN == "1") {
-                            Navigator.pushNamed(context, Routs.bookAppointment);
+                            Navigator.pushNamed(context, Routs.bookAppointment,
+                                arguments: SendArguments(
+                                    doctorId:
+                                        _getAllProfileList[inx].branchId));
                           } else if (_getAllProfileList[inx].pTSCREEN == "2") {
                             Navigator.pushNamed(
                                 context, Routs.pathologyAndChemistForm);

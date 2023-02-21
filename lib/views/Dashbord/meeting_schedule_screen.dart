@@ -80,21 +80,13 @@ class _MeetingScheduleState extends State<MeetingSchedule>
                   backgroundColor: Colors.grey,
                 );
               } else {
-                print("selectDay:=$selectDay");
-                print("selectTimeList:=$selectTimeList");
-                print("state:=${stateModel.stateId}");
-                print("city:=${cityModel.districtId}");
                 String? id = await Preferances.getString("userId");
-                print("city:=${id}");
-                List<MultipartFile> files = [];
-
-                for (var time in selectTimeList) {
-                  files.add(await MultipartFile.fromFile(time));
-                }
+                print("selectTimeList pass:=${selectTimeList}");
                 FormData data() {
                   return FormData.fromMap({
-                    "login_id": id,
-                    "slot_id": files,
+                    "login_id":
+                        id!.replaceAll('"', '').replaceAll('"', '').toString(),
+                    "slot_id": selectTimeList,
                     "day_id": selectDay,
                     "state_id": stateModel.stateId,
                     "district_id": cityModel.districtId,

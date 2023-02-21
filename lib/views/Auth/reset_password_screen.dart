@@ -13,7 +13,7 @@ import '../../widget/primary_textfield.dart';
 import '../../widget/scrollview.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
-  final OtpArguments? arguments;
+  final SendArguments? arguments;
   const ResetPasswordScreen({Key? key, this.arguments}) : super(key: key);
 
   @override
@@ -22,7 +22,6 @@ class ResetPasswordScreen extends StatefulWidget {
 
 class _ResetPasswordScreenState extends State<ResetPasswordScreen>
     with ValidationMixin {
-
   final TextEditingController _password = TextEditingController();
   final TextEditingController _phoneNumber = TextEditingController();
   final TextEditingController _confirmPassword = TextEditingController();
@@ -52,7 +51,6 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen>
             SizedBoxH6(),
             appText("Enter new password here", style: AppTextStyle.subTitle),
             SizedBoxH28(),
-
             appText("New Password", style: AppTextStyle.lable),
             SizedBoxH8(),
             PrimaryTextField(
@@ -105,7 +103,6 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen>
                         "password": _password.text.trim(),
                       });
                     }
-
 
                     ApiService().updatePassword(context, data: data());
                   }

@@ -19,7 +19,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../../widget/scrollview.dart';
 
 class OtpVerificationScreen extends StatefulWidget {
-  final OtpArguments? arguments;
+  final SendArguments? arguments;
 
   const OtpVerificationScreen({Key? key, this.arguments}) : super(key: key);
 
@@ -165,12 +165,12 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen>
         CommonFunctions.toast("otp verify successfully !!");
         Navigator.pushNamed(context, Routs.resetPassword,
             arguments:
-                OtpArguments(phoneNumber: widget.arguments?.phoneNumber));
+                SendArguments(phoneNumber: widget.arguments?.phoneNumber));
       } else {
         CommonFunctions.toast("otp verify successfully !!");
         Navigator.pushNamed(context, Routs.signUp,
             arguments:
-                OtpArguments(phoneNumber: widget.arguments?.phoneNumber));
+                SendArguments(phoneNumber: widget.arguments?.phoneNumber));
       }
 
       Loader.hideLoader();
