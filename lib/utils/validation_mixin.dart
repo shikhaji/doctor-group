@@ -23,6 +23,8 @@ mixin ValidationMixin {
     }
   }
 
+
+
   String? lastNameValidator(String? lastName) {
     if (lastName!.isNotEmpty) {
       return null;

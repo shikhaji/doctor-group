@@ -68,9 +68,9 @@ class _SignUpScreenState extends State<SignUpScreen> with ValidationMixin {
             appText("Phone number", style: AppTextStyle.lable),
             SizedBoxH8(),
             PrimaryTextField(
-              controller: _phone,
+              //controller: _phone,
               keyboardInputType: TextInputType.phone,
-              //validator: mobileNumberValidator,
+              validator: mobileNumberValidator,
               readOnly: true,
               prefix: const Icon(Icons.phone),
               hintText: "${widget.arguments?.phoneNumber}",
