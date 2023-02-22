@@ -1,16 +1,12 @@
 import 'dart:developer';
-
 import 'package:bot_toast/bot_toast.dart';
 import 'package:doctor_on_call/routs/app_routs.dart';
-import 'package:doctor_on_call/utils/app_text_style.dart';
 import 'package:doctor_on_call/utils/screen_utils.dart';
 import 'package:doctor_on_call/utils/theme_utils.dart';
-import 'package:doctor_on_call/views/splash/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
-
 import 'commonMethod/notification.dart';
 import 'commonMethod/storage_handler.dart';
 

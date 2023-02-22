@@ -1,8 +1,3 @@
-// Html(
-// data: getAboutUsData != null && getAboutUsData!.aboutUs != null
-// ? getAboutUsData!.aboutUs.toString()
-// : "",
-// ),
 
 import 'package:doctor_on_call/models/privacy_policy_model.dart';
 import 'package:doctor_on_call/services/api_services.dart';
@@ -23,7 +18,6 @@ class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
   PrivacyPolicyModel? _privacyPolicyModel;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     ApiService().privacyPolicy(context).then((value) {
       setState(() {

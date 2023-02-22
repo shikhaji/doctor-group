@@ -19,7 +19,7 @@ import '../../widget/primary_textfield.dart';
 import '../../widget/scrollview.dart';
 
 class SignUpScreen extends StatefulWidget {
-  final OtpArguments? arguments;
+  final SendArguments? arguments;
   const SignUpScreen({Key? key, this.arguments}) : super(key: key);
 
   @override
@@ -131,11 +131,6 @@ class _SignUpScreenState extends State<SignUpScreen> with ValidationMixin {
                 lable: "Sign Up",
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    print("name:=${_name.text}");
-                    print("_phone:=${widget.arguments?.phoneNumber}");
-                    print("_password:=${_password.text}");
-                    print("_referCode:=${_referCode.text}");
-                    print("categoriesModel.id:=${categoriesModel.ptId}");
                     FormData data() {
                       return FormData.fromMap({
                         "name": _name.text.trim(),

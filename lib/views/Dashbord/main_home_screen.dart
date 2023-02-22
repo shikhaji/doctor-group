@@ -1,19 +1,12 @@
-import 'dart:developer';
-
 import 'package:doctor_on_call/views/Dashbord/home_screen.dart';
 import 'package:doctor_on_call/views/Dashbord/my_appointment_screen.dart';
 import 'package:doctor_on_call/views/Dashbord/my_order_screen.dart';
 import 'package:doctor_on_call/views/Dashbord/services_screen.dart';
 import 'package:flutter/material.dart';
-
-import '../../utils/app_color.dart';
 import '../../utils/app_sizes.dart';
-import '../../utils/app_text_style.dart';
 import '../../utils/screen_utils.dart';
 import '../../widget/drawer_widget.dart';
 import '../../widget/primary_bottom_navigation_bar.dart';
-
-import 'doctor_services/doctor_profile__list_screen.dart';
 
 class MainHomeScreen extends StatefulWidget {
   const MainHomeScreen({Key? key}) : super(key: key);
@@ -25,10 +18,6 @@ class MainHomeScreen extends StatefulWidget {
 class _MainHomeScreenState extends State<MainHomeScreen> {
   final ValueNotifier<int> _currentIndexNotifier = ValueNotifier(0);
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
-  // void openDrawer() {
-  //   _scaffoldKey.currentState?.openDrawer();
-  // }
 
   @override
   Widget build(BuildContext context) {

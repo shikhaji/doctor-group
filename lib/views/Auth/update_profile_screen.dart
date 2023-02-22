@@ -23,7 +23,7 @@ import '../../widget/primary_textfield.dart';
 import '../../widget/scrollview.dart';
 
 class UpdateProfileScreen extends StatefulWidget {
-  final OtpArguments? arguments;
+  final SendArguments? arguments;
   const UpdateProfileScreen({Key? key, this.arguments}) : super(key: key);
 
   @override
@@ -136,13 +136,12 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen>
                               await SubCategoriesPickerDailog.show(
                                   context, "${widget.arguments?.ptId}");
                           _subCategoriesType.text =
-                              subCategoriesModel.categoryName ?? '';
-                          setState(() {});
+                              subCategoriesModel.categoryId ?? '';
                           setState(() {});
                         },
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return 'Please select state';
+                            return 'Please select sub categories';
                           } else {
                             return null;
                           }
@@ -232,16 +231,9 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen>
             PrimaryButton(
                 lable: "Save",
                 onPressed: () {
-                  print("state:=${stateModel.stateId}");
-                  print("city:=${cityModel.districtId}");
-                  print("name:=${_name.text}");
-                  print("email:=${_email.text}");
-                  print("address:=${_address.text}");
-                  print("gender:=${_gender.text}");
-                  print("login id:=${widget.arguments?.userId}");
-                  print(" _subCategoriesType.text:=${_subCategoriesType.text}");
-                  // Navigator.pushNamed(context, Routs.mainHome);
                   if (_formKey.currentState!.validate()) {
+                    print(
+                        "_subCategoriesType.text:=${_subCategoriesType.text}");
                     FormData data() {
                       return FormData.fromMap({
                         "name": _name.text.trim(),
@@ -251,7 +243,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen>
                         "address": _address.text.trim(),
                         "city": cityModel.districtId,
                         "state": stateModel.stateId,
-                        "subcategoryid": _subCategoriesType.text,
+                        "subcategoryid": _subCategoriesType.text.trim(),
                       });
                     }
 
@@ -295,7 +287,6 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen>
         onChanged: (String? value) {
           setState(() {
             genderInitialValue = value!;
-            print(value);
             genderValue = value;
           });
         },

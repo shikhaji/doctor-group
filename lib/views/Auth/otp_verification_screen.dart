@@ -19,7 +19,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../../widget/scrollview.dart';
 
 class OtpVerificationScreen extends StatefulWidget {
-  final OtpArguments? arguments;
+  final SendArguments? arguments;
 
   const OtpVerificationScreen({Key? key, this.arguments}) : super(key: key);
 
@@ -118,7 +118,6 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen>
                   if (_controller.text == "") {
                     CommonFunctions.toast("please enter otp code !!");
                   } else {
-                    print("co_controller.text:=${_controller.text}");
                     AuthResult result = await _verify(_controller.text);
                     if (result.status) {}
                   }
@@ -147,9 +146,6 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen>
       },
       codeAutoRetrievalTimeout: (String verificationId) {
         _verificationId = verificationId;
-        print("verificationId:=$verificationId");
-        print("_verificationId_verificationId:=$_verificationId");
-
         setState(() {});
       },
     );
@@ -169,12 +165,12 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen>
         CommonFunctions.toast("otp verify successfully !!");
         Navigator.pushNamed(context, Routs.resetPassword,
             arguments:
-                OtpArguments(phoneNumber: widget.arguments?.phoneNumber));
+                SendArguments(phoneNumber: widget.arguments?.phoneNumber));
       } else {
         CommonFunctions.toast("otp verify successfully !!");
         Navigator.pushNamed(context, Routs.signUp,
             arguments:
-                OtpArguments(phoneNumber: widget.arguments?.phoneNumber));
+                SendArguments(phoneNumber: widget.arguments?.phoneNumber));
       }
 
       Loader.hideLoader();

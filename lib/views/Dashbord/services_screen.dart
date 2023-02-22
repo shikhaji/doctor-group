@@ -1,25 +1,17 @@
 import 'package:doctor_on_call/routs/arguments.dart';
-import 'package:doctor_on_call/views/Dashbord/doctor_services/sub_category_doctor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import '../../models/categories_model.dart';
 import '../../models/get_all_service_model.dart';
-import '../../models/get_categories_list_model.dart';
 import '../../routs/app_routs.dart';
 import '../../services/api_services.dart';
-import '../../utils/app_asset.dart';
 import '../../utils/app_color.dart';
 import '../../utils/app_sizes.dart';
-import '../../utils/app_text_style.dart';
 import '../../utils/screen_utils.dart';
 import '../../widget/custom_container_box.dart';
 import '../../widget/drawer_widget.dart';
 import '../../widget/primary_appbar.dart';
-import '../../widget/primary_bottom_navigation_bar.dart';
 import '../../widget/primary_textfield.dart';
 import '../../widget/scrollview.dart';
-import 'home_screen.dart';
 
 class ServicesScreen extends StatefulWidget {
   const ServicesScreen({Key? key}) : super(key: key);
@@ -127,13 +119,13 @@ class _ServicesScreenState extends State<ServicesScreen> {
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {
-                    if (allServicesList[index].ptSubCatAvailable == "1") {
+                    if (allServicesList[index].ptScreen == "1") {
                       Navigator.pushNamed(context, Routs.specialistDoctor,
                           arguments:
-                              OtpArguments(ptId: allServicesList[index].ptId));
+                              SendArguments(ptId: allServicesList[index].ptId));
                     } else {
                       Navigator.pushNamed(context, Routs.doctorList,
-                          arguments: OtpArguments(
+                          arguments: SendArguments(
                             ptId: allServicesList[index].ptId,
                             catId: "0",
                           ));

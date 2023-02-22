@@ -1,13 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import '../../utils/app_color.dart';
 import '../../utils/app_sizes.dart';
-import '../../utils/app_text_style.dart';
 import '../../utils/screen_utils.dart';
 import '../../widget/drawer_widget.dart';
 import '../../widget/primary_appbar.dart';
-import '../../widget/primary_bottom_navigation_bar.dart';
 import '../../widget/scrollview.dart';
 
 class MyOrderScreen extends StatefulWidget {
@@ -30,8 +26,7 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
         key: _scaffoldKey,
         body: CustomScroll(
           children: [
-            // todo slider
-            SizedBox(
+            const SizedBox(
               height: 100,
             ),
             ListView.builder(
@@ -68,8 +63,6 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
   }
 
   Widget orderListContainer(String title) {
-    return Container(
-      child: Text(title),
-    );
+    return Text(title);
   }
 }

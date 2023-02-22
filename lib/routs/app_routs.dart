@@ -4,6 +4,7 @@ import 'package:doctor_on_call/views/Auth/mobile_verification_screen.dart';
 import 'package:doctor_on_call/views/Auth/otp_verification_screen.dart';
 import 'package:doctor_on_call/views/Auth/reset_password_screen.dart';
 import 'package:doctor_on_call/views/Auth/signup_screen.dart';
+import 'package:doctor_on_call/views/Dashbord/doctor_services/pathology_and_chemist_form_screen.dart';
 import 'package:doctor_on_call/views/Dashbord/doctor_services/book_appointment_screen.dart';
 
 import 'package:doctor_on_call/views/Dashbord/doctor_services/doctor_profile__list_screen.dart';
@@ -48,6 +49,8 @@ class Routs {
   static const String wallet = "/wallet_screen";
   static const String transactionHistory = "/transaction_history_screen";
   static const String bookAppointment = "/book_appointment_screen";
+  static const String pathologyAndChemistForm =
+      "/pathology_and_chemist_form_screen";
 }
 
 class RoutGenerator {
@@ -70,19 +73,19 @@ class RoutGenerator {
       case Routs.signUp:
         return MaterialPageRoute(
             builder: (_) => SignUpScreen(
-                  arguments: arguments as OtpArguments,
+                  arguments: arguments as SendArguments,
                 ));
 
       case Routs.updateProfile:
         return MaterialPageRoute(
             builder: (_) => UpdateProfileScreen(
-                  arguments: arguments as OtpArguments,
+                  arguments: arguments as SendArguments,
                 ));
 
       case Routs.otp:
         return MaterialPageRoute(
             builder: (_) => OtpVerificationScreen(
-                  arguments: arguments as OtpArguments,
+                  arguments: arguments as SendArguments,
                 ));
 
       case Routs.mainHome:
@@ -100,7 +103,7 @@ class RoutGenerator {
       case Routs.doctorList:
         return MaterialPageRoute(
             builder: (_) => DoctorProfileList(
-                  arguments: arguments as OtpArguments,
+                  arguments: arguments as SendArguments,
                 ));
 
       case Routs.services:
@@ -109,7 +112,7 @@ class RoutGenerator {
       case Routs.specialistDoctor:
         return MaterialPageRoute(
             builder: (_) => SubCategoryDoctor(
-                  arguments: arguments as OtpArguments,
+                  arguments: arguments as SendArguments,
                 ));
 
       case Routs.mobileVerification:
@@ -133,7 +136,13 @@ class RoutGenerator {
         return MaterialPageRoute(
             builder: (_) => const TransactionHistoryScreen());
       case Routs.bookAppointment:
-        return MaterialPageRoute(builder: (_) => const BookAppointmentScreen());
+        return MaterialPageRoute(
+            builder: (_) => BookAppointmentScreen(
+                  arguments: arguments as SendArguments,
+                ));
+      case Routs.pathologyAndChemistForm:
+        return MaterialPageRoute(
+            builder: (_) => const PathologyAndChemistFormScreen());
       default:
         return null;
     }
