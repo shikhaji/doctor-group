@@ -37,7 +37,7 @@ class _LocationDailogState extends State<LocationDailog> with ValidationMixin {
   final TextEditingController _city = TextEditingController();
   StateModel stateModel = StateModel();
   CityModel cityModel = CityModel();
-
+  final _formKey = GlobalKey<FormState>();
   SetLocationModel setLocationModel = SetLocationModel();
 
   @override
@@ -53,84 +53,91 @@ class _LocationDailogState extends State<LocationDailog> with ValidationMixin {
         height: ScreenUtil().screenHeight / 1.6,
         width: ScreenUtil().screenWidth / 1.2,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBoxH28(),
-              appText("Set location", style: AppTextStyle.appBarTextTitle),
-              SizedBoxH14(),
-              appText("Please select state and city and set your location",
-                  softWrap: true,
-                  textAlign: TextAlign.start,
-                  style: AppTextStyle.blackSubTitle.copyWith(
-                    color: const Color(0xff616467),
-                  )),
-              SizedBoxH28(),
-              appText("Select state", style: AppTextStyle.lable),
-              SizedBoxH8(),
-              PrimaryTextField(
-                controller: _state,
-                readOnly: true,
-                hintText: "Select State",
-                suffix: Icon(
-                  Icons.arrow_drop_down,
-                  size: Sizes.s30.h,
-                ),
-                onTap: () async {
-                  stateModel = await StatePickerDailog.show(context);
-                  _state.text = stateModel.stateName ?? '';
-                  _city.clear();
-                  setState(() {});
-                },
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Please select state';
-                  } else {
-                    return null;
-                  }
-                },
+            padding: const EdgeInsets.symmetric(horizontal: 12.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBoxH28(),
+                  appText("Set location", style: AppTextStyle.appBarTextTitle),
+                  SizedBoxH14(),
+                  appText("Please select state and city and set your location",
+                      softWrap: true,
+                      textAlign: TextAlign.start,
+                      style: AppTextStyle.blackSubTitle.copyWith(
+                        color: const Color(0xff616467),
+                      )),
+                  SizedBoxH28(),
+                  appText("Select state", style: AppTextStyle.lable),
+                  SizedBoxH8(),
+                  PrimaryTextField(
+                    controller: _state,
+                    readOnly: true,
+                    hintText: "Select State",
+                    suffix: Icon(
+                      Icons.arrow_drop_down,
+                      size: Sizes.s30.h,
+                    ),
+                    onTap: () async {
+                      stateModel = await StatePickerDailog.show(context);
+                      _state.text = stateModel.stateName ?? '';
+                      _city.clear();
+                      setState(() {});
+                    },
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please select state';
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+                  SizedBoxH14(),
+                  appText("Select city", style: AppTextStyle.lable),
+                  SizedBoxH8(),
+                  PrimaryTextField(
+                    controller: _city,
+                    hintText: "Select City",
+                    readOnly: true,
+                    suffix: Icon(
+                      Icons.arrow_drop_down,
+                      size: Sizes.s30.h,
+                    ),
+                    onTap: () async {
+                      cityModel = await CityPickerDailog.show(
+                          context, "${stateModel.stateId}");
+                      _city.text = cityModel.districtName ?? '';
+                      setState(() {});
+                    },
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please select city';
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+                  SizedBoxH18(),
+                  PrimaryButton(
+                      lable: "Done",
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          setLocationModel.state = _state.text;
+                          setLocationModel.city = _city.text;
+                          setLocationModel.stateId = stateModel.stateId;
+                          Navigator.pop(context, setLocationModel);
+                          Preferances.setString(
+                              "stateName", setLocationModel.state);
+                          Preferances.setString(
+                              "stateId", setLocationModel.stateId);
+                          Preferances.setString(
+                              "cityName", setLocationModel.city);
+                        }
+                      }),
+                ],
               ),
-              SizedBoxH14(),
-              appText("Select city", style: AppTextStyle.lable),
-              SizedBoxH8(),
-              PrimaryTextField(
-                controller: _city,
-                hintText: "Select City",
-                readOnly: true,
-                suffix: Icon(
-                  Icons.arrow_drop_down,
-                  size: Sizes.s30.h,
-                ),
-                onTap: () async {
-                  cityModel = await CityPickerDailog.show(
-                      context, "${stateModel.stateId}");
-                  _city.text = cityModel.districtName ?? '';
-                  setState(() {});
-                },
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Please select city';
-                  } else {
-                    return null;
-                  }
-                },
-              ),
-              SizedBoxH18(),
-              PrimaryButton(
-                  lable: "Done",
-                  onPressed: () {
-                    setLocationModel.state = _state.text;
-                    setLocationModel.city = _city.text;
-                    setLocationModel.stateId = stateModel.stateId;
-                    Navigator.pop(context, setLocationModel);
-                    Preferances.setString("stateName", setLocationModel.state);
-                    Preferances.setString("stateId", setLocationModel.stateId);
-                    Preferances.setString("cityName", setLocationModel.city);
-                  }),
-            ],
-          ),
-        ),
+            )),
       ),
     ));
   }

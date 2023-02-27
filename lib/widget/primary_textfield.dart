@@ -23,6 +23,7 @@ class PrimaryTextField extends StatelessWidget {
   final String? counterText;
   final Color? textColor;
   final int? maxLength;
+  final int? maxLines;
 
   final Color? color;
   final TextStyle? hintStyle;
@@ -34,6 +35,7 @@ class PrimaryTextField extends StatelessWidget {
   const PrimaryTextField({
     Key? key,
     this.controller,
+    this.maxLines,
     this.counterText,
     this.hintText,
     this.textInputAction,
@@ -78,6 +80,7 @@ class PrimaryTextField extends StatelessWidget {
           autovalidateMode: AutovalidateMode.onUserInteraction,
           style: AppTextStyle.textFieldFont,
           maxLength: maxLength,
+          maxLines: maxLines ?? 1,
           decoration: InputDecoration(
             isDense: true,
             hintStyle: AppTextStyle.alertSubtitle.copyWith(

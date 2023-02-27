@@ -1,6 +1,7 @@
 import 'package:doctor_on_call/routs/arguments.dart';
 import 'package:doctor_on_call/views/Auth/login_screen.dart';
 import 'package:doctor_on_call/views/Auth/mobile_verification_screen.dart';
+import 'package:doctor_on_call/views/Auth/my_location_screen.dart';
 import 'package:doctor_on_call/views/Auth/otp_verification_screen.dart';
 import 'package:doctor_on_call/views/Auth/reset_password_screen.dart';
 import 'package:doctor_on_call/views/Auth/signup_screen.dart';
@@ -14,6 +15,7 @@ import 'package:doctor_on_call/views/Dashbord/main_home_screen.dart';
 import 'package:doctor_on_call/views/Dashbord/meeting_schedule_screen.dart';
 import 'package:doctor_on_call/views/Dashbord/my_appointment_screen.dart';
 import 'package:doctor_on_call/views/Dashbord/my_order_screen.dart';
+import 'package:doctor_on_call/views/Dashbord/my_profile.dart';
 import 'package:doctor_on_call/views/Dashbord/services_screen.dart';
 import 'package:doctor_on_call/views/Dashbord/wallet/wallet_screen.dart';
 import 'package:doctor_on_call/views/Side%20menu/about_us.dart';
@@ -23,6 +25,7 @@ import 'package:flutter/material.dart';
 
 import '../views/Auth/forgot_password_screen.dart';
 import '../views/Auth/update_profile_screen.dart';
+import '../views/Dashbord/doctor_services/doctor_view_profile.dart';
 import '../views/Dashbord/wallet/transation_history_screen.dart';
 import '../views/splash/splash_screen.dart';
 
@@ -51,6 +54,9 @@ class Routs {
   static const String bookAppointment = "/book_appointment_screen";
   static const String pathologyAndChemistForm =
       "/pathology_and_chemist_form_screen";
+  static const String myLocation = "/my_location_screen";
+  static const String myProfile = "/my_profile_screen";
+  static const String doctorViewProfile = "/doctor_view_profile";
 }
 
 class RoutGenerator {
@@ -75,6 +81,11 @@ class RoutGenerator {
             builder: (_) => SignUpScreen(
                   arguments: arguments as SendArguments,
                 ));
+      case Routs.doctorViewProfile:
+        return MaterialPageRoute(
+            builder: (_) => DoctorViewProfileScreen(
+                  arguments: arguments as SendArguments,
+                ));
 
       case Routs.updateProfile:
         return MaterialPageRoute(
@@ -89,7 +100,10 @@ class RoutGenerator {
                 ));
 
       case Routs.mainHome:
-        return MaterialPageRoute(builder: (_) => const MainHomeScreen());
+        return MaterialPageRoute(
+            builder: (_) => MainHomeScreen(
+                  arguments: arguments as SendArguments,
+                ));
 
       case Routs.home:
         return MaterialPageRoute(builder: (_) => const HomeScreen());
@@ -99,6 +113,8 @@ class RoutGenerator {
 
       case Routs.myOrder:
         return MaterialPageRoute(builder: (_) => const MyOrderScreen());
+      case Routs.myProfile:
+        return MaterialPageRoute(builder: (_) => const MyProfileScreen());
 
       case Routs.doctorList:
         return MaterialPageRoute(
@@ -143,6 +159,8 @@ class RoutGenerator {
       case Routs.pathologyAndChemistForm:
         return MaterialPageRoute(
             builder: (_) => const PathologyAndChemistFormScreen());
+      case Routs.myLocation:
+        return MaterialPageRoute(builder: (_) => const MyLocationScreen());
       default:
         return null;
     }

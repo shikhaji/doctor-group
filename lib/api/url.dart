@@ -30,4 +30,10 @@ class EndPoints {
       '$baseUrl/$get/get_transaction_history';
   static const String getTimeSlotByDoctor =
       '$baseUrl/$get/get_time_slot_by_doctorid';
+  static const String addDoctorBooking = '$baseUrl/$post/add_doctor_booking';
+  static const String getProfile = '$baseUrl/$get/get_profile_by_status';
+  static const String updateMyProfile =
+      '$baseUrl/$post/update_business_profile';
+  static const String uploadPrescriptionByPatient =
+      '$baseUrl/$post/upload_prescription_by_patient';
 }

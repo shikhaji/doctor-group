@@ -81,12 +81,18 @@ class _MeetingScheduleState extends State<MeetingSchedule>
                 );
               } else {
                 String? id = await Preferances.getString("userId");
-                print("selectTimeList pass:=${selectTimeList}");
+                print(
+                    "login_id pass:=${id!.replaceAll('"', '').replaceAll('"', '').toString()}");
+                print("slot_id pass:=${selectTimeList.join(",")}");
+                print("day_id pass:=${selectDay}");
+                print("state_id pass:=${stateModel.stateId}");
+                print("district_id pass:=${cityModel.districtId}");
+
                 FormData data() {
                   return FormData.fromMap({
                     "login_id":
-                        id!.replaceAll('"', '').replaceAll('"', '').toString(),
-                    "slot_id": selectTimeList,
+                        id.replaceAll('"', '').replaceAll('"', '').toString(),
+                    "slot_id": selectTimeList.join(","),
                     "day_id": selectDay,
                     "state_id": stateModel.stateId,
                     "district_id": cityModel.districtId,
@@ -182,13 +188,14 @@ class _MeetingScheduleState extends State<MeetingSchedule>
               child: Row(
                 children: List.generate(getTimeSlotList.length, (index) {
                   return GestureDetector(
-                    onTap: () {
+                    onTap: () async {
                       getTimeSlotList[index]!.selectTime =
                           !getTimeSlotList[index]!.selectTime;
-                      setState(() {});
-                      selectTimeList.add("${getTimeSlotList[index]!.dTSID}");
 
-                      print("Selected selectTimeList := ${selectTimeList}");
+                      selectTimeList.add("${getTimeSlotList[index]!.dTSID}");
+                      setState(() {});
+                      print(
+                          "Selected selectTimeList := ${selectTimeList.join(",")}");
                     },
                     child: Container(
                       margin: const EdgeInsets.all(Sizes.s8),

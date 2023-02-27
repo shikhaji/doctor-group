@@ -125,6 +125,8 @@ class _SubCategoryDoctorState extends State<SubCategoryDoctor> {
                         arguments: SendArguments(
                           ptId: widget.arguments?.ptId,
                           catId: _getSubCategoryList[index].categoryId,
+                          servicesTypeName:
+                              _getSubCategoryList[index].categoryName,
                         ));
                   },
                   child: CustomContainerBox(

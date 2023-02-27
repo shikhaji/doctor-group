@@ -87,7 +87,7 @@ class _StatePickerDailogState extends State<StatePickerDailog> {
               PrimaryTextField(
                 controller: _searchController,
                 onChanged: _onSearchHandler,
-                hintText: 'Search Country',
+                hintText: 'Search State',
                 color: AppColor.textFieldColor,
                 suffix: _isSearching
                     ? InkWell(

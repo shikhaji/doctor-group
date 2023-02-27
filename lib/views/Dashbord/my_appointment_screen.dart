@@ -1,7 +1,10 @@
+import 'package:doctor_on_call/utils/app_text.dart';
+import 'package:doctor_on_call/widget/custom_sized_box.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../utils/app_color.dart';
 import '../../utils/app_sizes.dart';
+import '../../utils/app_text_style.dart';
 import '../../utils/screen_utils.dart';
 import '../../widget/drawer_widget.dart';
 import '../../widget/primary_appbar.dart';
@@ -100,12 +103,121 @@ class _MyAppointmentScreenState extends State<MyAppointmentScreen>
 
   Widget pendingList(BuildContext context) {
     return ListView.builder(
-      padding: EdgeInsets.symmetric(vertical: Sizes.s20.h),
+      padding:
+          EdgeInsets.symmetric(vertical: Sizes.s20.h, horizontal: Sizes.s12.h),
       shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
       itemCount: 4,
       itemBuilder: (context, inx) {
-        return const Text("Open");
+        return Container(
+          margin: EdgeInsets.symmetric(vertical: Sizes.s12),
+          padding:
+              EdgeInsets.symmetric(horizontal: Sizes.s12, vertical: Sizes.s18),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(Sizes.s12),
+              border:
+                  Border.all(color: AppColor.textFieldColor, width: Sizes.s2)),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Wrap(
+                children: [
+                  appText(
+                    "Appointment on ",
+                    style: AppTextStyle.alertSubtitle.copyWith(
+                        fontSize: Sizes.s16.sp,
+                        color: AppColor.grey,
+                        fontWeight: FontWeight.normal),
+                  ),
+                  Text(
+                    "28 Feb,2023 ",
+                    style: AppTextStyle.alertSubtitle.copyWith(
+                        fontSize: Sizes.s16.sp, color: AppColor.darkGrey),
+                  ),
+                  Text(
+                    "11:23 pm",
+                    style: AppTextStyle.alertSubtitle.copyWith(
+                        fontSize: Sizes.s16.sp, color: AppColor.darkGrey),
+                  )
+                ],
+              ),
+              SizedBoxH6(),
+              Text(
+                "Dr. Hina Patel",
+                style: AppTextStyle.redTextStyle.copyWith(
+                  fontSize: Sizes.s18.sp,
+                ),
+              ),
+              SizedBoxH10(),
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.symmetric(
+                    horizontal: Sizes.s12, vertical: Sizes.s18),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(Sizes.s12),
+                    color: AppColor.textFieldColor),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Patients Info : ",
+                      style: AppTextStyle.appName.copyWith(
+                        fontSize: Sizes.s16.sp,
+                      ),
+                    ),
+                    SizedBoxH10(),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.account_circle_sharp,
+                          color: AppColor.grey,
+                        ),
+                        SizedBoxW6(),
+                        Expanded(
+                          child: Text(
+                            "Yashil Patel",
+                            style: AppTextStyle.alertSubtitle,
+                          ),
+                        )
+                      ],
+                    ),
+                    SizedBoxH8(),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.phone,
+                          color: AppColor.grey,
+                        ),
+                        SizedBoxW6(),
+                        Expanded(
+                          child: Text(
+                            "9979966965",
+                            style: AppTextStyle.alertSubtitle,
+                          ),
+                        )
+                      ],
+                    ),
+                    SizedBoxH8(),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.location_on_rounded,
+                          color: AppColor.grey,
+                        ),
+                        SizedBoxW6(),
+                        Expanded(
+                          child: Text(
+                            "Amroli,surat",
+                            style: AppTextStyle.alertSubtitle,
+                          ),
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+        );
       },
     );
   }

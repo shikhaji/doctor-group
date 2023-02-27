@@ -32,42 +32,31 @@ class DrawerWidget extends StatelessWidget {
                     ScreenUtil().setVerticalSpacing(20),
                     _DrawerMenuListTile.asset(
                       title: 'Profile',
-                      onTap: () {},
-                      child: Icon(FontAwesomeIcons.user),
+                      onTap: () {
+                        Navigator.pushNamed(context, Routs.myProfile);
+                      },
+                      child: const Icon(FontAwesomeIcons.user),
                     ),
                     _DrawerMenuListTile.asset(
                       title: 'Order List',
-                      onTap: () {},
-                      child: Icon(Icons.format_list_bulleted_sharp),
+                      onTap: () {
+                        Navigator.pushNamed(context, Routs.myOrder);
+                      },
+                      child: const Icon(Icons.format_list_bulleted_sharp),
                     ),
-                    // _DrawerMenuListTile.asset(
-                    //   title: 'Share',
-                    //   onTap: () {},
-                    //   child: Icon(Icons.share),
-                    // ),
-                    // _DrawerMenuListTile.asset(
-                    //   title: 'Rate Us',
-                    //   onTap: () {},
-                    //   child: Icon(Icons.rate_review),
-                    // ),
-                    // _DrawerMenuListTile.asset(
-                    //   title: 'Feedback',
-                    //   onTap: () {},
-                    //   child: Icon(Icons.favorite_outline),
-                    // ),
                     _DrawerMenuListTile.asset(
                       title: 'Terms & Conditions',
                       onTap: () {
                         Navigator.pushNamed(context, Routs.termsAndCondition);
                       },
-                      child: Icon(Icons.local_police_outlined),
+                      child: const Icon(Icons.local_police_outlined),
                     ),
                     _DrawerMenuListTile.asset(
                       title: 'Privacy Policy',
                       onTap: () {
                         Navigator.pushNamed(context, Routs.privacyPolicy);
                       },
-                      child: Icon(Icons.policy),
+                      child: const Icon(Icons.policy),
                     ),
                     _DrawerMenuListTile.asset(
                       title: 'About Us',

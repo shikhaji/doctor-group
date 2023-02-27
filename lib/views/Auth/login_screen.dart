@@ -107,7 +107,6 @@ class _LoginScreenState extends State<LoginScreen> with ValidationMixin {
             PrimaryButton(
                 lable: "Login",
                 onPressed: () async {
-
                   if (_formKey.currentState!.validate()) {
                     FormData data() {
                       return FormData.fromMap({

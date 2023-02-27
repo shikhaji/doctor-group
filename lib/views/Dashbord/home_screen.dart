@@ -40,6 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   String? state, city, stateId;
+  String userTypeValue = "";
 
   @override
   void initState() {
@@ -49,6 +50,16 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> callApi() async {
+    String userType = await Preferances.prefGetString("userType", '');
+
+    print("userType:=${userType}");
+
+    setState(() {
+      userTypeValue =
+          userType.replaceAll('"', '').replaceAll('"', '').toString();
+    });
+
+    print("userTypeValue:=${userTypeValue}");
     state = await Preferances.getString("stateName");
     city = await Preferances.getString("cityName");
     stateId = await Preferances.getString("stateId");
@@ -148,7 +159,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     aspectRatio: 15 / 8,
                     viewportFraction: 1,
                     initialPage: 0,
-                    autoPlay: false,
+                    autoPlay: true,
                     enableInfiniteScroll: false,
                     autoPlayInterval: const Duration(seconds: 3),
                     autoPlayAnimationDuration:
@@ -175,7 +186,11 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: EdgeInsets.zero,
               cacheExtent: 30,
               physics: const ClampingScrollPhysics(),
-              itemCount: _homeData.length,
+              itemCount: userTypeValue == "1"
+                  ? _homeDataDoctor.length
+                  : userTypeValue == "2"
+                      ? _homeDataPatient.length
+                      : _homeData.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 childAspectRatio: 12 / 9,
@@ -185,15 +200,32 @@ class _HomeScreenState extends State<HomeScreen> {
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {
-                    Navigator.pushNamed(
-                      context,
-                      _homeData[index].onPressed.toString(),
-                    );
+                    userTypeValue == "1"
+                        ? Navigator.pushNamed(
+                            context,
+                            _homeDataDoctor[index].onPressed.toString(),
+                          )
+                        : userTypeValue == "2"
+                            ? Navigator.pushNamed(
+                                context,
+                                _homeDataPatient[index].onPressed.toString(),
+                              )
+                            : Navigator.pushNamed(
+                                context,
+                                _homeData[index].onPressed.toString(),
+                              );
                   },
                   child: CustomContainerBox(
-                    title: _homeData[index].name.toString(),
-                    icon: _homeData[index].icon.toString(),
-                  ),
+                      title: userTypeValue == "1"
+                          ? _homeDataDoctor[index].name.toString()
+                          : userTypeValue == "2"
+                              ? _homeDataPatient[index].name.toString()
+                              : _homeData[index].name.toString(),
+                      icon: userTypeValue == "1"
+                          ? _homeDataDoctor[index].icon.toString()
+                          : userTypeValue == "2"
+                              ? _homeDataPatient[index].icon.toString()
+                              : _homeData[index].icon.toString()),
                 );
               },
             ),
@@ -221,13 +253,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                   stateId?.replaceAll('"', '').toString(),
                             });
                           }
+
                           ApiService()
                               .slider(context, data: data())
                               .then((value) {
                             setState(() {
                               sliderImageList = value.message!;
                             });
-
                           });
                           await callApi();
                         });
@@ -244,16 +276,38 @@ class _HomeScreenState extends State<HomeScreen> {
             )));
   }
 
-  final List<HomeData> _homeData = [
+  final List<HomeData> _homeDataDoctor = [
     HomeData(
         name: 'Meeting Schedule',
         icon: AppAsset.meetingSchedule,
         onPressed: Routs.meetingSchedule),
     HomeData(name: 'Wallets', icon: AppAsset.wallets, onPressed: Routs.wallet),
     HomeData(
-      name: 'Clients',
-      icon: AppAsset.myAppointmentIcon,
-    ),
+        name: 'Patient Appointment',
+        icon: AppAsset.myAppointmentIcon,
+        onPressed: Routs.myAppointment),
+    HomeData(
+        name: 'My Appointment',
+        icon: AppAsset.myAppointmentIcon,
+        onPressed: Routs.myAppointment),
+  ];
+  final List<HomeData> _homeData = [
+    HomeData(name: 'Wallets', icon: AppAsset.wallets, onPressed: Routs.wallet),
+    HomeData(
+        name: 'Patient Appointment',
+        icon: AppAsset.myAppointmentIcon,
+        onPressed: Routs.myAppointment),
+    HomeData(
+        name: 'My Appointment',
+        icon: AppAsset.myAppointmentIcon,
+        onPressed: Routs.myAppointment),
+  ];
+  final List<HomeData> _homeDataPatient = [
+    HomeData(name: 'Wallets', icon: AppAsset.wallets, onPressed: Routs.wallet),
+    HomeData(
+        name: 'My Appointment',
+        icon: AppAsset.myAppointmentIcon,
+        onPressed: Routs.myAppointment),
   ];
 }
 

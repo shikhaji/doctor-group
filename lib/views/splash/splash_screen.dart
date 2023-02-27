@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:doctor_on_call/routs/arguments.dart';
 import 'package:doctor_on_call/utils/app_color.dart';
 import 'package:doctor_on_call/utils/app_text.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +34,8 @@ class _SplashScreenState extends State<SplashScreen> {
         if (userId != null &&
             profileStatus.replaceAll('"', '').toString() == "1") {
           Navigator.pushNamedAndRemoveUntil(
-              context, Routs.mainHome, (route) => false);
+              context, Routs.mainHome, (route) => false,
+              arguments: SendArguments(bottomIndex: 0));
         } else {
           Navigator.pushNamedAndRemoveUntil(
               context, Routs.mobileVerification, (route) => false);

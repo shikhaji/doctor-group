@@ -3,6 +3,7 @@ import 'package:doctor_on_call/services/api_services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../models/get_all_profile_model.dart';
 import '../../../routs/arguments.dart';
 import '../../../utils/app_color.dart';
@@ -44,6 +45,15 @@ class _DoctorProfileListState extends State<DoctorProfileList> {
     });
   }
 
+  _makingPhoneCall(String number) async {
+    var url = Uri.parse('tel:${number}');
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,13 +71,20 @@ class _DoctorProfileListState extends State<DoctorProfileList> {
                   itemCount: _getAllProfileList.length,
                   itemBuilder: (context, inx) {
                     return orderListContainer(
+                        btnLable: _getAllProfileList[inx].pTSCREEN == "3"
+                            ? "Call Now"
+                            : "Book Appointment",
                         name: _getAllProfileList[inx].branchName ?? '',
                         imgPath:
                             'https://www.desktopbackground.org/download/1024x768/2014/01/01/694300_daniels-statistics-analysis-name-meaning-list-of-firstnames_1920x1200_h.jpg',
                         experience: '3-Years',
-                        address: _getAllProfileList[inx].branchAddress ?? "",
+                        address: _getAllProfileList[inx].branchContact ?? "",
                         specialist: '${_getAllProfileList[inx].speciality}',
-                        viewProfileCallBack: () {},
+                        viewProfileCallBack: () {
+                          Navigator.pushNamed(context, Routs.doctorViewProfile,
+                              arguments: SendArguments(
+                                  userId: _getAllProfileList[inx].branchId));
+                        },
                         bookAppointmentCallBack: () {
                           if (_getAllProfileList[inx].pTSCREEN == "1") {
                             Navigator.pushNamed(context, Routs.bookAppointment,
@@ -78,10 +95,8 @@ class _DoctorProfileListState extends State<DoctorProfileList> {
                             Navigator.pushNamed(
                                 context, Routs.pathologyAndChemistForm);
                           } else {
-                            Fluttertoast.showToast(
-                              msg: 'Call Ambulance',
-                              backgroundColor: Colors.grey,
-                            );
+                            _makingPhoneCall(
+                                "${_getAllProfileList[inx].branchContact}");
                           }
                         });
                   },
@@ -91,8 +106,8 @@ class _DoctorProfileListState extends State<DoctorProfileList> {
           : Center(
               child: appText("No Doctor", style: AppTextStyle.blackSubTitle),
             ),
-      appBar: const SecondaryAppBar(
-        title: "Doctors",
+      appBar: SecondaryAppBar(
+        title: "${widget.arguments!.servicesTypeName}",
         isLeading: true,
       ),
     );
@@ -103,6 +118,7 @@ class _DoctorProfileListState extends State<DoctorProfileList> {
       required String imgPath,
       required String experience,
       required String address,
+      required String btnLable,
       required String specialist,
       required VoidCallback viewProfileCallBack,
       required VoidCallback bookAppointmentCallBack}) {
@@ -165,7 +181,7 @@ class _DoctorProfileListState extends State<DoctorProfileList> {
                 SizedBoxW10(),
                 Expanded(
                   child: CustomButton(
-                    lable: "Book Appointment",
+                    lable: btnLable,
                     color: AppColor.white,
                     bgColor: AppColor.primaryColor,
                     onPressed: bookAppointmentCallBack,

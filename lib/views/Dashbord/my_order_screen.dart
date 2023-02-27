@@ -14,52 +14,30 @@ class MyOrderScreen extends StatefulWidget {
 }
 
 class _MyOrderScreenState extends State<MyOrderScreen> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
-  void openDrawer() {
-    _scaffoldKey.currentState?.openDrawer();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        key: _scaffoldKey,
-        body: CustomScroll(
-          children: [
-            const SizedBox(
-              height: 100,
-            ),
-            ListView.builder(
-              padding: EdgeInsets.symmetric(vertical: Sizes.s20.h),
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: 4,
-              itemBuilder: (context, inx) {
-                return orderListContainer("hina");
-              },
-            )
-          ],
-        ),
-        drawer: Drawer(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          width: ScreenUtil().screenWidth * 0.8,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-              topRight: Radius.circular(Sizes.s20.r),
-              bottomRight: Radius.circular(Sizes.s20.r),
-            ),
+      appBar: const SecondaryAppBar(
+        title: "My Order",
+        isLeading: false,
+      ),
+      body: CustomScroll(
+        children: [
+          const SizedBox(
+            height: 100,
           ),
-          child: const DrawerWidget(),
-        ),
-        appBar: SecondaryAppBar(
-          title: "My Order",
-          isLeading: true,
-          onBackPressed: () {
-            openDrawer();
-          },
-          leadingIcon: Icons.menu,
-        ));
+          ListView.builder(
+            padding: EdgeInsets.symmetric(vertical: Sizes.s20.h),
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: 4,
+            itemBuilder: (context, inx) {
+              return orderListContainer("hina");
+            },
+          )
+        ],
+      ),
+    );
   }
 
   Widget orderListContainer(String title) {

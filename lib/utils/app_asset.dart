@@ -18,6 +18,8 @@ class AppAsset {
   static const String orderFill = "${iconPath}order_fill.png";
   static const String service = "${iconPath}service.png";
   static const String serviceFill = "${iconPath}service_fill.png";
+  static const String profile = "${iconPath}profile.png";
+  static const String profileFill = "${iconPath}profile_fill.png";
 
   //HOME PAGE
   static const String meetingSchedule = "${iconPath}meeting_schedule.png";
@@ -28,9 +30,13 @@ class AppAsset {
   static const String drawerBackground = "${imagePath}drawer_background.svg";
 
   //services Page
-  static const String ambulanceIcon= "${iconPath}ambulance_icon.png";
-  static const String chemistIcon= "${iconPath}chemist_icon.png";
-  static const String doctorIcon= "${iconPath}doctor_icon.png";
-  static const String pathologyIcon= "${iconPath}pathology_icon.png";
+  static const String ambulanceIcon = "${iconPath}ambulance_icon.png";
+  static const String chemistIcon = "${iconPath}chemist_icon.png";
+  static const String doctorIcon = "${iconPath}doctor_icon.png";
+  static const String pathologyIcon = "${iconPath}pathology_icon.png";
 
+  //MAP VIEW
+  static const String mapViewImg = "${imagePath}map_view.jpg";
+  static const String dummyAvatar = "${imagePath}dummyAvatar_img.jpg";
+  static const String camera = "${iconPath}camera.svg";
 }

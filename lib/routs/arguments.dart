@@ -5,11 +5,15 @@ class SendArguments {
   String? ptId;
   String? catId;
   String? doctorId;
+  String? servicesTypeName;
+  int? bottomIndex;
 
   SendArguments(
       {this.phoneNumber,
       this.otpStatus,
+      this.bottomIndex,
       this.userId,
+      this.servicesTypeName,
       this.ptId,
       this.catId,
       this.doctorId});
