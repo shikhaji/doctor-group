@@ -8,6 +8,7 @@ class AppAsset {
   //splash screen(png)
   static const String splash = "${imagePath}splash_img.jpg";
   static const String backGround = "${imagePath}background_img.png";
+  static const String addAchievement = "${imagePath}add_achievement.png";
 
   //BOTTOM IMAGE
   static const String home = "${iconPath}home.png";
@@ -24,7 +25,13 @@ class AppAsset {
   //HOME PAGE
   static const String meetingSchedule = "${iconPath}meeting_schedule.png";
   static const String myAppointmentIcon = "${iconPath}my_appointment_icon.png";
+  static const String patientAppointment = "${iconPath}patient_appointment.png";
   static const String wallets = "${iconPath}wallet.png";
+  static const String achievement = "${iconPath}achievement.png";
+
+  static const String yesOrNoIcon = "${iconPath}yes_no_icon.png";
+
+  static const String newsIcon = "${iconPath}news.png";
 
   //DRAWER IMAGE
   static const String drawerBackground = "${imagePath}drawer_background.svg";

@@ -136,7 +136,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen>
                               await SubCategoriesPickerDailog.show(
                                   context, "${widget.arguments?.ptId}");
                           _subCategoriesType.text =
-                              subCategoriesModel.categoryId ?? '';
+                              subCategoriesModel.categoryName ?? '';
                           setState(() {});
                         },
                         validator: (value) {
@@ -232,8 +232,6 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen>
                 lable: "Save",
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    print(
-                        "_subCategoriesType.text:=${_subCategoriesType.text}");
                     FormData data() {
                       return FormData.fromMap({
                         "name": _name.text.trim(),
@@ -243,13 +241,14 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen>
                         "address": _address.text.trim(),
                         "city": cityModel.districtId,
                         "state": stateModel.stateId,
-                        "subcategoryid": _subCategoriesType.text.trim(),
+                        "subcategoryid": subCategoriesModel.categoryId,
                       });
                     }
 
                     ApiService().updateProfile(context, data: data());
                   }
                 }),
+            SizedBoxH34(),
           ],
         ),
       )),

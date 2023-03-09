@@ -2,7 +2,14 @@ import 'package:doctor_on_call/routs/arguments.dart';
 import 'package:doctor_on_call/utils/app_sizes.dart';
 import 'package:doctor_on_call/utils/screen_utils.dart';
 import 'package:doctor_on_call/widget/custom_sized_box.dart';
+import 'package:doctor_on_call/widget/primary_botton.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+import '../../../models/get_doctor_achievement_model.dart';
+import '../../../models/get_profile_model.dart';
+import '../../../routs/app_routs.dart';
+import '../../../services/api_services.dart';
+import '../../../services/shared_referances.dart';
 import '../../../utils/app_color.dart';
 import '../../../utils/app_text.dart';
 import '../../../utils/app_text_style.dart';
@@ -10,9 +17,8 @@ import '../../../widget/primary_appbar.dart';
 import '../../../widget/scrollview.dart';
 
 class DoctorViewProfileScreen extends StatefulWidget {
-  final SendArguments arguments;
-  const DoctorViewProfileScreen({Key? key, required this.arguments})
-      : super(key: key);
+  final SendArguments? arguments;
+  const DoctorViewProfileScreen({Key? key, this.arguments}) : super(key: key);
 
   @override
   State<DoctorViewProfileScreen> createState() =>
@@ -20,6 +26,31 @@ class DoctorViewProfileScreen extends StatefulWidget {
 }
 
 class _DoctorViewProfileScreenState extends State<DoctorViewProfileScreen> {
+  GetProfileData? getProfileData;
+  List<AchievementList> achievementList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    ApiService()
+        .getDoctorAchievementList("${widget.arguments!.doctorId}")
+        .then((value) {
+      if (value != null) {
+        setState(() {
+          achievementList = value.achievement;
+        });
+        print("achievementList :=${achievementList.length}");
+      }
+    });
+    ApiService().getProfileData(widget.arguments!.doctorId).then((value) {
+      if (value != null) {
+        setState(() {
+          getProfileData = value.profile;
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,18 +68,24 @@ class _DoctorViewProfileScreenState extends State<DoctorViewProfileScreen> {
             width: double.infinity,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(Sizes.s14),
-                image: const DecorationImage(
-                    image: NetworkImage(
-                        "https://www.desktopbackground.org/download/1024x768/2014/01/01/694300_daniels-statistics-analysis-name-meaning-list-of-firstnames_1920x1200_h.jpg"),
-                    fit: BoxFit.cover)),
+                image: getProfileData != null &&
+                        getProfileData!.patientPhoto != ""
+                    ? DecorationImage(
+                        image: NetworkImage(
+                            'https://appointment.doctoroncalls.in/uploads/${getProfileData!.patientPhoto}'),
+                        fit: BoxFit.cover)
+                    : DecorationImage(
+                        image: NetworkImage(
+                            'https://cdn-icons-png.flaticon.com/512/387/387561.png'),
+                        fit: BoxFit.contain)),
           ),
           SizedBoxH18(),
           Text(
-            "Dr. Hina Patel",
+            "${getProfileData?.branchCategory == "1" ? "Dr. " : ""}${getProfileData?.branchName ?? ""}",
             style: AppTextStyle.appBarTextTitle,
           ),
           Text(
-            "specialist for alopathy",
+            "specialist for ${getProfileData?.categoryName ?? ""}",
             style: AppTextStyle.alertSubtitle,
           ),
           SizedBoxH18(),
@@ -80,7 +117,7 @@ class _DoctorViewProfileScreenState extends State<DoctorViewProfileScreen> {
                     SizedBoxW6(),
                     Expanded(
                         child: Text(
-                            "128, madhvbug parvat patiya surat Gujrat india 35001",
+                            "${getProfileData?.branchAddress ?? ""} ${getProfileData?.stateName ?? ""} ${getProfileData?.districtName ?? ""}",
                             style: AppTextStyle.subTitle))
                   ],
                 ),
@@ -97,7 +134,7 @@ class _DoctorViewProfileScreenState extends State<DoctorViewProfileScreen> {
                     ),
                     SizedBoxW6(),
                     Expanded(
-                        child: Text("hina2201@mailinator.com",
+                        child: Text(getProfileData?.branchEmail ?? "",
                             style: AppTextStyle.subTitle))
                   ],
                 ),
@@ -114,7 +151,8 @@ class _DoctorViewProfileScreenState extends State<DoctorViewProfileScreen> {
                     ),
                     SizedBoxW6(),
                     Expanded(
-                        child: Text("8320591644", style: AppTextStyle.subTitle))
+                        child: Text(getProfileData?.branchContact ?? "",
+                            style: AppTextStyle.subTitle))
                   ],
                 ),
               ],
@@ -126,32 +164,62 @@ class _DoctorViewProfileScreenState extends State<DoctorViewProfileScreen> {
             style: AppTextStyle.appBarTextTitle,
           ),
           SizedBoxH18(),
-          GridView.builder(
-            shrinkWrap: true,
-            padding: EdgeInsets.zero,
-            cacheExtent: 30,
-            physics: const ClampingScrollPhysics(),
-            itemCount: 5,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              childAspectRatio: 8 / 9,
-              crossAxisSpacing: Sizes.s20.h,
-              mainAxisSpacing: Sizes.s20.h,
-            ),
-            itemBuilder: (context, index) {
-              return Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(Sizes.s14),
-                    image: const DecorationImage(
-                        image: NetworkImage(
-                            "https://www.promotionalwears.com/image/cache/catalog/data/Trophies/custom-trophy/global-achievement-award-trophy-750x750.png"),
-                        fit: BoxFit.cover)),
-              );
-            },
-          ),
+          achievementList.length > 0
+              ? GridView.builder(
+                  shrinkWrap: true,
+                  padding: EdgeInsets.zero,
+                  cacheExtent: 30,
+                  physics: const ClampingScrollPhysics(),
+                  itemCount: achievementList.length,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    childAspectRatio: 8 / 9,
+                    crossAxisSpacing: Sizes.s20.h,
+                    mainAxisSpacing: Sizes.s20.h,
+                  ),
+                  itemBuilder: (context, index) {
+                    return Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(Sizes.s14),
+                          image: DecorationImage(
+                              image: NetworkImage(
+                                "https://appointment.doctoroncalls.in/uploads/${achievementList[index].daFileName}",
+                              ),
+                              fit: BoxFit.cover)),
+                    );
+                  },
+                )
+              : const Text(
+                  "No Achievement",
+                  style: AppTextStyle.body2,
+                ),
+          SizedBoxH34(),
+          PrimaryButton(
+              lable: "Book Appointment",
+              onPressed: () {
+                if (getProfileData!.ptScreen == "1") {
+                  Navigator.pushNamed(context, Routs.bookAppointment,
+                      arguments: SendArguments(
+                          doctorId: getProfileData!.branchId,
+                          doctorName: getProfileData!.branchName));
+                } else if (getProfileData!.ptScreen == "2") {
+                  Navigator.pushNamed(context, Routs.pathologyAndChemistForm);
+                } else {
+                  _makingPhoneCall("${getProfileData!.branchContact}");
+                }
+              }),
           SizedBoxH34(),
         ],
       ),
     );
+  }
+
+  _makingPhoneCall(String number) async {
+    var url = Uri.parse('tel:${number}');
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }

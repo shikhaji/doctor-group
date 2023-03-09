@@ -12,12 +12,14 @@ import '../../models/city_model.dart';
 import '../../models/gender_model.dart';
 import '../../models/get_profile_model.dart';
 import '../../models/state_model.dart';
+import '../../routs/arguments.dart';
 import '../../services/shared_referances.dart';
 import '../../utils/app_asset.dart';
 import '../../utils/app_color.dart';
 import '../../utils/app_sizes.dart';
 import '../../utils/app_text.dart';
 import '../../utils/app_text_style.dart';
+import '../../utils/file_utils.dart';
 import '../../utils/screen_utils.dart';
 import '../../utils/theme_utils.dart';
 import '../../utils/validation_mixin.dart';
@@ -32,7 +34,8 @@ import '../../widget/primary_textfield.dart';
 import '../../widget/scrollview.dart';
 
 class MyProfileScreen extends StatefulWidget {
-  const MyProfileScreen({Key? key}) : super(key: key);
+  final SendArguments? arguments;
+  const MyProfileScreen({Key? key, this.arguments}) : super(key: key);
 
   @override
   State<MyProfileScreen> createState() => _MyProfileScreenState();
@@ -41,43 +44,47 @@ class MyProfileScreen extends StatefulWidget {
 class _MyProfileScreenState extends State<MyProfileScreen>
     with ValidationMixin {
   final _formKey = GlobalKey<FormState>();
-
   final TextEditingController _name = TextEditingController();
   final TextEditingController _email = TextEditingController();
   final TextEditingController _address = TextEditingController();
   final TextEditingController _city = TextEditingController();
   final TextEditingController _phoneNumber = TextEditingController();
-  final TextEditingController _role = TextEditingController();
   final TextEditingController _state = TextEditingController();
   final TextEditingController _gender = TextEditingController();
   var genderValue = "Male";
   String genderInitialValue = 'Male';
   var gender = ["Male", "Female"];
-
   StateModel stateModel = StateModel();
   CityModel cityModel = CityModel();
   GenderModel genderModel = GenderModel();
   GetProfileData? getProfileData;
-
-  XFile? selectedDocument;
+  File? _file;
   var url;
 
   @override
   void initState() {
-    // TODO: implement initState
-    ApiService().getProfileData().then((value) {
+    getProfile();
+  }
+
+  Future<void> getProfile() async {
+    String? id = await Preferances.getString("userId");
+    ApiService()
+        .getProfileData(id!.replaceAll('"', '').replaceAll('"', '').toString())
+        .then((value) {
       if (value != null) {
-        getProfileData = value.profile;
-        print("image url get:=${getProfileData!.patientPhoto}");
-        _name.text = getProfileData!.branchName;
-        _role.text = getProfileData!.branchCategory;
-        _email.text = getProfileData!.branchEmail;
-        _phoneNumber.text = getProfileData!.branchContact;
-        _gender.text = getProfileData!.branchGender;
-        _address.text = getProfileData!.branchAddress;
-        _state.text = getProfileData!.stateName;
-        _city.text = getProfileData!.districtName;
+        setState(() {
+          getProfileData = value.profile;
+        });
+        _name.text = getProfileData!.branchName!;
+        _email.text = getProfileData!.branchEmail!;
+        _phoneNumber.text = getProfileData!.branchContact!;
+        _gender.text = getProfileData!.branchGender!;
+        _address.text = getProfileData!.branchAddress!;
+        _state.text = getProfileData!.stateName!;
+        _city.text = getProfileData!.districtName!;
         url = getProfileData!.patientPhoto;
+        stateModel.stateId = getProfileData!.stateId;
+        cityModel.districtId = getProfileData!.branchDistrictId;
       }
     });
   }
@@ -85,9 +92,9 @@ class _MyProfileScreenState extends State<MyProfileScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const SecondaryAppBar(
+      appBar: SecondaryAppBar(
         title: "My Profile",
-        isLeading: false,
+        isLeading: widget.arguments?.backIcon == false ? false : true,
       ),
       body: Form(
         key: _formKey,
@@ -111,28 +118,16 @@ class _MyProfileScreenState extends State<MyProfileScreen>
                 lable: "Save",
                 onPressed: () async {
                   String? id = await Preferances.getString("userId");
-
-                  print(
-                      "loginid${id!.replaceAll('"', '').replaceAll('"', '').toString()}");
-                  print("name:=${_name.text.trim()}");
-                  print("email:=${_email.text.trim()}");
-                  print("district:=${cityModel.districtId}");
-                  print("state:=${stateModel.stateId}");
-                  print("gender:=${_gender.text.trim()}");
-                  print("address:=${_address.text.trim()}");
-                  print("file to upload:=${url}");
-//////////////////////////////////////////////////////////////////
                   if (_formKey.currentState!.validate()) {
-                    if (selectedDocument?.path == null) {
-                      Fluttertoast.showToast(
-                        msg: 'Please Upload Profile',
-                        backgroundColor: Colors.grey,
-                      );
+                    var file;
+                    if (_file != null) {
+                      file = await MultipartFile.fromFile(_file!.path);
                     } else {
-                      var file =
-                          await MultipartFile.fromFile(selectedDocument!.path);
-                      Map<String, dynamic> data = {
-                        "loginid": id
+                      file = getProfileData?.patientPhoto;
+                    }
+                    FormData data() {
+                      return FormData.fromMap({
+                        "loginid": id!
                             .replaceAll('"', '')
                             .replaceAll('"', '')
                             .toString(),
@@ -142,11 +137,18 @@ class _MyProfileScreenState extends State<MyProfileScreen>
                         "state": stateModel.stateId,
                         "gender": _gender.text.trim(),
                         "address": _address.text.trim(),
-                        "fileToUpload": selectedDocument!.path,
-                      };
-
-                      ApiService().updateMyProfile(context, data: data);
+                        "fileToUpload": file,
+                      });
                     }
+
+                    ApiService()
+                        .updateMyProfile(context, data: data())
+                        .then((value) {
+                      Fluttertoast.showToast(
+                        msg: 'Profile update Successfully!',
+                        backgroundColor: Colors.grey,
+                      );
+                    });
                   }
                 }),
             SizedBoxH18(),
@@ -166,14 +168,6 @@ class _MyProfileScreenState extends State<MyProfileScreen>
           controller: _name,
           prefix: const Icon(Icons.perm_identity),
           hintText: "Enter your name",
-        ),
-        SizedBoxH10(),
-        appText("Your Role", style: AppTextStyle.lable),
-        SizedBoxH8(),
-        PrimaryTextField(
-          controller: _role,
-          prefix: const Icon(Icons.perm_identity),
-          hintText: "Enter your role",
         ),
         SizedBoxH10(),
         appText("Email address", style: AppTextStyle.lable),
@@ -314,12 +308,13 @@ class _MyProfileScreenState extends State<MyProfileScreen>
         CircleAvatar(
           radius: 75,
           child: ClipOval(
-            child: selectedDocument != null
-                ? Image.file(File(selectedDocument!.path),
+            // photo: _file?.path ?? userProvider.user.profilePic,
+            child: _file != null
+                ? Image.file(File(_file!.path),
                     height: 160, width: 160, fit: BoxFit.cover)
-                : url != ''
+                : getProfileData != null && getProfileData?.patientPhoto != ''
                     ? Image.network(
-                        'https://appointment.doctoroncalls.in/uploads/${url}',
+                        'https://appointment.doctoroncalls.in/uploads/${getProfileData!.patientPhoto}',
                         height: 160,
                         width: 160,
                         fit: BoxFit.cover)
@@ -333,7 +328,15 @@ class _MyProfileScreenState extends State<MyProfileScreen>
             alignment: Alignment.bottomCenter,
             //  child: showDialogForUserImage(1),
             child: InkWell(
-              onTap: () => showDialogForUserImage(1),
+              //onTap: () => showDialogForUserImage(1),
+              onTap: () async {
+                File? file = await FileUtils.pickImage(ImageSource.gallery);
+                if (file != null) {
+                  setState(() {
+                    _file = file;
+                  });
+                }
+              },
               child: CircleAvatar(
                 backgroundColor: AppColor.white,
                 radius: Sizes.s20.r,
@@ -352,107 +355,5 @@ class _MyProfileScreenState extends State<MyProfileScreen>
         )
       ],
     );
-  }
-
-  showDialogForUserImage(int imgIndex) {
-    showCupertinoModalPopup(
-      context: context,
-      builder: (a) => ClipRRect(
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
-        ),
-        child: Material(
-          child: Container(
-            decoration: BoxDecoration(
-              color: AppColor.primaryColor,
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 50,
-                  color: AppColor.primaryColor,
-                  child: const Center(
-                    child: Text(
-                      "Select Image",
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: AppColor.white,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    InkWell(
-                      onTap: () {
-                        Navigator.of(a).pop();
-                        selectImage(ImageSource.gallery, 1);
-                      },
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Icon(
-                            Icons.image_rounded,
-                            color: AppColor.white,
-                          ),
-                          SizedBox(height: 10),
-                          Text(
-                            "Gallery",
-                            style: AppTextStyle.greySubTitle
-                                .copyWith(color: AppColor.white),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      color: Colors.white,
-                      height: MediaQuery.of(context).size.height / 12,
-                      width: 3,
-                    ),
-                    InkWell(
-                      onTap: () {
-                        Navigator.of(a).pop();
-                        selectImage(ImageSource.camera, 1);
-                      },
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Icon(
-                            Icons.camera_alt_rounded,
-                            color: AppColor.white,
-                          ),
-                          SizedBox(height: 10),
-                          Text(
-                            "Camera",
-                            style: AppTextStyle.greySubTitle
-                                .copyWith(color: AppColor.white),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-                const SizedBox(height: 10),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  selectImage(ImageSource source, int imgIndex) async {
-    final ImagePicker imagePicker = ImagePicker();
-    if (imgIndex == 1) {
-      selectedDocument = await imagePicker.pickImage(source: source);
-      setState(() {});
-    }
   }
 }

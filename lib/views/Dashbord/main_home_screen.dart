@@ -69,11 +69,15 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
       case 0:
         return const HomeScreen();
       case 1:
-        return const MyOrderScreen();
+        return MyOrderScreen(
+          arguments: SendArguments(backIcon: false),
+        );
       case 2:
         return const ServicesScreen();
       case 3:
-        return const MyProfileScreen();
+        return MyProfileScreen(
+          arguments: SendArguments(backIcon: false),
+        );
       default:
     }
     return Container();

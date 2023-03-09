@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
-
 import '../../models/terms_and_condition_model.dart';
 import '../../services/api_services.dart';
 import '../../widget/primary_appbar.dart';

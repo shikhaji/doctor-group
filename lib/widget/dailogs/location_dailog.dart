@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:doctor_on_call/utils/validation_mixin.dart';
 import 'package:doctor_on_call/widget/dailogs/state_picker.dart';
 import 'package:doctor_on_call/widget/primary_botton.dart';
@@ -5,7 +6,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/city_model.dart';
+import '../../models/get_profile_model.dart';
 import '../../models/state_model.dart';
+import '../../services/api_services.dart';
 import '../../services/shared_referances.dart';
 import '../../utils/app_sizes.dart';
 import '../../utils/app_text.dart';
@@ -121,18 +124,13 @@ class _LocationDailogState extends State<LocationDailog> with ValidationMixin {
                   SizedBoxH18(),
                   PrimaryButton(
                       lable: "Done",
-                      onPressed: () {
+                      onPressed: () async {
                         if (_formKey.currentState!.validate()) {
                           setLocationModel.state = _state.text;
                           setLocationModel.city = _city.text;
                           setLocationModel.stateId = stateModel.stateId;
+                          setLocationModel.cityId = cityModel.districtId;
                           Navigator.pop(context, setLocationModel);
-                          Preferances.setString(
-                              "stateName", setLocationModel.state);
-                          Preferances.setString(
-                              "stateId", setLocationModel.stateId);
-                          Preferances.setString(
-                              "cityName", setLocationModel.city);
                         }
                       }),
                 ],
@@ -148,8 +146,10 @@ class SetLocationModel {
     this.state,
     this.city,
     this.stateId,
+    this.cityId,
   });
   String? state;
   String? city;
   String? stateId;
+  String? cityId;
 }

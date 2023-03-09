@@ -1,11 +1,14 @@
+import 'package:dio/dio.dart';
 import 'package:doctor_on_call/utils/app_asset.dart';
 import 'package:doctor_on_call/utils/screen_utils.dart';
 import 'package:doctor_on_call/widget/primary_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
+import '../../models/get_profile_model.dart';
 import '../../routs/app_routs.dart';
 import '../../routs/arguments.dart';
+import '../../services/api_services.dart';
+import '../../services/shared_referances.dart';
 import '../../utils/app_color.dart';
 import '../../utils/app_sizes.dart';
 import '../../utils/app_text.dart';
@@ -24,6 +27,31 @@ class MyLocationScreen extends StatefulWidget {
 
 class _MyLocationScreenState extends State<MyLocationScreen> {
   final TextEditingController _location = TextEditingController();
+  GetProfileData? getProfileData;
+  String stateId = "";
+  String cityId = "";
+
+  @override
+  void initState() {
+    super.initState();
+    getProfile();
+  }
+
+  Future<void> getProfile() async {
+    String? id = await Preferances.getString("userId");
+    ApiService()
+        .getProfileData(id!.replaceAll('"', '').replaceAll('"', '').toString())
+        .then((value) {
+      if (value != null) {
+        setState(() {
+          getProfileData = value.profile;
+        });
+        _location.text =
+            "${getProfileData!.stateName} ,${getProfileData!.districtName}";
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,19 +61,16 @@ class _MyLocationScreenState extends State<MyLocationScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBoxH34(),
-            SizedBoxH34(),
-            SizedBoxH34(),
+            SizedBoxH28(),
+            SizedBoxH28(),
             Center(
-              child: appText("Doctor on call",
-                  style: AppTextStyle.appName
-                      .copyWith(color: AppColor.primaryColor)),
+              child: appText("My Location", style: AppTextStyle.title),
             ),
-            SizedBoxH28(),
-            SizedBoxH28(),
-            appText("My Location", style: AppTextStyle.title),
             SizedBoxH6(),
-            appText("Please select your location",
-                style: AppTextStyle.subTitle),
+            Center(
+              child: appText("Please select your location",
+                  style: AppTextStyle.subTitle),
+            ),
             SizedBoxH28(),
             appText("Select Location", style: AppTextStyle.lable),
             SizedBoxH8(),
@@ -59,6 +84,8 @@ class _MyLocationScreenState extends State<MyLocationScreen> {
               onTap: () {
                 LocationDailog.show(context).then((value) {
                   _location.text = "${value.state} ,${value.city}";
+                  cityId = value.cityId;
+                  stateId = value.stateId;
                 });
               },
             ),
@@ -77,9 +104,30 @@ class _MyLocationScreenState extends State<MyLocationScreen> {
                 lable: "Save",
                 onPressed: () async {
                   if (_location.text != "") {
-                    Navigator.pushNamedAndRemoveUntil(
-                        context, Routs.mainHome, (route) => false,
-                        arguments: SendArguments(bottomIndex: 0));
+                    String? id = await Preferances.getString("userId");
+                    FormData data() {
+                      return FormData.fromMap({
+                        "loginid": id!
+                            .replaceAll('"', '')
+                            .replaceAll('"', '')
+                            .toString(),
+                        "name": getProfileData?.branchName,
+                        "email": getProfileData?.branchEmail,
+                        "district": cityId,
+                        "state": stateId,
+                        "gender": getProfileData?.branchGender,
+                        "address": getProfileData?.branchAddress,
+                        "fileToUpload": getProfileData?.patientPhoto,
+                      });
+                    }
+
+                    ApiService()
+                        .updateMyProfile(context, data: data())
+                        .then((value) {
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, Routs.mainHome, (route) => false,
+                          arguments: SendArguments(bottomIndex: 0));
+                    });
                   } else {
                     Fluttertoast.showToast(
                       msg: 'Please select location !',

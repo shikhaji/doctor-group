@@ -1,8 +1,6 @@
-
 import 'package:doctor_on_call/models/privacy_policy_model.dart';
 import 'package:doctor_on_call/services/api_services.dart';
 import 'package:flutter/material.dart';
-import '../../utils/app_color.dart';
 import '../../widget/primary_appbar.dart';
 import '../../widget/scrollview.dart';
 import 'package:flutter_html/flutter_html.dart';

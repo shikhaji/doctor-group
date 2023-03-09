@@ -6,8 +6,10 @@ import 'package:doctor_on_call/utils/validation_mixin.dart';
 import 'package:doctor_on_call/widget/primary_botton.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 
 import '../../../models/get_days_model.dart';
+import '../../../models/get_profile_model.dart';
 import '../../../models/get_time_slot_by_doctor_model.dart';
 import '../../../models/state_model.dart';
 import '../../../routs/arguments.dart';
@@ -36,16 +38,17 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen>
   final TextEditingController _patientName = TextEditingController();
   final TextEditingController _address = TextEditingController();
   final TextEditingController _des = TextEditingController();
-  final TextEditingController _state = TextEditingController();
   List<GetDaysList?> getDaysList = [];
   List<TimeSlotByDoctorList?> timeSlotByDoctorList = [];
   var selectDay = "1";
+  String appointmentDate = "";
   var selectTime = "";
   final _formKey = GlobalKey<FormState>();
-  StateModel stateModel = StateModel();
+
   @override
   void initState() {
     super.initState();
+    getProfile();
     ApiService().getDaysList().then((value) {
       getDaysList = value!.data;
       setState(() {});
@@ -58,9 +61,23 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen>
             }))
         .then((value) {
       setState(() {
-        print("index 1 data:=${value!.data.length}");
-        timeSlotByDoctorList = value.data;
+        timeSlotByDoctorList = value!.data;
       });
+    });
+  }
+
+  GetProfileData? getProfileData;
+
+  Future<void> getProfile() async {
+    String? id = await Preferances.getString("userId");
+    ApiService()
+        .getProfileData(id!.replaceAll('"', '').replaceAll('"', '').toString())
+        .then((value) {
+      if (value != null) {
+        setState(() {
+          getProfileData = value.profile;
+        });
+      }
     });
   }
 
@@ -86,7 +103,7 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen>
                       children: [
                         appText("Doctor Name",
                             style: AppTextStyle.alertSubtitle),
-                        appText("Dr.Hina  Patel",
+                        appText("Dr. ${widget.arguments?.doctorName}",
                             style: AppTextStyle.appBarTextTitle)
                       ],
                     )),
@@ -134,17 +151,12 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen>
                           );
                         } else {
                           String? id = await Preferances.getString("userId");
-                          print("doctorid${widget.arguments!.doctorId}");
-                          print("patient_name${_patientName.text.trim()}");
-                          print("patient_mobile${_phoneNumber.text.trim()}");
-                          print("desc${_des.text.trim()}");
-                          print("patient_address${_address.text.trim()}");
-                          print("appointment_slot${selectTime}");
-                          print("district_id${stateModel.stateId}");
-                          print("appointment_date${selectDay}");
+                          print("selectDay:=${selectDay}");
                           print(
-                              "loginid${id!.replaceAll('"', '').replaceAll('"', '').toString()}");
-
+                              "district_id:=${getProfileData?.branchDistrictId}");
+                          print("doctorid:=${widget.arguments!.doctorId}");
+                          print("appointment_slot:=${selectTime}");
+                          print("loginid:=${id}");
                           FormData data() {
                             return FormData.fromMap({
                               "doctorid": widget.arguments!.doctorId,
@@ -153,12 +165,12 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen>
                               "patient_address": _address.text.trim(),
                               "appointment_slot": selectTime,
                               "appointment_type": 1,
-                              "loginid": id
+                              "loginid": id!
                                   .replaceAll('"', '')
                                   .replaceAll('"', '')
                                   .toString(),
                               "desc": _des.text.trim(),
-                              "district_id": stateModel.stateId,
+                              "district_id": getProfileData?.branchDistrictId,
                               "appointment_date": selectDay,
                             });
                           }
@@ -179,6 +191,9 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen>
           return GestureDetector(
             onTap: () {
               selectDay = getDaysList[index]!.dlId;
+              appointmentDate = DateFormat('yyyy-mm-dd')
+                  .format(DateTime.parse(getDaysList[index]!.dlTt.toString()))
+                  .toString();
               setState(() {});
               ApiService()
                   .getTimeSlotByDoctor(context,
@@ -227,6 +242,17 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen>
                     ],
                   ),
                   Text(
+                    //MMM dd yyyy
+                    DateFormat('MMM dd yyyy')
+                        .format(
+                            DateTime.parse(getDaysList[index]!.dlTt.toString()))
+                        .toString(),
+                    style: getDaysList[index]!.dlId == selectDay
+                        ? AppTextStyle.timeTitle
+                        : AppTextStyle.timeTitle
+                            .copyWith(color: AppColor.black),
+                  ),
+                  Text(
                     getDaysList[index]!.dlName,
                     style: getDaysList[index]!.dlId == selectDay
                         ? AppTextStyle.timeTitle
@@ -249,13 +275,10 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen>
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: List.generate(timeSlotByDoctorList.length, (index) {
-          print("timeSlotByDoctorList.length:-${timeSlotByDoctorList.length}");
           return GestureDetector(
             onTap: () {
               selectTime = timeSlotByDoctorList[index]!.dmsId;
               setState(() {});
-
-              print("Selected selectTime := ${selectTime}");
             },
             child: Container(
               margin: const EdgeInsets.all(Sizes.s8),
@@ -348,28 +371,6 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen>
               hintText: "Enter Address",
               validator: addressValidation,
               prefix: const Icon(Icons.home),
-            ),
-            PrimaryTextField(
-              controller: _state,
-              readOnly: true,
-              hintText: "Select State",
-              suffix: Icon(
-                Icons.arrow_drop_down,
-                size: Sizes.s30.h,
-              ),
-              onTap: () async {
-                stateModel = await StatePickerDailog.show(context);
-                _state.text = stateModel.stateName ?? '';
-
-                setState(() {});
-              },
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return 'Please select state';
-                } else {
-                  return null;
-                }
-              },
             ),
             PrimaryTextField(
               controller: _des,

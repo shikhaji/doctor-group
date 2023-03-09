@@ -10,12 +10,14 @@ class PrimaryButton extends StatelessWidget {
   final String lable;
   final VoidCallback onPressed;
   final double? height;
+  final double? width;
   final Color? color;
   final bool? isStyle;
   const PrimaryButton(
       {Key? key,
       required this.lable,
       this.color,
+      this.width,
       this.isStyle = false,
       required this.onPressed,
       this.height})
@@ -25,7 +27,7 @@ class PrimaryButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialButton(
         height: height ?? ScreenUtil().setHeight(50),
-        minWidth: double.infinity,
+        minWidth: width ?? double.infinity,
         shape: const StadiumBorder(),
 
         // RoundedRectangleBorder(

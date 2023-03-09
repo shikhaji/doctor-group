@@ -34,18 +34,18 @@ class GetDaysList {
   });
 
   String dlId;
-  DateTime dlTt;
+  String dlTt;
   String dlName;
 
   factory GetDaysList.fromJson(Map<String, dynamic> json) => GetDaysList(
         dlId: json["DL_ID"],
-        dlTt: DateTime.parse(json["DL_TT"]),
+        dlTt: json["DL_TT"],
         dlName: json["DL_NAME"],
       );
 
   Map<String, dynamic> toJson() => {
         "DL_ID": dlId,
-        "DL_TT": dlTt.toIso8601String(),
+        "DL_TT": dlTt,
         "DL_NAME": dlName,
       };
 }

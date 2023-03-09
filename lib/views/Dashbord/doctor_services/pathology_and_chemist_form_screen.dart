@@ -52,7 +52,6 @@ class _PathologyAndChemistFormScreenState
               lable: "Done",
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
-                  print("selectedDocument here${selectedDocument!.name}");
                   if (selectedDocument!.path == null) {
                     Fluttertoast.showToast(
                       msg: 'Please Upload Prescription',
@@ -60,18 +59,13 @@ class _PathologyAndChemistFormScreenState
                     );
                   } else {
                     String? id = await Preferances.getString("userId");
-
-                    print("selectedDocument${selectedDocument!.name}");
-
-                    print(
-                        "loginid${id!.replaceAll('"', '').replaceAll('"', '').toString()}");
-
+                    print("selectedDocument!.path:=${selectedDocument!.path}");
                     var file =
                         await MultipartFile.fromFile(selectedDocument!.path);
-
+                    print("pass file:=${file}");
                     FormData data() {
                       return FormData.fromMap({
-                        "loginid": id
+                        "loginid": id!
                             .replaceAll('"', '')
                             .replaceAll('"', '')
                             .toString(),

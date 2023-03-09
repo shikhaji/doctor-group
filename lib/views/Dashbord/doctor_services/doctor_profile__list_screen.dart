@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../models/get_all_profile_model.dart';
+import '../../../models/get_profile_model.dart';
 import '../../../routs/arguments.dart';
+import '../../../services/shared_referances.dart';
 import '../../../utils/app_color.dart';
 import '../../../utils/app_sizes.dart';
 import '../../../utils/app_text.dart';
@@ -28,18 +30,37 @@ class DoctorProfileList extends StatefulWidget {
 class _DoctorProfileListState extends State<DoctorProfileList> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   List<GetAllProfileList> _getAllProfileList = [];
+  GetProfileData? getProfileData;
   @override
   void initState() {
     super.initState();
-    print("PTID:=${widget.arguments?.ptId}");
-    print("CTID:=${widget.arguments?.catId}");
+
+    apiCall();
+  }
+
+  Future<void> apiCall() async {
+    String? id = await Preferances.getString("userId");
     ApiService()
-        .getAllProfileList(
-            "${widget.arguments?.ptId}", "${widget.arguments?.catId}")
+        .getProfileData(id!.replaceAll('"', '').replaceAll('"', '').toString())
         .then((value) {
       if (value != null) {
         setState(() {
-          _getAllProfileList = value.message!;
+          getProfileData = value.profile;
+          print("catid:=${widget.arguments?.catId}");
+          print("ptId:=${widget.arguments?.ptId}");
+          print("branchDistrictId:=${getProfileData?.branchDistrictId}");
+          ApiService()
+              .getAllProfileList(
+                  "${widget.arguments?.ptId}",
+                  "${widget.arguments?.catId}",
+                  "${getProfileData?.branchDistrictId}")
+              .then((value) {
+            if (value != null) {
+              setState(() {
+                _getAllProfileList = value.message!;
+              });
+            }
+          });
         });
       }
     });
@@ -75,22 +96,24 @@ class _DoctorProfileListState extends State<DoctorProfileList> {
                             ? "Call Now"
                             : "Book Appointment",
                         name: _getAllProfileList[inx].branchName ?? '',
-                        imgPath:
-                            'https://www.desktopbackground.org/download/1024x768/2014/01/01/694300_daniels-statistics-analysis-name-meaning-list-of-firstnames_1920x1200_h.jpg',
+                        imgPath: _getAllProfileList[inx].patientPhoto != ""
+                            ? "https://appointment.doctoroncalls.in/uploads/${_getAllProfileList[inx].patientPhoto}"
+                            : "https://cdn-icons-png.flaticon.com/512/387/387561.png",
                         experience: '3-Years',
                         address: _getAllProfileList[inx].branchContact ?? "",
                         specialist: '${_getAllProfileList[inx].speciality}',
                         viewProfileCallBack: () {
                           Navigator.pushNamed(context, Routs.doctorViewProfile,
                               arguments: SendArguments(
-                                  userId: _getAllProfileList[inx].branchId));
+                                  doctorId: _getAllProfileList[inx].branchId));
                         },
                         bookAppointmentCallBack: () {
                           if (_getAllProfileList[inx].pTSCREEN == "1") {
                             Navigator.pushNamed(context, Routs.bookAppointment,
                                 arguments: SendArguments(
-                                    doctorId:
-                                        _getAllProfileList[inx].branchId));
+                                    doctorId: _getAllProfileList[inx].branchId,
+                                    doctorName:
+                                        _getAllProfileList[inx].branchName));
                           } else if (_getAllProfileList[inx].pTSCREEN == "2") {
                             Navigator.pushNamed(
                                 context, Routs.pathologyAndChemistForm);

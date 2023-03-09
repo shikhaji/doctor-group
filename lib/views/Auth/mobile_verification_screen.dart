@@ -1,12 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:doctor_on_call/routs/arguments.dart';
 import 'package:doctor_on_call/services/api_services.dart';
-import 'package:doctor_on_call/views/Auth/login_screen.dart';
-import 'package:doctor_on_call/views/Auth/otp_verification_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
 import '../../routs/app_routs.dart';
 import '../../utils/app_color.dart';
 import '../../utils/app_text.dart';
