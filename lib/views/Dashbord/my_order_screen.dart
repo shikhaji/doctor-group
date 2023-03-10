@@ -1,65 +1,126 @@
+import 'package:doctor_on_call/utils/app_text_style.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import '../../Dialogs/download_image_dialog.dart';
+import '../../Dialogs/upload_image_dailog.dart';
+import '../../models/get_my_order_model.dart';
+import '../../routs/arguments.dart';
+import '../../services/api_services.dart';
+import '../../services/shared_referances.dart';
+import '../../utils/app_color.dart';
 import '../../utils/app_sizes.dart';
 import '../../utils/screen_utils.dart';
+import '../../widget/custom_sized_box.dart';
 import '../../widget/drawer_widget.dart';
 import '../../widget/primary_appbar.dart';
 import '../../widget/scrollview.dart';
+import 'my_appointment_screen.dart';
 
 class MyOrderScreen extends StatefulWidget {
-  const MyOrderScreen({Key? key}) : super(key: key);
+  final SendArguments? arguments;
+  const MyOrderScreen({Key? key, this.arguments}) : super(key: key);
 
   @override
   State<MyOrderScreen> createState() => _MyOrderScreenState();
 }
 
 class _MyOrderScreenState extends State<MyOrderScreen> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  List<GetOrderList> getOrderList = [];
 
-  void openDrawer() {
-    _scaffoldKey.currentState?.openDrawer();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getOrderData();
+  }
+
+  Future<void> getOrderData() async {
+    String? id = await Preferances.getString("userId");
+    ApiService()
+        .getMyOrder(id!.replaceAll('"', '').replaceAll('"', '').toString())
+        .then((value) {
+      if (value != null) {
+        setState(() {
+          getOrderList = value.profile;
+        });
+
+        print("getOrderList:=${getOrderList.length}");
+        print("getOrderList:=${getOrderList[0].upbpReferBy}");
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        key: _scaffoldKey,
-        body: CustomScroll(
-          children: [
-            const SizedBox(
-              height: 100,
-            ),
-            ListView.builder(
-              padding: EdgeInsets.symmetric(vertical: Sizes.s20.h),
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: 4,
-              itemBuilder: (context, inx) {
-                return orderListContainer("hina");
-              },
-            )
-          ],
-        ),
-        drawer: Drawer(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          width: ScreenUtil().screenWidth * 0.8,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-              topRight: Radius.circular(Sizes.s20.r),
-              bottomRight: Radius.circular(Sizes.s20.r),
-            ),
-          ),
-          child: const DrawerWidget(),
-        ),
-        appBar: SecondaryAppBar(
-          title: "My Order",
-          isLeading: true,
-          onBackPressed: () {
-            openDrawer();
-          },
-          leadingIcon: Icons.menu,
-        ));
+      appBar: SecondaryAppBar(
+        title: "My Order",
+        isLeading: widget.arguments?.backIcon == false ? false : true,
+      ),
+      body: CustomScroll(
+        children: [
+          ListView.builder(
+            padding: EdgeInsets.symmetric(vertical: Sizes.s20.h),
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: getOrderList.length,
+            itemBuilder: (context, inx) {
+              return Container(
+                margin: const EdgeInsets.symmetric(vertical: Sizes.s12),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: Sizes.s12, vertical: Sizes.s18),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(Sizes.s12),
+                    border: Border.all(
+                        color: AppColor.textFieldColor, width: Sizes.s2)),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          "Refer By := ",
+                          style: AppTextStyle.greySubTitle,
+                        ),
+                        Expanded(
+                          child: Text(
+                            "${getOrderList[inx].upbpReferBy}",
+                            style: AppTextStyle.textFieldFont,
+                          ),
+                        )
+                      ],
+                    ),
+                    SizedBoxH10(),
+                    Row(
+                      children: [
+                        const Text(
+                          "Short Description := ",
+                          style: AppTextStyle.greySubTitle,
+                        ),
+                        Expanded(
+                          child: Text(
+                            getOrderList[inx].upbpDesc,
+                            style: AppTextStyle.textFieldFont,
+                          ),
+                        )
+                      ],
+                    ),
+                    SizedBoxH18(),
+                    completeAndCancel("Upload", "Download", onTapComplete: () {
+                      UploadImagePickerDailog.show(
+                          context, getOrderList[inx].loginId, 1);
+                    }, onTapCancel: () {
+                      DownloadImagePickerDailog.show(
+                          context, getOrderList[inx].upbpReportFile);
+                    })
+                  ],
+                ),
+              );
+            },
+          )
+        ],
+      ),
+    );
   }
 
   Widget orderListContainer(String title) {

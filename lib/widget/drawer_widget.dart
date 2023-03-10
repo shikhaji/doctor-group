@@ -1,3 +1,4 @@
+import 'package:doctor_on_call/routs/arguments.dart';
 import 'package:doctor_on_call/utils/app_asset.dart';
 import 'package:doctor_on_call/utils/app_color.dart';
 import 'package:doctor_on_call/utils/app_text_style.dart';
@@ -8,13 +9,40 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../models/get_profile_model.dart';
 import '../routs/app_routs.dart';
+import '../services/api_services.dart';
+import '../services/shared_referances.dart';
 import '../utils/app_sizes.dart';
 import '../utils/screen_utils.dart';
 import '../views/Auth/login_screen.dart';
 
-class DrawerWidget extends StatelessWidget {
-  const DrawerWidget({super.key});
+class DrawerWidget extends StatefulWidget {
+  const DrawerWidget({Key? key}) : super(key: key);
+
+  @override
+  State<DrawerWidget> createState() => _DrawerWidgetState();
+}
+
+class _DrawerWidgetState extends State<DrawerWidget> {
+  GetProfileData? getProfileData;
+  @override
+  void initState() {
+    getProfile();
+  }
+
+  Future<void> getProfile() async {
+    String? id = await Preferances.getString("userId");
+    ApiService()
+        .getProfileData(id!.replaceAll('"', '').replaceAll('"', '').toString())
+        .then((value) {
+      if (value != null) {
+        setState(() {
+          getProfileData = value.profile;
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,42 +60,33 @@ class DrawerWidget extends StatelessWidget {
                     ScreenUtil().setVerticalSpacing(20),
                     _DrawerMenuListTile.asset(
                       title: 'Profile',
-                      onTap: () {},
-                      child: Icon(FontAwesomeIcons.user),
+                      onTap: () {
+                        Navigator.pushNamed(context, Routs.myProfile,
+                            arguments: SendArguments(backIcon: true));
+                      },
+                      child: const Icon(FontAwesomeIcons.user),
                     ),
                     _DrawerMenuListTile.asset(
                       title: 'Order List',
-                      onTap: () {},
-                      child: Icon(Icons.format_list_bulleted_sharp),
+                      onTap: () {
+                        Navigator.pushNamed(context, Routs.myOrder,
+                            arguments: SendArguments(backIcon: true));
+                      },
+                      child: const Icon(Icons.format_list_bulleted_sharp),
                     ),
-                    // _DrawerMenuListTile.asset(
-                    //   title: 'Share',
-                    //   onTap: () {},
-                    //   child: Icon(Icons.share),
-                    // ),
-                    // _DrawerMenuListTile.asset(
-                    //   title: 'Rate Us',
-                    //   onTap: () {},
-                    //   child: Icon(Icons.rate_review),
-                    // ),
-                    // _DrawerMenuListTile.asset(
-                    //   title: 'Feedback',
-                    //   onTap: () {},
-                    //   child: Icon(Icons.favorite_outline),
-                    // ),
                     _DrawerMenuListTile.asset(
                       title: 'Terms & Conditions',
                       onTap: () {
                         Navigator.pushNamed(context, Routs.termsAndCondition);
                       },
-                      child: Icon(Icons.local_police_outlined),
+                      child: const Icon(Icons.local_police_outlined),
                     ),
                     _DrawerMenuListTile.asset(
                       title: 'Privacy Policy',
                       onTap: () {
                         Navigator.pushNamed(context, Routs.privacyPolicy);
                       },
-                      child: Icon(Icons.policy),
+                      child: const Icon(Icons.policy),
                     ),
                     _DrawerMenuListTile.asset(
                       title: 'About Us',
@@ -172,19 +191,25 @@ class DrawerWidget extends StatelessWidget {
                       width: Sizes.s80.h,
                       decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: NetworkImage(
-                                "https://www.desktopbackground.org/download/1024x768/2014/01/01/694300_daniels-statistics-analysis-name-meaning-list-of-firstnames_1920x1200_h.jpg"),
-                          ))),
+                          image: getProfileData?.patientPhoto != ""
+                              ? DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: NetworkImage(
+                                      "https://appointment.doctoroncalls.in/uploads/${getProfileData?.patientPhoto}" ??
+                                          ""),
+                                )
+                              : DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: AssetImage(AppAsset.dummyAvatar),
+                                ))),
                   ScreenUtil().setVerticalSpacing(10),
                   Text(
-                    "Hina patel",
+                    getProfileData?.branchName ?? "",
                     style: AppTextStyle.appBarTextTitle
                         .copyWith(color: AppColor.white),
                   ),
                   Text(
-                    "hinaPatel2201@gmail.com",
+                    getProfileData?.branchEmail ?? "",
                     style: AppTextStyle.lable.copyWith(color: AppColor.white),
                   )
                 ],

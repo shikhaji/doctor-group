@@ -9,11 +9,13 @@ import 'package:doctor_on_call/widget/dailogs/state_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 
 import '../../models/city_model.dart';
 import '../../models/get_days_model.dart';
 import '../../models/get_time_slot_model.dart';
 import '../../models/state_model.dart';
+import '../../routs/app_routs.dart';
 import '../../services/shared_referances.dart';
 import '../../utils/app_color.dart';
 import '../../utils/app_sizes.dart';
@@ -81,17 +83,12 @@ class _MeetingScheduleState extends State<MeetingSchedule>
                 );
               } else {
                 String? id = await Preferances.getString("userId");
-                print("selectTimeList pass:=${selectTimeList}");
-                print("selectTimeList pass:=${id!.replaceAll('"', '').replaceAll('"', '').toString()}");
-                print("selectTimeList pass:=${selectDay}");
-                print("selectTimeList pass:=${stateModel.stateId}");
-                print("selectTimeList pass:=${cityModel.districtId}");
-
+                print("join with comma := ${selectTimeList.join(",")}");
                 FormData data() {
                   return FormData.fromMap({
                     "login_id":
                         id!.replaceAll('"', '').replaceAll('"', '').toString(),
-                    "slot_id": selectTimeList,
+                    "slot_id": selectTimeList.join(","),
                     "day_id": selectDay,
                     "state_id": stateModel.stateId,
                     "district_id": cityModel.districtId,
@@ -112,6 +109,26 @@ class _MeetingScheduleState extends State<MeetingSchedule>
             const SizedBox(
               height: 20,
             ),
+            GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, Routs.showAllMyMeeting);
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    "Show all my meeting",
+                    style: AppTextStyle.lable.copyWith(
+                        color: AppColor.orange,
+                        fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.underline),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
             appText(
               "Select Date",
               style: AppTextStyle.headingTextTile,
@@ -125,7 +142,6 @@ class _MeetingScheduleState extends State<MeetingSchedule>
                     onTap: () {
                       selectDay = getDaysList[index]!.dlId;
                       setState(() {});
-                      print("Selected Days := ${getDaysList[index]!.dlId}");
                     },
                     child: Container(
                       margin: const EdgeInsets.all(Sizes.s8),
@@ -163,6 +179,16 @@ class _MeetingScheduleState extends State<MeetingSchedule>
                             ],
                           ),
                           Text(
+                            DateFormat('MMM dd yyyy')
+                                .format(DateTime.parse(
+                                    getDaysList[index]!.dlTt.toString()))
+                                .toString(),
+                            style: getDaysList[index]!.dlId == selectDay
+                                ? AppTextStyle.timeTitle
+                                : AppTextStyle.timeTitle
+                                    .copyWith(color: AppColor.black),
+                          ),
+                          Text(
                             getDaysList[index]!.dlName,
                             style: getDaysList[index]!.dlId == selectDay
                                 ? AppTextStyle.timeTitle
@@ -187,13 +213,12 @@ class _MeetingScheduleState extends State<MeetingSchedule>
               child: Row(
                 children: List.generate(getTimeSlotList.length, (index) {
                   return GestureDetector(
-                    onTap: () {
+                    onTap: () async {
                       getTimeSlotList[index]!.selectTime =
                           !getTimeSlotList[index]!.selectTime;
-                      setState(() {});
-                      selectTimeList.add("${getTimeSlotList[index]!.dTSID}");
 
-                      print("Selected selectTimeList := ${selectTimeList}");
+                      selectTimeList.add("${getTimeSlotList[index]!.dTSID}");
+                      setState(() {});
                     },
                     child: Container(
                       margin: const EdgeInsets.all(Sizes.s8),

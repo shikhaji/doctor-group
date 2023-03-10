@@ -22,14 +22,10 @@ class ServicesScreen extends StatefulWidget {
 
 class _ServicesScreenState extends State<ServicesScreen> {
   final TextEditingController _searchController = TextEditingController();
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   List<GetAllServicesList> allServicesList = [];
   List<GetAllServicesList> allServicesListRes = [];
   bool _isSearching = false;
-
-  void openDrawer() {
-    _scaffoldKey.currentState?.openDrawer();
-  }
 
   @override
   void initState() {
@@ -71,96 +67,81 @@ class _ServicesScreenState extends State<ServicesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        key: _scaffoldKey,
-        body: CustomScroll(
-          children: [
-            const SizedBox(
-              height: 20,
-            ),
-            PrimaryTextField(
-              controller: _searchController,
-              onChanged: _onSearchHandler,
-              hintText: 'Search Doctor',
-              color: AppColor.textFieldColor,
-              suffix: _isSearching
-                  ? InkWell(
-                      onTap: () {
-                        _searchController.clear();
-                        _isSearching = false;
-                        allServicesList.clear();
-                        allServicesList = allServicesListRes;
-                        setState(() {});
-                      },
-                      child: const Padding(
-                        padding: EdgeInsets.only(right: 10),
-                        child: Icon(
-                          Icons.clear,
-                          color: Colors.black,
-                        ),
-                      ),
-                    )
-                  : null,
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            GridView.builder(
-              shrinkWrap: true,
-              padding: EdgeInsets.zero,
-              cacheExtent: 30,
-              physics: const ClampingScrollPhysics(),
-              itemCount: allServicesList.length,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 12 / 9,
-                crossAxisSpacing: Sizes.s20.h,
-                mainAxisSpacing: Sizes.s20.h,
-              ),
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () {
-                    if (allServicesList[index].ptScreen == "1") {
-                      Navigator.pushNamed(context, Routs.specialistDoctor,
-                          arguments:
-                              SendArguments(ptId: allServicesList[index].ptId));
-                    } else {
-                      Navigator.pushNamed(context, Routs.doctorList,
-                          arguments: SendArguments(
-                            ptId: allServicesList[index].ptId,
-                            catId: "0",
-                          ));
-                    }
-                  },
-                  child: CustomContainerBox(
-                    title: allServicesList[index].ptName,
-                    iconBool: true,
-                    icon:
-                        "https://appointment.doctoroncalls.in/uploads/${allServicesList[index].ptImage.toString()}",
-                  ),
-                );
-              },
-            ),
-          ],
-        ),
-        drawer: Drawer(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          width: ScreenUtil().screenWidth * 0.8,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-              topRight: Radius.circular(Sizes.s20.r),
-              bottomRight: Radius.circular(Sizes.s20.r),
-            ),
+      appBar: const SecondaryAppBar(
+        title: "Services",
+        isLeading: false,
+      ),
+      body: CustomScroll(
+        children: [
+          const SizedBox(
+            height: 20,
           ),
-          child: const DrawerWidget(),
-        ),
-        appBar: SecondaryAppBar(
-          title: "Services",
-          isLeading: true,
-          leadingIcon: Icons.menu,
-          onBackPressed: () {
-            openDrawer();
-          },
-        ));
+          PrimaryTextField(
+            controller: _searchController,
+            onChanged: _onSearchHandler,
+            hintText: 'Search Doctor',
+            color: AppColor.textFieldColor,
+            suffix: _isSearching
+                ? InkWell(
+                    onTap: () {
+                      _searchController.clear();
+                      _isSearching = false;
+                      allServicesList.clear();
+                      allServicesList = allServicesListRes;
+                      setState(() {});
+                    },
+                    child: const Padding(
+                      padding: EdgeInsets.only(right: 10),
+                      child: Icon(
+                        Icons.clear,
+                        color: Colors.black,
+                      ),
+                    ),
+                  )
+                : null,
+          ),
+          const SizedBox(
+            height: 15,
+          ),
+          GridView.builder(
+            shrinkWrap: true,
+            padding: EdgeInsets.zero,
+            cacheExtent: 30,
+            physics: const ClampingScrollPhysics(),
+            itemCount: allServicesList.length,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              childAspectRatio: 12 / 9,
+              crossAxisSpacing: Sizes.s20.h,
+              mainAxisSpacing: Sizes.s20.h,
+            ),
+            itemBuilder: (context, index) {
+              return GestureDetector(
+                onTap: () {
+                  if (allServicesList[index].ptScreen == "1") {
+                    Navigator.pushNamed(context, Routs.specialistDoctor,
+                        arguments:
+                            SendArguments(ptId: allServicesList[index].ptId));
+                  } else {
+                    Navigator.pushNamed(context, Routs.doctorList,
+                        arguments: SendArguments(
+                          ptId: allServicesList[index].ptId,
+                          catId: "0",
+                          servicesTypeName: allServicesList[index].ptName,
+                        ));
+                  }
+                },
+                child: CustomContainerBox(
+                  title: allServicesList[index].ptName,
+                  iconBool: true,
+                  icon:
+                      "https://appointment.doctoroncalls.in/uploads/${allServicesList[index].ptImage.toString()}",
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+    );
   }
 }

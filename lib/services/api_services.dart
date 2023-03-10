@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:doctor_on_call/models/all_main_category_model.dart';
+import 'package:doctor_on_call/models/get_doctor_achievement_model.dart';
+import 'package:doctor_on_call/models/get_my_order_model.dart';
 import 'package:doctor_on_call/models/get_transation_model.dart';
 import 'package:doctor_on_call/models/get_wallet_model.dart';
 import 'package:doctor_on_call/models/mobile_verify_model.dart';
@@ -9,7 +11,7 @@ import 'package:doctor_on_call/views/Dashbord/main_home_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
+import 'package:http/http.dart' as http;
 import '../api/dio_client.dart';
 import '../api/url.dart';
 import '../models/about_us_model.dart';
@@ -19,6 +21,11 @@ import '../models/get_all_service_model.dart';
 import '../models/get_categories_list_model.dart';
 import '../models/get_city_list_model.dart';
 import '../models/get_days_model.dart';
+import '../models/get_doctor_appointment_by_days_model.dart';
+import '../models/get_doctor_appointment_district_model.dart';
+import '../models/get_doctor_appointment_time_slot_model.dart';
+import '../models/get_doctor_appointmnet_list_model.dart';
+import '../models/get_profile_model.dart';
 import '../models/get_state_list_model.dart';
 import '../models/get_sub_categories_model.dart';
 import '../models/get_time_slot_by_doctor_model.dart';
@@ -213,10 +220,9 @@ class ApiService {
         Preferances.setString("Token", responseData.loginToken);
         Preferances.setString("userType", responseData.businessType);
         Preferances.setString("profileStatus", responseData.profileStatus);
-        String profileStatus =
-            await Preferances.prefGetString("profileStatus", '');
+        String businessType = await Preferances.prefGetString("userType", '');
 
-        print("profile store get Status:=${profileStatus}");
+        print("profile store get Status:=${businessType}");
         Loader.hideLoader();
         Fluttertoast.showToast(
           msg: 'login Successfully...',
@@ -234,7 +240,8 @@ class ApiService {
           );
         } else {
           Navigator.pushNamedAndRemoveUntil(
-              context, Routs.mainHome, (route) => false);
+              context, Routs.mainHome, (route) => false,
+              arguments: SendArguments(bottomIndex: 0));
         }
 
         return responseData;
@@ -283,8 +290,8 @@ class ApiService {
           backgroundColor: Colors.grey,
         );
 
-        Navigator.pushNamedAndRemoveUntil(
-            context, Routs.mainHome, (route) => false);
+        Navigator.pushNamed(context, Routs.mainHome,
+            arguments: SendArguments(bottomIndex: 0));
         debugPrint('responseData ----- > ${response.data}');
         return response.data;
       } else {
@@ -529,12 +536,13 @@ class ApiService {
 
   //----------------------------SUB CATEGORIES LIST API-----------------------//
   Future<GetAllProfileModel?> getAllProfileList(
-      String ptId, String catId) async {
+      String ptId, String catId, String districtId) async {
     try {
+      print("districtId:-${districtId}");
       Loader.showLoader();
       Response response;
-      FormData formData =
-          FormData.fromMap({"catid": catId, "profile_type": ptId});
+      FormData formData = FormData.fromMap(
+          {"catid": catId, "profile_type": ptId, "district_id": districtId});
       response = await dio.post(EndPoints.getAllProfileList,
           options: Options(headers: {
             "Client-Service": "frontend-client",
@@ -637,6 +645,9 @@ class ApiService {
       if (response.statusCode == 200) {
         Loader.hideLoader();
         debugPrint('meeting add data responseData ----- > ${response.data}');
+        Navigator.pushNamedAndRemoveUntil(
+            context, Routs.mainHome, (route) => false,
+            arguments: SendArguments(bottomIndex: 0));
         Fluttertoast.showToast(
           msg: 'Meeting schedule Successfully !',
           backgroundColor: Colors.grey,
@@ -770,6 +781,474 @@ class ApiService {
       } else {
         Loader.hideLoader();
         throw Exception(response.data);
+      }
+    } on DioError catch (e) {
+      Loader.hideLoader();
+      debugPrint('Dio E  $e');
+    } finally {
+      Loader.hideLoader();
+    }
+    return null;
+  }
+
+  //----------------------------ADD DOCTOR BOOKING API-----------------------//
+  Future<void> addDoctorBooking(BuildContext context, {FormData? data}) async {
+    try {
+      Loader.showLoader();
+      Response response;
+      response = await dio.post(EndPoints.addDoctorBooking,
+          options: Options(headers: {
+            "Client-Service": "frontend-client",
+            "Auth-Key": 'simplerestapi',
+          }),
+          data: data);
+      if (response.statusCode == 200) {
+        print("response :=${response.data}");
+        Fluttertoast.showToast(
+          msg: 'Booking add Successfully!',
+          backgroundColor: Colors.grey,
+        );
+        Navigator.pushNamedAndRemoveUntil(
+            context, Routs.mainHome, (route) => false,
+            arguments: SendArguments(bottomIndex: 2));
+        Loader.hideLoader();
+      } else {
+        Loader.hideLoader();
+        throw Exception(response.data);
+      }
+    } on DioError catch (e) {
+      Loader.hideLoader();
+      debugPrint('Dio E  $e');
+    } finally {
+      Loader.hideLoader();
+    }
+    return null;
+  }
+
+  //----------------------------UPLOAD PRESCRIPTION BY PATIENT API-----------------------//
+  Future<void> uploadPrescriptionByPatient(BuildContext context,
+      {FormData? data}) async {
+    try {
+      Loader.showLoader();
+      Response response;
+      response = await dio.post(EndPoints.uploadPrescriptionByPatient,
+          options: Options(headers: {
+            "Client-Service": "frontend-client",
+            "Auth-Key": 'simplerestapi',
+          }),
+          data: data);
+      if (response.statusCode == 200) {
+        Fluttertoast.showToast(
+          msg: 'Booking add Successfully!',
+          backgroundColor: Colors.grey,
+        );
+        Navigator.pushNamedAndRemoveUntil(
+            context, Routs.mainHome, (route) => false,
+            arguments: SendArguments(bottomIndex: 0));
+        Loader.hideLoader();
+      } else {
+        Loader.hideLoader();
+        throw Exception(response);
+      }
+    } on DioError catch (e) {
+      Loader.hideLoader();
+      debugPrint('Dio E  $e');
+    } finally {
+      Loader.hideLoader();
+    }
+    return null;
+  }
+
+  //-----------------------------GET PROFILE DATA API---------------------------//
+  Future<GetProfileDataModel?> getProfileData(String? loginId) async {
+    try {
+      Loader.showLoader();
+      Response response;
+      print("loginId:== ${loginId}");
+      FormData formData = FormData.fromMap({
+        "loginid": loginId,
+      });
+      response = await dio.post(EndPoints.getProfile,
+          // options: Options(headers: {"Content-Type": 'application/json'}),
+          data: formData);
+      if (response.statusCode == 200) {
+        GetProfileDataModel responseData =
+            GetProfileDataModel.fromJson(response.data);
+        print("Resposnce data:=${responseData.profile}");
+        Loader.hideLoader();
+        return responseData;
+      } else {
+        Loader.hideLoader();
+        throw Exception(response.data);
+      }
+    } on DioError catch (e) {
+      Loader.hideLoader();
+      debugPrint('Dio E  $e');
+    } finally {
+      Loader.hideLoader();
+    }
+    return null;
+  }
+
+  //----------------------------ADD DOCTOR BOOKING API-----------------------//
+  Future<String> updateMyProfile(BuildContext context, {FormData? data}) async {
+    try {
+      Loader.showLoader();
+      // var url =
+      //     "https://appointment.doctoroncalls.in/post_ajax/update_business_profile";
+      // var response = await http.post(Uri.parse(url), body: data, headers: {
+      //   "Client-Service": "frontend-client",
+      //   "Auth-Key": 'simplerestapi',
+      // });
+      Response response;
+      response = await dio.post(EndPoints.updateMyProfile,
+          // options: Options(headers: {
+          //   "Client-Service": "frontend-client",
+          //   "Auth-Key": 'simplerestapi',
+          // }),
+          data: data);
+      if (response.statusCode == 200) {
+        // Fluttertoast.showToast(
+        //   msg: 'Profile update Successfully!',
+        //   backgroundColor: Colors.grey,
+        // );
+        Loader.hideLoader();
+      } else {
+        Loader.hideLoader();
+        throw Exception(response);
+      }
+    } on DioError catch (e) {
+      Loader.hideLoader();
+      debugPrint('Dio E  $e');
+    } finally {
+      Loader.hideLoader();
+    }
+    return "";
+  }
+
+  //----------------------------GET DOCTOR MEETING SCHEDULE LIST API-----------------------//
+  Future<GetSubCategoryModel?> getMeetingSchedule(String doctorId) async {
+    try {
+      Loader.showLoader();
+      Response response;
+      FormData formData = FormData.fromMap({"doctorid": doctorId});
+      response = await dio.post(EndPoints.getMeetingScheduleList,
+          options: Options(headers: {
+            "Client-Service": "frontend-client",
+            "Auth-Key": 'simplerestapi',
+          }),
+          data: formData);
+      if (response.statusCode == 200) {
+        GetSubCategoryModel responseData =
+            GetSubCategoryModel.fromJson(response.data);
+        Loader.hideLoader();
+        return responseData;
+      } else {
+        Loader.hideLoader();
+        throw Exception(response.data);
+      }
+    } on DioError catch (e) {
+      Loader.hideLoader();
+      debugPrint('Dio E  $e');
+    } finally {
+      Loader.hideLoader();
+    }
+    return null;
+  }
+
+  //----------------------------GET DOCTOR MEETING SCHEDULE LIST API-----------------------//
+  Future<GetMyOrderModel?> getMyOrder(String doctorId) async {
+    try {
+      Loader.showLoader();
+      Response response;
+      FormData formData = FormData.fromMap({"doctorid": doctorId});
+      response = await dio.post(EndPoints.getMyOrder,
+          options: Options(headers: {
+            "Client-Service": "frontend-client",
+            "Auth-Key": 'simplerestapi',
+          }),
+          data: formData);
+      if (response.statusCode == 200) {
+        GetMyOrderModel responseData = GetMyOrderModel.fromJson(response.data);
+        Loader.hideLoader();
+        return responseData;
+      } else {
+        Loader.hideLoader();
+        throw Exception(response.data);
+      }
+    } on DioError catch (e) {
+      Loader.hideLoader();
+      debugPrint('Dio E  $e');
+    } finally {
+      Loader.hideLoader();
+    }
+    return null;
+  }
+
+  //----------------------------UPLOAD REPORT TO CUSTOMER  API-----------------------//
+  Future<void> uploadReportToCustomer(BuildContext context,
+      {FormData? data}) async {
+    try {
+      Loader.showLoader();
+      Response response;
+      response = await dio.post(EndPoints.uploadReportToCustomer,
+          options: Options(headers: {
+            "Client-Service": "frontend-client",
+            "Auth-Key": 'simplerestapi',
+          }),
+          data: data);
+      if (response.statusCode == 200) {
+        Fluttertoast.showToast(
+          msg: 'Upload Report Successfully!',
+          backgroundColor: Colors.grey,
+        );
+        Navigator.pop(context);
+        Loader.hideLoader();
+      } else {
+        Loader.hideLoader();
+        throw Exception(response);
+      }
+    } on DioError catch (e) {
+      Loader.hideLoader();
+      debugPrint('Dio E  $e');
+    } finally {
+      Loader.hideLoader();
+    }
+    return null;
+  }
+
+  //----------------------------UPLOAD PRESCRIPTION BY PATIENT API-----------------------//
+  Future<void> uploadDoctorAchievement(BuildContext context,
+      {FormData? data}) async {
+    try {
+      Loader.showLoader();
+
+      Response response;
+      response = await dio.post(EndPoints.uploadProfileAchievement,
+          options: Options(headers: {
+            "Client-Service": "frontend-client",
+            "Auth-Key": 'simplerestapi',
+          }),
+          data: data);
+      if (response.statusCode == 200) {
+        Fluttertoast.showToast(
+          msg: 'Add Achievement Successfully!',
+          backgroundColor: Colors.grey,
+        );
+        // Navigator.pushNamedAndRemoveUntil(
+        //     context, Routs.mainHome, (route) => false,
+        //     arguments: SendArguments(bottomIndex: 0));
+        Navigator.pop(context);
+        Loader.hideLoader();
+      } else {
+        Loader.hideLoader();
+        throw Exception(response);
+      }
+    } on DioError catch (e) {
+      Loader.hideLoader();
+      debugPrint('Dio E  $e');
+    } finally {
+      Loader.hideLoader();
+    }
+    return null;
+  }
+
+  //----------------------------GET DOCTOR ACHIEVEMENT LIST API-----------------------//
+  Future<GetDoctorAchievementModel?> getDoctorAchievementList(
+      String userId) async {
+    try {
+      Loader.showLoader();
+      Response response;
+
+      FormData formData = FormData.fromMap({"loginid": userId});
+      response = await dio.post(EndPoints.getDoctorAchievement,
+          options: Options(headers: {
+            "Client-Service": "frontend-client",
+            "Auth-Key": 'simplerestapi',
+          }),
+          data: formData);
+      if (response.statusCode == 200) {
+        GetDoctorAchievementModel responseData =
+            GetDoctorAchievementModel.fromJson(response.data);
+        Loader.hideLoader();
+        return responseData;
+      } else {
+        Loader.hideLoader();
+        throw Exception(response.data);
+      }
+    } on DioError catch (e) {
+      Loader.hideLoader();
+      debugPrint('Dio E  $e');
+    } finally {
+      Loader.hideLoader();
+    }
+    return null;
+  }
+
+  //----------------------------GET DOCTOR APPOINTMENT DISTRICT LIST API-----------------------//
+  Future<GetDoctorAppointmentDistrictModel?>
+      getDoctorAppointmentDistrict() async {
+    try {
+      Loader.showLoader();
+      Response response;
+
+      String? id = await Preferances.getString("userId");
+      FormData formData = FormData.fromMap({
+        "loginid": id!.replaceAll('"', '').replaceAll('"', '').toString(),
+      });
+      response = await dio.post(EndPoints.getDoctorAppointmentDistrict,
+          options: Options(headers: {
+            "Client-Service": "frontend-client",
+            "Auth-Key": 'simplerestapi',
+          }),
+          data: formData);
+      if (response.statusCode == 200) {
+        GetDoctorAppointmentDistrictModel responseData =
+            GetDoctorAppointmentDistrictModel.fromJson(response.data);
+        Loader.hideLoader();
+        return responseData;
+      } else {
+        Loader.hideLoader();
+        throw Exception(response.data);
+      }
+    } on DioError catch (e) {
+      Loader.hideLoader();
+      debugPrint('Dio E  $e');
+    } finally {
+      Loader.hideLoader();
+    }
+    return null;
+  }
+
+  //----------------------------GET DOCTOR APPOINTMENT BY DAYS LIST API-----------------------//
+  Future<GetDoctorAppointmentByDaysModel?> getDoctorAppointmentByDay(
+      String districtId) async {
+    try {
+      Loader.showLoader();
+      Response response;
+
+      String? id = await Preferances.getString("userId");
+      FormData formData = FormData.fromMap({
+        "loginid": id!.replaceAll('"', '').replaceAll('"', '').toString(),
+        "districtid": districtId
+      });
+      response = await dio.post(EndPoints.getDoctorAppointmentByDays,
+          options: Options(headers: {
+            "Client-Service": "frontend-client",
+            "Auth-Key": 'simplerestapi',
+          }),
+          data: formData);
+      if (response.statusCode == 200) {
+        print("resposncee  :===${response.data}");
+        GetDoctorAppointmentByDaysModel responseData =
+            GetDoctorAppointmentByDaysModel.fromJson(response.data);
+        Loader.hideLoader();
+        return responseData;
+      } else {
+        Loader.hideLoader();
+        throw Exception(response.data);
+      }
+    } on DioError catch (e) {
+      Loader.hideLoader();
+      debugPrint('Dio E  $e');
+    } finally {
+      Loader.hideLoader();
+    }
+    return null;
+  }
+
+  //----------------------------GET DOCTOR APPOINTMENT TIME SLOT LIST API-----------------------//
+  Future<GetDoctorAppointmentTimeSlotModel?> getDoctorAppointmentTimeSlot(
+      String districtId, String dayId) async {
+    try {
+      Loader.showLoader();
+      Response response;
+
+      String? id = await Preferances.getString("userId");
+      FormData formData = FormData.fromMap({
+        "loginid": id!.replaceAll('"', '').replaceAll('"', '').toString(),
+        "districtid": districtId,
+        "days_id": dayId
+      });
+      response = await dio.post(EndPoints.getDoctorAppointmentTimeSlot,
+          options: Options(headers: {
+            "Client-Service": "frontend-client",
+            "Auth-Key": 'simplerestapi',
+          }),
+          data: formData);
+      if (response.statusCode == 200) {
+        GetDoctorAppointmentTimeSlotModel responseData =
+            GetDoctorAppointmentTimeSlotModel.fromJson(response.data);
+        Loader.hideLoader();
+        return responseData;
+      } else {
+        Loader.hideLoader();
+        throw Exception(response.data);
+      }
+    } on DioError catch (e) {
+      Loader.hideLoader();
+      debugPrint('Dio E  $e');
+    } finally {
+      Loader.hideLoader();
+    }
+    return null;
+  }
+
+  //----------------------------GET DOCTOR APPOINTMENT TIME SLOT LIST API-----------------------//
+  Future<GetDoctorAppointmentModel?> getDoctorAppointmentApi(
+    int status,
+  ) async {
+    try {
+      Loader.showLoader();
+      Response response;
+
+      String? id = await Preferances.getString("userId");
+      FormData formData = FormData.fromMap({
+        "loginid": id!.replaceAll('"', '').replaceAll('"', '').toString(),
+        "status": status,
+      });
+      response = await dio.post(EndPoints.getDoctorAppointmentList,
+          options: Options(headers: {
+            "Client-Service": "frontend-client",
+            "Auth-Key": 'simplerestapi',
+          }),
+          data: formData);
+      if (response.statusCode == 200) {
+        GetDoctorAppointmentModel responseData =
+            GetDoctorAppointmentModel.fromJson(response.data);
+        Loader.hideLoader();
+        return responseData;
+      } else {
+        Loader.hideLoader();
+        throw Exception(response.data);
+      }
+    } on DioError catch (e) {
+      Loader.hideLoader();
+      debugPrint('Dio E  $e');
+    } finally {
+      Loader.hideLoader();
+    }
+    return null;
+  }
+
+  //----------------------------UPADTE APPROVED BOOKING STATUS API-----------------------//
+  Future<void> updateApproveBookingStatusApi(BuildContext context,
+      {FormData? data}) async {
+    try {
+      Loader.showLoader();
+
+      Response response;
+      response = await dio.post(EndPoints.updateApproveBookingStatus,
+          options: Options(headers: {
+            "Client-Service": "frontend-client",
+            "Auth-Key": 'simplerestapi',
+          }),
+          data: data);
+      if (response.statusCode == 200) {
+        Loader.hideLoader();
+      } else {
+        Loader.hideLoader();
+        throw Exception(response);
       }
     } on DioError catch (e) {
       Loader.hideLoader();

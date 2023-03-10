@@ -30,4 +30,29 @@ class EndPoints {
       '$baseUrl/$get/get_transaction_history';
   static const String getTimeSlotByDoctor =
       '$baseUrl/$get/get_time_slot_by_doctorid';
+  static const String addDoctorBooking = '$baseUrl/$post/add_doctor_booking';
+  static const String getProfile = '$baseUrl/$get/get_profile_by_status';
+  static const String updateMyProfile =
+      '$baseUrl/$post/update_business_profile';
+  static const String uploadPrescriptionByPatient =
+      '$baseUrl/$post/upload_prescription_by_patient';
+  static const String getMeetingScheduleList =
+      '$baseUrl/$get/get_meeting_scedule_list';
+  static const String getMyOrder = '$baseUrl/$get/get_my_order_list';
+  static const String uploadReportToCustomer =
+      '$baseUrl/$post/upload_report_to_customer';
+  static const String uploadProfileAchievement =
+      '$baseUrl/$post/upload_profile_achivement';
+  static const String getDoctorAchievement =
+      '$baseUrl/$get/get_upload_profile_achivement';
+  static const String getDoctorAppointmentDistrict =
+      '$baseUrl/$get/get_doctor_appointment_district';
+  static const String getDoctorAppointmentByDays =
+      '$baseUrl/$get/get_doctor_appointment_by_days';
+  static const String getDoctorAppointmentTimeSlot =
+      '$baseUrl/$get/get_doctor_appointment_time_slot_list';
+  static const String getDoctorAppointmentList =
+      '$baseUrl/$get/get_doctor_appointment_list';
+  static const String updateApproveBookingStatus =
+      '$baseUrl/$post/update_approve_booking_status';
 }

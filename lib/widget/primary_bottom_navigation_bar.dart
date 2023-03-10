@@ -35,11 +35,6 @@ class PrimaryBottomNavigationBar extends StatelessWidget {
           activeIcon: _buildImageIcon(AppAsset.home),
         ),
         BottomNavigationBarItem(
-          label: 'My Appointment',
-          icon: _buildImageIcon(AppAsset.myAppointment),
-          activeIcon: _buildImageIcon(AppAsset.myAppointmentFill),
-        ),
-        BottomNavigationBarItem(
           label: 'My Order',
 
           icon: _buildImageIcon(AppAsset.order),
@@ -49,6 +44,11 @@ class PrimaryBottomNavigationBar extends StatelessWidget {
           label: 'Services',
           icon: _buildImageIcon(AppAsset.service),
           activeIcon: _buildImageIcon(AppAsset.serviceFill),
+        ),
+        BottomNavigationBarItem(
+          label: 'My Profile',
+          icon: _buildImageIcon(AppAsset.profile),
+          activeIcon: _buildImageIcon(AppAsset.profileFill),
         ),
       ],
     );

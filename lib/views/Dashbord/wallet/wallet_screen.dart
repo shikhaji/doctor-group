@@ -237,6 +237,7 @@ class _WalletScreenState extends State<WalletScreen> with ValidationMixin {
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
     paymentId = response.paymentId;
+    _amountController.clear();
 
     try {
       ApiService()

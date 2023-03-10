@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:doctor_on_call/utils/app_color.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 class FileUtils {
@@ -11,6 +14,21 @@ class FileUtils {
   static final lastWeekDate = DateTime.now().subtract(const Duration(days: 6));
   static final lastMonthDate =
       DateTime.now().subtract(const Duration(days: 29));
+
+  static final ImagePicker _picker = ImagePicker();
+
+  static pickImage(ImageSource source) async {
+    try {
+      XFile? image = await _picker.pickImage(source: source);
+
+      if (image != null) {
+        return File(image.path);
+      }
+      return null;
+    } catch (e) {
+      return null;
+    }
+  }
 
   static Future<DateTime?> pickDate(BuildContext context) async {
     final DateTime? selectedTime = await showDatePicker(

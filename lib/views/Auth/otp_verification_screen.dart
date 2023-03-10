@@ -8,6 +8,7 @@ import '../../models/auth_result.dart';
 import '../../routs/app_routs.dart';
 import '../../routs/arguments.dart';
 import '../../utils/app_color.dart';
+import '../../utils/app_sizes.dart';
 import '../../utils/app_text.dart';
 import '../../utils/app_text_style.dart';
 import '../../utils/function.dart';
@@ -29,7 +30,7 @@ class OtpVerificationScreen extends StatefulWidget {
 
 class _OtpVerificationScreenState extends State<OtpVerificationScreen>
     with ValidationMixin {
-  TextEditingController _controller = TextEditingController(text: "");
+  final TextEditingController _controller = TextEditingController(text: "");
   int pinLength = 6;
   int _seconds = -1;
   Timer? _timer;
@@ -122,6 +123,25 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen>
                     if (result.status) {}
                   }
                 }),
+            SizedBox(height: Sizes.s30.h),
+            if (_timer?.isActive ?? false)
+              Center(
+                child: Text(
+                  _seconds.toString(),
+                  style: TextStyle(
+                    fontSize: Sizes.s18.sp,
+                  ),
+                ),
+              )
+            else if (_seconds != -1)
+              GestureDetector(
+                  onTap: () async => sendCode(),
+                  child: Center(
+                    child: appText(
+                      'Resend Code',
+                      style: AppTextStyle.redTextStyle,
+                    ),
+                  )),
           ],
         ),
       ),
@@ -129,6 +149,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen>
   }
 
   Future<void> sendCode() async {
+    Loader.showLoader();
     await FirebaseAuth.instance.verifyPhoneNumber(
       phoneNumber: "${"+91"}${widget.arguments?.phoneNumber}",
       verificationCompleted: (PhoneAuthCredential credential) {},
@@ -140,6 +161,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen>
         }
       },
       codeSent: (String verificationId, int? resendToken) {
+        Loader.hideLoader();
         _verificationId = verificationId;
         setState(() {});
         _startTimer();

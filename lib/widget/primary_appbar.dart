@@ -152,10 +152,12 @@ class _TabAppBarState extends State<TabAppBar> {
       ],
       leading: InkWell(
         highlightColor: Colors.transparent,
-        onTap: widget.onTap,
+        onTap: () {
+          Navigator.pop(context);
+        },
         child: Padding(
             padding: const EdgeInsets.all(10),
-            child: Center(child: widget.leading)),
+            child: Center(child: Icon(Icons.arrow_back_ios))),
       ),
       bottom: widget.bottom,
     );

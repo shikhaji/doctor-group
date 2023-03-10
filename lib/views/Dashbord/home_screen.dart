@@ -6,17 +6,19 @@ import 'package:doctor_on_call/services/api_services.dart';
 import 'package:doctor_on_call/utils/app_asset.dart';
 import 'package:doctor_on_call/utils/app_color.dart';
 import 'package:doctor_on_call/utils/app_text.dart';
+import 'package:doctor_on_call/utils/app_text_style.dart';
 import 'package:doctor_on_call/widget/custom_sized_box.dart';
+import 'package:doctor_on_call/widget/primary_botton.dart';
 import 'package:doctor_on_call/widget/scrollview.dart';
 import 'package:flutter/material.dart';
 import 'package:marquee/marquee.dart';
+import '../../models/get_profile_model.dart';
 import '../../models/slider_model.dart';
 import '../../routs/app_routs.dart';
 import '../../services/shared_referances.dart';
 import '../../utils/app_sizes.dart';
 import '../../utils/screen_utils.dart';
 import '../../widget/custom_container_box.dart';
-import '../../widget/dailogs/location_dailog.dart';
 import '../../widget/drawer_widget.dart';
 import '../../widget/primary_appbar.dart';
 
@@ -39,7 +41,8 @@ class _HomeScreenState extends State<HomeScreen> {
     _scaffoldKey.currentState?.openDrawer();
   }
 
-  String? state, city, stateId;
+  String userTypeValue = "";
+  GetProfileData? getProfileData;
 
   @override
   void initState() {
@@ -49,25 +52,37 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> callApi() async {
-    state = await Preferances.getString("stateName");
-    city = await Preferances.getString("cityName");
-    stateId = await Preferances.getString("stateId");
-    if (stateId == null) {
-      stateId = "0";
-    }
-    FormData data() {
-      return FormData.fromMap({
-        "districtid": stateId?.replaceAll('"', '').toString(),
-      });
-    }
+    String userType = await Preferances.prefGetString("userType", '');
+    String? id = await Preferances.getString("userId");
+    ApiService()
+        .getProfileData(id!.replaceAll('"', '').replaceAll('"', '').toString())
+        .then((value) {
+      if (value != null) {
+        setState(() {
+          getProfileData = value.profile;
+        });
+        print(
+            "getprofile data:=${getProfileData != null ? getProfileData!.stateId : ""}");
+      }
+    });
 
-    ApiService().slider(context, data: data()).then((value) {
+    setState(() {
+      userTypeValue =
+          userType.replaceAll('"', '').replaceAll('"', '').toString();
+    });
+
+    await ApiService()
+        .slider(context,
+            data: FormData.fromMap({
+              "districtid": getProfileData?.stateId,
+            }))
+        .then((value) {
       setState(() {
         sliderImageList = value.message!;
       });
     });
 
-    ApiService().latestNews(context).then((value) {
+    await ApiService().latestNews(context).then((value) {
       setState(() {
         latestNewsList = value.message!.notice!;
       });
@@ -93,33 +108,51 @@ class _HomeScreenState extends State<HomeScreen> {
         body: CustomScroll(
           children: [
             SizedBoxH18(),
-            Container(
-                height: 50,
-                padding: const EdgeInsets.only(top: 1, bottom: 1),
-                decoration: BoxDecoration(
-                  color: AppColor.textFieldColor,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: latestNewsList.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return SizedBox(
-                        height: 30,
-                        child: Marquee(
-                          scrollAxis: Axis.horizontal,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          blankSpace: 20.0,
-                          startPadding: 10.0,
-                          accelerationDuration: const Duration(seconds: 1),
-                          accelerationCurve: Curves.linear,
-                          textDirection: TextDirection.ltr,
-                          text:
-                              '${latestNewsList[index].newsDesc}  ${latestNewsList[index].newsLink}',
-                          style: const TextStyle(fontWeight: FontWeight.bold),
+            latestNewsList.isNotEmpty
+                ? Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(Sizes.s18),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        color: AppColor.newsColor),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Image.asset(
+                          AppAsset.newsIcon,
+                          height: Sizes.s80,
                         ),
-                      );
-                    })),
+                        Column(
+                          children: [
+                            Text(
+                              "You want to know latest \n news CLICK HERE,",
+                              style: AppTextStyle.greySubTitle
+                                  .copyWith(fontSize: Sizes.s14),
+                            ),
+                            SizedBoxH14(),
+                            GestureDetector(
+                                onTap: () {
+                                  Navigator.pushNamed(context, Routs.news);
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.all(Sizes.s12),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(14),
+                                      color: AppColor.primaryLightColor),
+                                  child: Text(
+                                    "LATEST NEWS",
+                                    style: AppTextStyle.appBarTitle.copyWith(
+                                      color: AppColor.white,
+                                      fontSize: Sizes.s14,
+                                    ),
+                                  ),
+                                ))
+                          ],
+                        )
+                      ],
+                    ),
+                  )
+                : const SizedBox.shrink(),
             SizedBoxH18(),
             SizedBox(
               width: double.infinity,
@@ -148,7 +181,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     aspectRatio: 15 / 8,
                     viewportFraction: 1,
                     initialPage: 0,
-                    autoPlay: false,
+                    autoPlay: true,
                     enableInfiniteScroll: false,
                     autoPlayInterval: const Duration(seconds: 3),
                     autoPlayAnimationDuration:
@@ -175,7 +208,11 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: EdgeInsets.zero,
               cacheExtent: 30,
               physics: const ClampingScrollPhysics(),
-              itemCount: _homeData.length,
+              itemCount: userTypeValue == "1"
+                  ? _homeDataDoctor.length
+                  : userTypeValue == "2"
+                      ? _homeDataPatient.length
+                      : _homeData.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 childAspectRatio: 12 / 9,
@@ -185,15 +222,32 @@ class _HomeScreenState extends State<HomeScreen> {
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {
-                    Navigator.pushNamed(
-                      context,
-                      _homeData[index].onPressed.toString(),
-                    );
+                    userTypeValue == "1"
+                        ? Navigator.pushNamed(
+                            context,
+                            _homeDataDoctor[index].onPressed.toString(),
+                          )
+                        : userTypeValue == "2"
+                            ? Navigator.pushNamed(
+                                context,
+                                _homeDataPatient[index].onPressed.toString(),
+                              )
+                            : Navigator.pushNamed(
+                                context,
+                                _homeData[index].onPressed.toString(),
+                              );
                   },
                   child: CustomContainerBox(
-                    title: _homeData[index].name.toString(),
-                    icon: _homeData[index].icon.toString(),
-                  ),
+                      title: userTypeValue == "1"
+                          ? _homeDataDoctor[index].name.toString()
+                          : userTypeValue == "2"
+                              ? _homeDataPatient[index].name.toString()
+                              : _homeData[index].name.toString(),
+                      icon: userTypeValue == "1"
+                          ? _homeDataDoctor[index].icon.toString()
+                          : userTypeValue == "2"
+                              ? _homeDataPatient[index].icon.toString()
+                              : _homeData[index].icon.toString()),
                 );
               },
             ),
@@ -210,50 +264,55 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 IconButton(
                     onPressed: () {
-                      LocationDailog.show(context).then((value) {
-                        setState(() async {
-                          state = value.state;
-                          city = value.city;
-                          stateId = value.stateId;
-                          FormData data() {
-                            return FormData.fromMap({
-                              "districtid":
-                                  stateId?.replaceAll('"', '').toString(),
-                            });
-                          }
-                          ApiService()
-                              .slider(context, data: data())
-                              .then((value) {
-                            setState(() {
-                              sliderImageList = value.message!;
-                            });
-
-                          });
-                          await callApi();
-                        });
-                      });
+                      Navigator.pushNamed(context, Routs.myLocation);
                     },
                     icon: const Icon(
                       Icons.location_on_rounded,
                       color: AppColor.orange,
                     )),
-                state != null && city != null
-                    ? appText("${city!.replaceAll('"', '').toString()}")
-                    : SizedBox.shrink()
+                getProfileData != null && getProfileData?.districtName != null
+                    ? appText("${getProfileData!.districtName}")
+                    : const SizedBox.shrink()
               ],
             )));
   }
 
-  final List<HomeData> _homeData = [
+  final List<HomeData> _homeDataDoctor = [
     HomeData(
         name: 'Meeting Schedule',
         icon: AppAsset.meetingSchedule,
         onPressed: Routs.meetingSchedule),
     HomeData(name: 'Wallets', icon: AppAsset.wallets, onPressed: Routs.wallet),
     HomeData(
-      name: 'Clients',
-      icon: AppAsset.myAppointmentIcon,
-    ),
+        name: 'Patient Appointment',
+        icon: AppAsset.patientAppointment,
+        onPressed: Routs.myAppointment),
+    HomeData(
+        name: 'My Appointment',
+        icon: AppAsset.myAppointmentIcon,
+        onPressed: Routs.myAppointment),
+    HomeData(
+        name: 'Add Achievement',
+        icon: AppAsset.achievement,
+        onPressed: Routs.addAchievement),
+  ];
+  final List<HomeData> _homeData = [
+    HomeData(name: 'Wallets', icon: AppAsset.wallets, onPressed: Routs.wallet),
+    HomeData(
+        name: 'Patient Appointment',
+        icon: AppAsset.patientAppointment,
+        onPressed: Routs.myAppointment),
+    HomeData(
+        name: 'My Appointment',
+        icon: AppAsset.myAppointmentIcon,
+        onPressed: Routs.myAppointment),
+  ];
+  final List<HomeData> _homeDataPatient = [
+    HomeData(name: 'Wallets', icon: AppAsset.wallets, onPressed: Routs.wallet),
+    HomeData(
+        name: 'My Appointment',
+        icon: AppAsset.myAppointmentIcon,
+        onPressed: Routs.myAppointment),
   ];
 }
 

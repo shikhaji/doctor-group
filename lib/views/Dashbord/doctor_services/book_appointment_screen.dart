@@ -5,11 +5,15 @@ import 'package:doctor_on_call/utils/file_utils.dart';
 import 'package:doctor_on_call/utils/validation_mixin.dart';
 import 'package:doctor_on_call/widget/primary_botton.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 
 import '../../../models/get_days_model.dart';
+import '../../../models/get_profile_model.dart';
 import '../../../models/get_time_slot_by_doctor_model.dart';
 import '../../../models/state_model.dart';
 import '../../../routs/arguments.dart';
+import '../../../services/shared_referances.dart';
 import '../../../utils/app_color.dart';
 import '../../../utils/app_sizes.dart';
 import '../../../utils/app_text.dart';
@@ -34,15 +38,17 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen>
   final TextEditingController _patientName = TextEditingController();
   final TextEditingController _address = TextEditingController();
   final TextEditingController _des = TextEditingController();
-  final TextEditingController _state = TextEditingController();
   List<GetDaysList?> getDaysList = [];
   List<TimeSlotByDoctorList?> timeSlotByDoctorList = [];
   var selectDay = "1";
+  String appointmentDate = "";
+  var selectTime = "";
   final _formKey = GlobalKey<FormState>();
-  StateModel stateModel = StateModel();
+
   @override
   void initState() {
     super.initState();
+    getProfile();
     ApiService().getDaysList().then((value) {
       getDaysList = value!.data;
       setState(() {});
@@ -54,7 +60,24 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen>
               "dayid": 1,
             }))
         .then((value) {
-      timeSlotByDoctorList = value!.data;
+      setState(() {
+        timeSlotByDoctorList = value!.data;
+      });
+    });
+  }
+
+  GetProfileData? getProfileData;
+
+  Future<void> getProfile() async {
+    String? id = await Preferances.getString("userId");
+    ApiService()
+        .getProfileData(id!.replaceAll('"', '').replaceAll('"', '').toString())
+        .then((value) {
+      if (value != null) {
+        setState(() {
+          getProfileData = value.profile;
+        });
+      }
     });
   }
 
@@ -65,53 +88,99 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen>
           title: "Book Appointment",
           isLeading: true,
         ),
-        body: CustomScroll(
-          children: [
-            const SizedBox(
-              height: 20,
-            ),
-            Row(
+        body: Form(
+            key: _formKey,
+            child: CustomScroll(
               children: [
-                Expanded(
-                    child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                const SizedBox(
+                  height: 20,
+                ),
+                Row(
                   children: [
-                    appText("Doctor Name", style: AppTextStyle.alertSubtitle),
-                    appText("Dr.Hina  Patel",
-                        style: AppTextStyle.appBarTextTitle)
+                    Expanded(
+                        child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        appText("Doctor Name",
+                            style: AppTextStyle.alertSubtitle),
+                        appText("Dr. ${widget.arguments?.doctorName}",
+                            style: AppTextStyle.appBarTextTitle)
+                      ],
+                    )),
+                    appText("rs.300/-",
+                        style: AppTextStyle.redTextStyle
+                            .copyWith(fontSize: Sizes.s20)),
                   ],
-                )),
-                appText("rs.300/-",
-                    style: AppTextStyle.redTextStyle
-                        .copyWith(fontSize: Sizes.s20)),
+                ),
+                SizedBoxH34(),
+                Row(
+                  children: [
+                    const Icon(Icons.calendar_today_outlined),
+                    SizedBoxW6(),
+                    appText("Select Date", style: AppTextStyle.lable),
+                  ],
+                ),
+                SizedBoxH10(),
+                _buildDateView(),
+                SizedBoxH34(),
+                Row(
+                  children: [
+                    const Icon(Icons.calendar_today_outlined),
+                    SizedBoxW6(),
+                    appText("Select Time", style: AppTextStyle.lable),
+                  ],
+                ),
+                SizedBoxH10(),
+                _buildTimeView(),
+                SizedBoxH34(),
+                _buildFormView(),
+                SizedBoxH34(),
+                PrimaryButton(
+                    lable: "Confirm Appointment",
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        if (selectDay == "") {
+                          Fluttertoast.showToast(
+                            msg: 'Please Select Date',
+                            backgroundColor: Colors.grey,
+                          );
+                        } else if (selectTime == "") {
+                          Fluttertoast.showToast(
+                            msg: 'Please Select Time',
+                            backgroundColor: Colors.grey,
+                          );
+                        } else {
+                          String? id = await Preferances.getString("userId");
+                          print("selectDay:=${selectDay}");
+                          print(
+                              "district_id:=${getProfileData?.branchDistrictId}");
+                          print("doctorid:=${widget.arguments!.doctorId}");
+                          print("appointment_slot:=${selectTime}");
+                          print("loginid:=${id}");
+                          FormData data() {
+                            return FormData.fromMap({
+                              "doctorid": widget.arguments!.doctorId,
+                              "patient_name": _patientName.text.trim(),
+                              "patient_mobile": _phoneNumber.text.trim(),
+                              "patient_address": _address.text.trim(),
+                              "appointment_slot": selectTime,
+                              "appointment_type": 1,
+                              "loginid": id!
+                                  .replaceAll('"', '')
+                                  .replaceAll('"', '')
+                                  .toString(),
+                              "desc": _des.text.trim(),
+                              "district_id": getProfileData?.branchDistrictId,
+                              "appointment_date": selectDay,
+                            });
+                          }
+
+                          ApiService().addDoctorBooking(context, data: data());
+                        }
+                      }
+                    })
               ],
-            ),
-            SizedBoxH34(),
-            Row(
-              children: [
-                const Icon(Icons.calendar_today_outlined),
-                SizedBoxW6(),
-                appText("Select Date", style: AppTextStyle.lable),
-              ],
-            ),
-            SizedBoxH10(),
-            _buildDateView(),
-            SizedBoxH34(),
-            Row(
-              children: [
-                const Icon(Icons.calendar_today_outlined),
-                SizedBoxW6(),
-                appText("Select Time", style: AppTextStyle.lable),
-              ],
-            ),
-            SizedBoxH10(),
-            _buildTimeView(),
-            SizedBoxH34(),
-            _buildFormView(),
-            SizedBoxH34(),
-            PrimaryButton(lable: "Confirm Appointment", onPressed: () {})
-          ],
-        ));
+            )));
   }
 
   Widget _buildDateView() {
@@ -122,8 +191,10 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen>
           return GestureDetector(
             onTap: () {
               selectDay = getDaysList[index]!.dlId;
+              appointmentDate = DateFormat('yyyy-mm-dd')
+                  .format(DateTime.parse(getDaysList[index]!.dlTt.toString()))
+                  .toString();
               setState(() {});
-              print("Selected Days := ${getDaysList[index]!.dlId}");
               ApiService()
                   .getTimeSlotByDoctor(context,
                       data: FormData.fromMap({
@@ -131,8 +202,9 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen>
                         "dayid": getDaysList[index]!.dlId,
                       }))
                   .then((value) {
-                print("api call for time");
-                timeSlotByDoctorList = value!.data;
+                setState(() {
+                  timeSlotByDoctorList = value!.data;
+                });
               });
             },
             child: Container(
@@ -170,6 +242,17 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen>
                     ],
                   ),
                   Text(
+                    //MMM dd yyyy
+                    DateFormat('MMM dd yyyy')
+                        .format(
+                            DateTime.parse(getDaysList[index]!.dlTt.toString()))
+                        .toString(),
+                    style: getDaysList[index]!.dlId == selectDay
+                        ? AppTextStyle.timeTitle
+                        : AppTextStyle.timeTitle
+                            .copyWith(color: AppColor.black),
+                  ),
+                  Text(
                     getDaysList[index]!.dlName,
                     style: getDaysList[index]!.dlId == selectDay
                         ? AppTextStyle.timeTitle
@@ -190,16 +273,12 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen>
       scrollDirection: Axis.horizontal,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: List.generate(timeSlotByDoctorList.length, (index) {
-          print("timeSlotByDoctorList.length:-${timeSlotByDoctorList.length}");
           return GestureDetector(
             onTap: () {
-              // getTimeSlotList[index]!.selectTime =
-              // !getTimeSlotList[index]!.selectTime;
-              // setState(() {});
-              // selectTimeList.add("${getTimeSlotList[index]!.dTSID}");
-              //
-              // print("Selected selectTimeList := ${selectTimeList}");
+              selectTime = timeSlotByDoctorList[index]!.dmsId;
+              setState(() {});
             },
             child: Container(
               margin: const EdgeInsets.all(Sizes.s8),
@@ -214,10 +293,10 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen>
                       color: Colors.grey.withOpacity(0.4), //color of shadow
                       spreadRadius: 2, //spread radius
                       blurRadius: 2, // blur radius
-                      offset: Offset(0, 2),
+                      offset: const Offset(0, 2),
                     )
                   ],
-                  color: timeSlotByDoctorList[index]?.dtsTime == true
+                  color: timeSlotByDoctorList[index]!.dmsId == selectTime
                       ? AppColor.orange
                       : AppColor.white,
                   borderRadius: BorderRadius.circular(Sizes.s12)),
@@ -229,7 +308,7 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen>
                       Icon(
                         Icons.check,
                         size: Sizes.s18,
-                        color: timeSlotByDoctorList[index]!.dtsTime == true
+                        color: timeSlotByDoctorList[index]!.dmsId == selectTime
                             ? AppColor.white
                             : AppColor.white,
                       )
@@ -237,7 +316,7 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen>
                   ),
                   Text(
                     "${timeSlotByDoctorList[index]!.dtsTime}",
-                    style: timeSlotByDoctorList[index]!.dtsTime == true
+                    style: timeSlotByDoctorList[index]!.dmsId == selectTime
                         ? AppTextStyle.timeTitle
                         : AppTextStyle.timeTitle
                             .copyWith(color: AppColor.black),
@@ -252,71 +331,56 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen>
   }
 
   Widget _buildFormView() {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(Sizes.s12),
-        color: AppColor.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5), //color of shadow
-            spreadRadius: 3, //spread radius
-            blurRadius: 5, // blur radius
-            offset: const Offset(0, 3),
-          )
-        ],
-      ),
-      padding: const EdgeInsets.only(
-          top: Sizes.s24, bottom: Sizes.s24, left: Sizes.s12, right: Sizes.s12),
-      child: Column(
-        children: [
-          PrimaryTextField(
-            controller: _phoneNumber,
-            hintText: "Enter Mobile No.",
-            validator: mobileNumberValidator,
-            prefix: const Icon(Icons.phone),
-            keyboardInputType: TextInputType.phone,
-          ),
-          PrimaryTextField(
-            controller: _patientName,
-            hintText: "Enter Patient Name",
-            validator: patientNameValidation,
-            prefix: const Icon(Icons.person),
-          ),
-          PrimaryTextField(
-            controller: _address,
-            hintText: "Enter Address",
-            validator: addressValidation,
-            prefix: const Icon(Icons.home),
-          ),
-          PrimaryTextField(
-            controller: _state,
-            readOnly: true,
-            hintText: "Select State",
-            suffix: Icon(
-              Icons.arrow_drop_down,
-              size: Sizes.s30.h,
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(Sizes.s12),
+          color: AppColor.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5), //color of shadow
+              spreadRadius: 3, //spread radius
+              blurRadius: 5, // blur radius
+              offset: const Offset(0, 3),
+            )
+          ],
+        ),
+        padding: const EdgeInsets.only(
+            top: Sizes.s24,
+            bottom: Sizes.s24,
+            left: Sizes.s12,
+            right: Sizes.s12),
+        child: Column(
+          children: [
+            PrimaryTextField(
+              controller: _phoneNumber,
+              hintText: "Enter Mobile No.",
+              validator: mobileNumberValidator,
+              prefix: const Icon(Icons.phone),
+              keyboardInputType: TextInputType.phone,
             ),
-            onTap: () async {
-              stateModel = await StatePickerDailog.show(context);
-              _state.text = stateModel.stateName ?? '';
-
-              setState(() {});
-            },
-            validator: (value) {
-              if (value!.isEmpty) {
-                return 'Please select state';
-              } else {
-                return null;
-              }
-            },
-          ),
-          PrimaryTextField(
-            controller: _des,
-            hintText: "Enter Description",
-            validator: descriptionValidation,
-            prefix: const Icon(Icons.note),
-          ),
-        ],
+            PrimaryTextField(
+              controller: _patientName,
+              hintText: "Enter Patient Name",
+              validator: patientNameValidation,
+              prefix: const Icon(Icons.person),
+            ),
+            PrimaryTextField(
+              controller: _address,
+              hintText: "Enter Address",
+              validator: addressValidation,
+              prefix: const Icon(Icons.home),
+            ),
+            PrimaryTextField(
+              controller: _des,
+              maxLines: 5,
+              hintText: "Enter Description",
+              validator: descriptionValidation,
+              // prefix: const Icon(Icons.note),
+            ),
+          ],
+        ),
       ),
     );
   }

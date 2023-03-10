@@ -1,11 +1,17 @@
 import 'dart:io';
 
 import 'package:date_picker_timeline/extra/color.dart';
+import 'package:dio/dio.dart';
 import 'package:doctor_on_call/widget/primary_botton.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:r_dotted_line_border/r_dotted_line_border.dart';
+import '../../../services/api_services.dart';
+import '../../../services/shared_referances.dart';
 import '../../../utils/app_color.dart';
 import '../../../utils/app_sizes.dart';
 import '../../../utils/app_text.dart';
@@ -30,7 +36,7 @@ class _PathologyAndChemistFormScreenState
   final TextEditingController _referredBy = TextEditingController();
   final TextEditingController _description = TextEditingController();
   XFile? selectedDocument;
-
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,45 +48,78 @@ class _PathologyAndChemistFormScreenState
             child: Padding(
           padding: EdgeInsets.symmetric(
               horizontal: Sizes.s16.h, vertical: Sizes.s28.h),
-          child: PrimaryButton(lable: "Done", onPressed: () {}),
-        )),
-        body: CustomScroll(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(
-              height: 20,
-            ),
-            appText("Referred By", style: AppTextStyle.lable),
-            SizedBoxH8(),
-            PrimaryTextField(
-              controller: _referredBy,
-              hintText: "Referred By",
-              // validator: mobileNumberValidator,
-              prefix: const Icon(Icons.phone),
-              keyboardInputType: TextInputType.phone,
-            ),
-            SizedBoxH10(),
-            appText("Description", style: AppTextStyle.lable),
-            SizedBoxH8(),
-            PrimaryTextField(
-              controller: _description,
-              hintText: "Description",
+          child: PrimaryButton(
+              lable: "Done",
+              onPressed: () async {
+                if (_formKey.currentState!.validate()) {
+                  if (selectedDocument!.path == null) {
+                    Fluttertoast.showToast(
+                      msg: 'Please Upload Prescription',
+                      backgroundColor: Colors.grey,
+                    );
+                  } else {
+                    String? id = await Preferances.getString("userId");
+                    print("selectedDocument!.path:=${selectedDocument!.path}");
+                    var file =
+                        await MultipartFile.fromFile(selectedDocument!.path);
+                    print("pass file:=${file}");
+                    FormData data() {
+                      return FormData.fromMap({
+                        "loginid": id!
+                            .replaceAll('"', '')
+                            .replaceAll('"', '')
+                            .toString(),
+                        "referby": _referredBy.text.trim(),
+                        "desc": _description.text.trim(),
+                        "fileToUpload": file,
+                      });
+                    }
 
-              // validator: patientNameValidation,
-              prefix: const Icon(Icons.person),
-            ),
-            appText("Upload Prescription", style: AppTextStyle.lable),
-            SizedBoxH8(),
-            InkWell(
-              onTap: () => showDialogForUserImage(1),
-              child: uploadBox(
-                'Upload Image',
-                selectedDocument != null ? selectedDocument!.path : '',
+                    ApiService()
+                        .uploadPrescriptionByPatient(context, data: data());
+                  }
+                }
+              }),
+        )),
+        body: Form(
+          key: _formKey,
+          child: CustomScroll(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(
+                height: 20,
               ),
-            ),
-            SizedBoxH34(),
-            SizedBoxH34(),
-          ],
+              appText("Referred By", style: AppTextStyle.lable),
+              SizedBoxH8(),
+              PrimaryTextField(
+                controller: _referredBy,
+                hintText: "Referred By",
+                // validator: mobileNumberValidator,
+                prefix: const Icon(Icons.verified_user_sharp),
+              ),
+              SizedBoxH10(),
+              appText("Description", style: AppTextStyle.lable),
+              SizedBoxH8(),
+              PrimaryTextField(
+                controller: _description,
+                hintText: "Description",
+
+                // validator: patientNameValidation,
+                prefix: const Icon(Icons.person),
+              ),
+              appText("Upload Prescription", style: AppTextStyle.lable),
+              SizedBoxH8(),
+              InkWell(
+                onTap: () => showDialogForUserImage(1),
+                child: uploadBox(
+                  'Upload Image',
+                  selectedDocument != null ? selectedDocument!.path : '',
+                ),
+              ),
+              SizedBoxH34(),
+              SizedBoxH34(),
+            ],
+          ),
         ));
   }
 
