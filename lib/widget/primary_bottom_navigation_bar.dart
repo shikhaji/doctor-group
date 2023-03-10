@@ -41,6 +41,7 @@ class PrimaryBottomNavigationBar extends StatelessWidget {
         ),
         BottomNavigationBarItem(
           label: 'My Order',
+
           icon: _buildImageIcon(AppAsset.order),
           activeIcon: _buildImageIcon(AppAsset.orderFill),
         ),

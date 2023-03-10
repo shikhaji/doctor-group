@@ -14,3 +14,4 @@ class SendArguments {
       this.catId,
       this.doctorId});
 }
+

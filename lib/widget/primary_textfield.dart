@@ -2,7 +2,6 @@ import 'package:doctor_on_call/utils/app_color.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import '../utils/app_sizes.dart';
 import '../utils/app_text.dart';
 import '../utils/app_text_style.dart';

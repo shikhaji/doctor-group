@@ -82,6 +82,11 @@ class _MeetingScheduleState extends State<MeetingSchedule>
               } else {
                 String? id = await Preferances.getString("userId");
                 print("selectTimeList pass:=${selectTimeList}");
+                print("selectTimeList pass:=${id!.replaceAll('"', '').replaceAll('"', '').toString()}");
+                print("selectTimeList pass:=${selectDay}");
+                print("selectTimeList pass:=${stateModel.stateId}");
+                print("selectTimeList pass:=${cityModel.districtId}");
+
                 FormData data() {
                   return FormData.fromMap({
                     "login_id":
