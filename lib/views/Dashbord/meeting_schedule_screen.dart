@@ -179,16 +179,6 @@ class _MeetingScheduleState extends State<MeetingSchedule>
                             ],
                           ),
                           Text(
-                            DateFormat('MMM dd yyyy')
-                                .format(DateTime.parse(
-                                    getDaysList[index]!.dlTt.toString()))
-                                .toString(),
-                            style: getDaysList[index]!.dlId == selectDay
-                                ? AppTextStyle.timeTitle
-                                : AppTextStyle.timeTitle
-                                    .copyWith(color: AppColor.black),
-                          ),
-                          Text(
                             getDaysList[index]!.dlName,
                             style: getDaysList[index]!.dlId == selectDay
                                 ? AppTextStyle.timeTitle

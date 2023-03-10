@@ -55,7 +55,7 @@ class _AddAchievementScreenState extends State<AddAchievementScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-      floatingActionButton: achievementList.length > 0
+      floatingActionButton: achievementList != []
           ? Padding(
               padding: EdgeInsets.all(30),
               child: FloatingActionButton(
