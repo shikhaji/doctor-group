@@ -47,14 +47,12 @@ class _LoginScreenState extends State<LoginScreen> with ValidationMixin {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBoxH34(),
-            SizedBoxH34(),
-            SizedBoxH34(),
             Center(
-              child: appText("Doctor on call",
-                  style: AppTextStyle.appName
-                      .copyWith(color: AppColor.primaryColor)),
+              child: Image.asset(
+                AppAsset.logo,
+                height: Sizes.s150,
+              ),
             ),
-            SizedBoxH28(),
             SizedBoxH28(),
             appText("Login", style: AppTextStyle.title),
             SizedBoxH6(),

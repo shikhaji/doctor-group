@@ -125,15 +125,16 @@ class _AddAchievementScreenState extends State<AddAchievementScreen> {
                       mainAxisSpacing: Sizes.s20.h,
                     ),
                     itemBuilder: (BuildContext context, int index) {
-                      return ClipRRect(
-                        borderRadius: BorderRadius.circular(16),
-                        child: Image.network(
-                          "https://appointment.doctoroncalls.in/uploads/${achievementList[index].daFileName}",
-                          width: double.infinity,
-                          fit: BoxFit.cover,
-                        ),
-                        // child: Image.file(File(achievementList[index].daFileName),
-                        //     width: double.infinity, fit: BoxFit.cover)
+                      return Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(color: AppColor.textFieldColor),
+                            image: DecorationImage(
+                              image: NetworkImage(
+                                "https://appointment.doctoroncalls.in/uploads/${achievementList[index].daFileName}",
+                              ),
+                              fit: BoxFit.cover,
+                            )),
                       );
                     }),
               ],

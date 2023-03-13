@@ -46,4 +46,7 @@ class AppAsset {
   static const String mapViewImg = "${imagePath}map_view.jpg";
   static const String dummyAvatar = "${imagePath}dummyAvatar_img.jpg";
   static const String camera = "${iconPath}camera.svg";
+
+  //LOGO
+  static const String logo = "${imagePath}logo.png";
 }

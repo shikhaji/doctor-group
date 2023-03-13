@@ -38,35 +38,39 @@ class _NewsScreenState extends State<NewsScreen> {
           Navigator.pop(context);
         },
       ),
-      body: CustomScroll(
-        children: [
-          SizedBoxH18(),
-          SizedBoxH18(),
-          ListView.separated(
-            shrinkWrap: true,
-            itemCount: latestNewsList.length,
-            separatorBuilder: (BuildContext context, int inx) =>
-                const Divider(),
-            itemBuilder: (BuildContext context, int inx) {
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    latestNewsList[inx].newsDesc,
-                    style: AppTextStyle.textFieldFont,
-                  ),
-                  Text(
-                    latestNewsList[inx].newsLink,
-                    style:
-                        AppTextStyle.redTextStyle.copyWith(color: Colors.red),
-                  ),
-                ],
-              );
-            },
-          ),
-        ],
-      ),
+      body: latestNewsList.isEmpty
+          ? const Center(
+              child: Text("No News", style: AppTextStyle.blackSubTitle),
+            )
+          : CustomScroll(
+              children: [
+                SizedBoxH18(),
+                SizedBoxH18(),
+                ListView.separated(
+                  shrinkWrap: true,
+                  itemCount: latestNewsList.length,
+                  separatorBuilder: (BuildContext context, int inx) =>
+                      const Divider(),
+                  itemBuilder: (BuildContext context, int inx) {
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          latestNewsList[inx].newsDesc,
+                          style: AppTextStyle.textFieldFont,
+                        ),
+                        Text(
+                          latestNewsList[inx].newsLink,
+                          style: AppTextStyle.redTextStyle
+                              .copyWith(color: Colors.red),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ],
+            ),
     );
   }
 }

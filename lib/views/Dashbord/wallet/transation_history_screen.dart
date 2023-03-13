@@ -34,40 +34,46 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
     return Scaffold(
         backgroundColor: AppColor.white,
         body: SafeArea(
-            child: CustomScroll(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBoxH28(),
-            ListView.builder(
-                itemCount: transactionHistoryList.length,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: (BuildContext context, int index) {
-                  return ListTile(
-                    leading: const Icon(Icons.wallet_giftcard_outlined),
-                    title: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          transactionHistoryList[index].branchName,
-                          style: AppTextStyle.textFieldFont,
-                        ),
-                        Text(
-                          transactionHistoryList[index].cwtDate != ""
-                              ? "Payment on ${DateFormat('MMM dd, hh:mma').format(DateTime.parse(transactionHistoryList[index].cwtTt.toString())).toString()}"
-                              : "",
-                          style: AppTextStyle.subTitle2,
-                        ),
-                      ],
-                    ),
-                    trailing: Text(
-                        "+ ${transactionHistoryList[index].cwtAmount}",
-                        style: AppTextStyle.greySubTitle
-                            .copyWith(color: Colors.green)),
-                  );
-                })
-          ],
-        )),
+            child: transactionHistoryList.isEmpty
+                ? const Center(
+                    child: Text("No Transaction History",
+                        style: AppTextStyle.blackSubTitle),
+                  )
+                : CustomScroll(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBoxH28(),
+                      ListView.builder(
+                          itemCount: transactionHistoryList.length,
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemBuilder: (BuildContext context, int index) {
+                            return ListTile(
+                              leading:
+                                  const Icon(Icons.wallet_giftcard_outlined),
+                              title: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    transactionHistoryList[index].branchName,
+                                    style: AppTextStyle.textFieldFont,
+                                  ),
+                                  Text(
+                                    transactionHistoryList[index].cwtDate != ""
+                                        ? "Payment on ${DateFormat('MMM dd, hh:mma').format(DateTime.parse(transactionHistoryList[index].cwtTt.toString())).toString()}"
+                                        : "",
+                                    style: AppTextStyle.subTitle2,
+                                  ),
+                                ],
+                              ),
+                              trailing: Text(
+                                  "+ ${transactionHistoryList[index].cwtAmount}",
+                                  style: AppTextStyle.greySubTitle
+                                      .copyWith(color: Colors.green)),
+                            );
+                          })
+                    ],
+                  )),
         appBar: SecondaryAppBar(
           title: "Transaction History",
           isLeading: true,

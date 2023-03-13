@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 
 import '../../routs/arguments.dart';
 import '../../services/api_services.dart';
+import '../../utils/app_asset.dart';
 import '../../utils/app_color.dart';
+import '../../utils/app_sizes.dart';
 import '../../utils/app_text.dart';
 import '../../utils/app_text_style.dart';
 import '../../utils/validation_mixin.dart';
@@ -41,9 +43,10 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen>
             SizedBoxH34(),
             SizedBoxH34(),
             Center(
-              child: appText("Doctor on call",
-                  style: AppTextStyle.appName
-                      .copyWith(color: AppColor.primaryColor)),
+              child: Image.asset(
+                AppAsset.logo,
+                height: Sizes.s150,
+              ),
             ),
             SizedBoxH28(),
             SizedBoxH28(),

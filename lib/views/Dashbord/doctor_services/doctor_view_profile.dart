@@ -181,6 +181,7 @@ class _DoctorViewProfileScreenState extends State<DoctorViewProfileScreen> {
                     return Container(
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(Sizes.s14),
+                          border: Border.all(color: AppColor.textFieldColor),
                           image: DecorationImage(
                               image: NetworkImage(
                                 "https://appointment.doctoroncalls.in/uploads/${achievementList[index].daFileName}",

@@ -56,44 +56,42 @@ class _SubCategoriesPickerDailogState extends State<SubCategoriesPickerDailog> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Dialog(
-          insetPadding: EdgeInsets.all(Sizes.s20.h),
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(Sizes.s12.r),
+        insetPadding: EdgeInsets.all(Sizes.s20.h),
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(Sizes.s12.r),
+        ),
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: Sizes.s14.w,
+            vertical: Sizes.s20.h,
           ),
-          child: SizedBox(
-            height: ScreenUtil().screenHeight / 2,
-            width: ScreenUtil().screenWidth / 1.2,
-            child: Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: Sizes.s14.w,
-                vertical: Sizes.s20.h,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              ListView.builder(
+                shrinkWrap: true,
+                itemCount: _subCategoriesModel.length,
+                padding: EdgeInsets.symmetric(
+                  horizontal: Sizes.s16.w,
+                  vertical: Sizes.s20.h,
+                ),
+                itemBuilder: (context, index) {
+                  SubCategoriesModel subCategoriesData =
+                      _subCategoriesModel[index];
+                  return _CategoriesListTile(
+                    subCategoriesModel: subCategoriesData,
+                    onTap: () {
+                      Navigator.pop(context, subCategoriesData);
+                    },
+                  );
+                },
               ),
-              child: Column(
-                children: [
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: _subCategoriesModel.length,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: Sizes.s16.w,
-                        vertical: Sizes.s20.h,
-                      ),
-                      itemBuilder: (context, index) {
-                        SubCategoriesModel subCategoriesData =
-                            _subCategoriesModel[index];
-                        return _CategoriesListTile(
-                          subCategoriesModel: subCategoriesData,
-                          onTap: () {
-                            Navigator.pop(context, subCategoriesData);
-                          },
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          )),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

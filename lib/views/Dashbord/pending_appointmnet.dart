@@ -176,7 +176,7 @@ class _PendingAppointmentState extends State<PendingAppointment> {
                         ),
                       ),
                       SizedBoxH18(),
-                      userTypeValue == 2
+                      userTypeValue == "2"
                           ? PrimaryButton(
                               lable: "Cancel",
                               onPressed: () {

@@ -11,6 +11,7 @@ import '../../models/city_model.dart';
 import '../../models/sub_categories_model.dart';
 import '../../routs/arguments.dart';
 import '../../services/api_services.dart';
+import '../../utils/app_asset.dart';
 import '../../utils/app_color.dart';
 import '../../utils/app_sizes.dart';
 import '../../utils/app_text.dart';
@@ -61,9 +62,10 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen>
           children: [
             SizedBoxH34(),
             Center(
-              child: appText("Doctor on call",
-                  style: AppTextStyle.appName
-                      .copyWith(color: AppColor.primaryColor)),
+              child: Image.asset(
+                AppAsset.logo,
+                height: Sizes.s150,
+              ),
             ),
             SizedBoxH28(),
             appText("Update profile", style: AppTextStyle.title),
@@ -241,7 +243,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen>
                         "address": _address.text.trim(),
                         "city": cityModel.districtId,
                         "state": stateModel.stateId,
-                        "subcategoryid": subCategoriesModel.categoryId,
+                        "subcategoryid": subCategoriesModel.categoryId ?? "",
                       });
                     }
 

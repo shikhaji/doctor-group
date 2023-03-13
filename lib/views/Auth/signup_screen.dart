@@ -8,6 +8,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import '../../models/categories_model.dart';
 import '../../routs/arguments.dart';
 import '../../services/api_services.dart';
+import '../../utils/app_asset.dart';
 import '../../utils/app_color.dart';
 import '../../utils/app_sizes.dart';
 import '../../utils/app_text.dart';
@@ -47,9 +48,10 @@ class _SignUpScreenState extends State<SignUpScreen> with ValidationMixin {
           children: [
             SizedBoxH34(),
             Center(
-              child: appText("Doctor on call",
-                  style: AppTextStyle.appName
-                      .copyWith(color: AppColor.primaryColor)),
+              child: Image.asset(
+                AppAsset.logo,
+                height: Sizes.s150,
+              ),
             ),
             SizedBoxH28(),
             appText("Sign Up", style: AppTextStyle.title),
@@ -144,6 +146,7 @@ class _SignUpScreenState extends State<SignUpScreen> with ValidationMixin {
                     ApiService().signUp(context, data: data());
                   }
                 }),
+            SizedBoxH18(),
           ],
         ),
       )),

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import '../../routs/app_routs.dart';
 import '../../services/shared_referances.dart';
 import '../../utils/app_asset.dart';
+import '../../utils/app_sizes.dart';
 import '../../utils/app_text_style.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -43,19 +44,25 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor.primaryColor,
-      body: SafeArea(
-        child: Container(
-          height: double.infinity,
-          width: double.infinity,
-          decoration: const BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage(AppAsset.splash), fit: BoxFit.cover)),
-          child: Center(
-            child: appText("Doctor on call", style: AppTextStyle.headline1),
-          ),
+      backgroundColor: AppColor.white,
+      body: Center(
+        child: Image.asset(
+          AppAsset.logo,
+          height: Sizes.s150,
         ),
       ),
+      // SafeArea(
+      //   child: Container(
+      //     height: double.infinity,
+      //     width: double.infinity,
+      //     decoration: const BoxDecoration(
+      //         image: DecorationImage(
+      //             image: AssetImage(AppAsset.splash), fit: BoxFit.cover)),
+      //     child: Center(child: Image.asset(AppAsset.logo)
+      //         //child: appText("Doctor on call", style: AppTextStyle.headline1),
+      //         ),
+      //   ),
+      // ),
     );
   }
 }

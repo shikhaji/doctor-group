@@ -12,7 +12,7 @@ class GetWalletModel {
   });
 
   int status;
-  int balance;
+  String balance;
 
   factory GetWalletModel.fromJson(Map<String, dynamic> json) => GetWalletModel(
         status: json["status"],

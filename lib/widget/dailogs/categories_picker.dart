@@ -6,8 +6,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../services/api_services.dart';
+import '../../utils/app_asset.dart';
 import '../../utils/app_sizes.dart';
 import '../../utils/screen_utils.dart';
+import '../primary_botton.dart';
 
 class CategoriesPickerDailog extends StatefulWidget {
   const CategoriesPickerDailog({super.key});
@@ -49,44 +51,44 @@ class _CategoriesPickerDailogState extends State<CategoriesPickerDailog> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Dialog(
-          insetPadding: EdgeInsets.all(Sizes.s20.h),
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(Sizes.s12.r),
+        insetPadding: EdgeInsets.symmetric(
+          horizontal: Sizes.s26.w,
+          vertical: Sizes.s20.h,
+        ),
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(Sizes.s12.r),
+        ),
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: Sizes.s18.w,
+            vertical: Sizes.s20.h,
           ),
-          child: SizedBox(
-            height: ScreenUtil().screenHeight / 2,
-            width: ScreenUtil().screenWidth / 1.2,
-            child: Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: Sizes.s14.w,
-                vertical: Sizes.s20.h,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              ListView.builder(
+                itemCount: _categoriesModel.length,
+                shrinkWrap: true,
+                padding: EdgeInsets.symmetric(
+                  horizontal: Sizes.s16.w,
+                  vertical: Sizes.s20.h,
+                ),
+                itemBuilder: (context, index) {
+                  CategoriesModel categoriesData = _categoriesModel[index];
+                  return _CategoriesListTile(
+                    categoriesModel: categoriesData,
+                    onTap: () {
+                      Navigator.pop(context, categoriesData);
+                    },
+                  );
+                },
               ),
-              child: Column(
-                children: [
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: _categoriesModel.length,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: Sizes.s16.w,
-                        vertical: Sizes.s20.h,
-                      ),
-                      itemBuilder: (context, index) {
-                        CategoriesModel categoriesData =
-                            _categoriesModel[index];
-                        return _CategoriesListTile(
-                          categoriesModel: categoriesData,
-                          onTap: () {
-                            Navigator.pop(context, categoriesData);
-                          },
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          )),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

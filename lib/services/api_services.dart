@@ -177,7 +177,7 @@ class ApiService {
       if (commonModel.status == 200) {
         Loader.hideLoader();
         Fluttertoast.showToast(
-          msg: '${commonModel.message}',
+          msg: 'Signup Successfully... !!',
           backgroundColor: Colors.grey,
         );
         Navigator.pushNamed(context, Routs.login);
@@ -225,7 +225,7 @@ class ApiService {
         print("profile store get Status:=${businessType}");
         Loader.hideLoader();
         Fluttertoast.showToast(
-          msg: 'login Successfully...',
+          msg: 'Login Successfully... !!',
           backgroundColor: Colors.grey,
         );
         if (responseData.profileStatus == "0") {
@@ -289,9 +289,11 @@ class ApiService {
           msg: 'Your Profile Updated Successfully...',
           backgroundColor: Colors.grey,
         );
-
-        Navigator.pushNamed(context, Routs.mainHome,
+        Navigator.pushNamedAndRemoveUntil(
+            context, Routs.mainHome, (route) => false,
             arguments: SendArguments(bottomIndex: 0));
+        // Navigator.pushNamed(context, Routs.mainHome,
+        //     arguments: SendArguments(bottomIndex: 0));
         debugPrint('responseData ----- > ${response.data}');
         return response.data;
       } else {
@@ -743,6 +745,7 @@ class ApiService {
       if (response.statusCode == 200) {
         GetTransactionModel responseData =
             GetTransactionModel.fromJson(response.data);
+        debugPrint('responseData  ${response.data}');
         Loader.hideLoader();
         return responseData;
       } else {

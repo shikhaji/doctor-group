@@ -194,7 +194,8 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen>
                           ApiService().addDoctorBooking(context, data: data());
                         }
                       }
-                    })
+                    }),
+                SizedBoxH34(),
               ],
             )));
   }
