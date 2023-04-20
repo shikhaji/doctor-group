@@ -26,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> verify() async {
     String userId = await Preferances.prefGetString("userId", '');
     String profileStatus = await Preferances.prefGetString("profileStatus", '');
-    Future.delayed(const Duration(seconds: 3)).then(
+    Future.delayed(const Duration(seconds: 5)).then(
       (value) {
         if (userId != null &&
             profileStatus.replaceAll('"', '').toString() == "1") {
@@ -48,21 +48,10 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Center(
         child: Image.asset(
           AppAsset.logo,
-          height: Sizes.s150,
+          height: Sizes.s200,
         ),
       ),
-      // SafeArea(
-      //   child: Container(
-      //     height: double.infinity,
-      //     width: double.infinity,
-      //     decoration: const BoxDecoration(
-      //         image: DecorationImage(
-      //             image: AssetImage(AppAsset.splash), fit: BoxFit.cover)),
-      //     child: Center(child: Image.asset(AppAsset.logo)
-      //         //child: appText("Doctor on call", style: AppTextStyle.headline1),
-      //         ),
-      //   ),
-      // ),
+
     );
   }
 }

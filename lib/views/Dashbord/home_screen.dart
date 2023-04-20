@@ -11,7 +11,6 @@ import 'package:doctor_on_call/widget/custom_sized_box.dart';
 import 'package:doctor_on_call/widget/primary_botton.dart';
 import 'package:doctor_on_call/widget/scrollview.dart';
 import 'package:flutter/material.dart';
-import 'package:marquee/marquee.dart';
 import '../../models/get_profile_model.dart';
 import '../../models/slider_model.dart';
 import '../../routs/app_routs.dart';

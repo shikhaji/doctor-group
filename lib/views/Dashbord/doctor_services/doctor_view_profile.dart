@@ -216,7 +216,7 @@ class _DoctorViewProfileScreenState extends State<DoctorViewProfileScreen> {
   }
 
   _makingPhoneCall(String number) async {
-    var url = Uri.parse('tel:${number}');
+    var url = Uri.parse('tel:$number');
     if (await canLaunchUrl(url)) {
       await launchUrl(url);
     } else {
